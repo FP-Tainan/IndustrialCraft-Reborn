@@ -1,0 +1,32 @@
+{
+  "itemGroup.ic2reborn": "IndustrialCraft 2 Reborn",
+
+  "block.ic2reborn.rubber_log":             "Rubber Tree Wood",
+  "block.ic2reborn.rubber_leaves":          "Rubber Tree Leaves",
+  "block.ic2reborn.rubber_sapling":         "Rubber Tree Sapling",
+  "block.ic2reborn.tin_ore":                "Tin Ore",
+  "block.ic2reborn.deepslate_tin_ore":      "Deepslate Tin Ore",
+  "block.ic2reborn.lead_ore":               "Lead Ore",
+  "block.ic2reborn.deepslate_lead_ore":     "Deepslate Lead Ore",
+  "block.ic2reborn.uranium_ore":            "Uranium Ore",
+  "block.ic2reborn.deepslate_uranium_ore":  "Deepslate Uranium Ore",
+
+  "item.ic2reborn.rubber_log":              "Rubber Tree Wood",
+  "item.ic2reborn.rubber_leaves":           "Rubber Tree Leaves",
+  "item.ic2reborn.rubber_sapling":          "Rubber Tree Sapling",
+  "item.ic2reborn.tin_ore":                 "Tin Ore",
+  "item.ic2reborn.deepslate_tin_ore":       "Deepslate Tin Ore",
+  "item.ic2reborn.lead_ore":                "Lead Ore",
+  "item.ic2reborn.deepslate_lead_ore":      "Deepslate Lead Ore",
+  "item.ic2reborn.uranium_ore":             "Uranium Ore",
+  "item.ic2reborn.deepslate_uranium_ore":   "Deepslate Uranium Ore",
+
+  "item.ic2reborn.rubber":                  "Rubber",
+  "item.ic2reborn.treetap":                 "Treetap",
+  "item.ic2reborn.raw_tin":                 "Raw Tin",
+  "item.ic2reborn.raw_lead":                "Raw Lead",
+  "item.ic2reborn.raw_uranium":             "Raw Uranium",
+  "item.ic2reborn.ingot_tin":               "Tin Ingot",
+  "item.ic2reborn.ingot_lead":              "Lead Ingot",
+  "item.ic2reborn.ingot_uranium":           "Uranium Ingot"
+}

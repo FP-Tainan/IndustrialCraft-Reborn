@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[64,)"
+license="Fan Port - Fiel ao IC2 original"
+
+[[mods]]
+modId="ic2reborn"
+version="0.1.0-m1"
+displayName="IndustrialCraft 2 Reborn"
+description='''
+Port não-oficial do IndustrialCraft 2 para versões modernas do Minecraft.
+Módulo 1: Natureza — Árvore de borracha, resina, minérios IC2.
+Feito com autorização do dev original.
+'''
+
+[[dependencies.ic2reborn]]
+    modId="forge"
+    mandatory=true
+    versionRange="[64,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.ic2reborn]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[26.1,26.2)"
+    ordering="NONE"
+    side="BOTH"

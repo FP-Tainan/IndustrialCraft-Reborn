@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "axis=y,wood_type=dry":    { "model": "ic2reborn:block/rubber_log" },
+    "axis=x,wood_type=dry":    { "model": "ic2reborn:block/rubber_log", "x": 90, "y": 90 },
+    "axis=z,wood_type=dry":    { "model": "ic2reborn:block/rubber_log", "x": 90 },
+
+    "axis=y,wood_type=wet,facing=north":  { "model": "ic2reborn:block/rubber_log_wet" },
+    "axis=y,wood_type=wet,facing=south":  { "model": "ic2reborn:block/rubber_log_wet", "y": 180 },
+    "axis=y,wood_type=wet,facing=east":   { "model": "ic2reborn:block/rubber_log_wet", "y": 90 },
+    "axis=y,wood_type=wet,facing=west":   { "model": "ic2reborn:block/rubber_log_wet", "y": 270 },
+    "axis=x,wood_type=wet,facing=north":  { "model": "ic2reborn:block/rubber_log_wet", "x": 90, "y": 90 },
+    "axis=x,wood_type=wet,facing=south":  { "model": "ic2reborn:block/rubber_log_wet", "x": 90, "y": 270 },
+    "axis=x,wood_type=wet,facing=east":   { "model": "ic2reborn:block/rubber_log_wet", "x": 90 },
+    "axis=x,wood_type=wet,facing=west":   { "model": "ic2reborn:block/rubber_log_wet", "x": 90, "y": 180 },
+    "axis=z,wood_type=wet,facing=north":  { "model": "ic2reborn:block/rubber_log_wet", "x": 90 },
+    "axis=z,wood_type=wet,facing=south":  { "model": "ic2reborn:block/rubber_log_wet", "x": 90, "y": 180 },
+    "axis=z,wood_type=wet,facing=east":   { "model": "ic2reborn:block/rubber_log_wet", "x": 90, "y": 90 },
+    "axis=z,wood_type=wet,facing=west":   { "model": "ic2reborn:block/rubber_log_wet", "x": 90, "y": 270 },
+
+    "axis=y,wood_type=tapped,facing=north":  { "model": "ic2reborn:block/rubber_log_dry" },
+    "axis=y,wood_type=tapped,facing=south":  { "model": "ic2reborn:block/rubber_log_dry", "y": 180 },
+    "axis=y,wood_type=tapped,facing=east":   { "model": "ic2reborn:block/rubber_log_dry", "y": 90 },
+    "axis=y,wood_type=tapped,facing=west":   { "model": "ic2reborn:block/rubber_log_dry", "y": 270 },
+    "axis=x,wood_type=tapped,facing=north":  { "model": "ic2reborn:block/rubber_log_dry", "x": 90, "y": 90 },
+    "axis=x,wood_type=tapped,facing=south":  { "model": "ic2reborn:block/rubber_log_dry", "x": 90, "y": 270 },
+    "axis=x,wood_type=tapped,facing=east":   { "model": "ic2reborn:block/rubber_log_dry", "x": 90 },
+    "axis=x,wood_type=tapped,facing=west":   { "model": "ic2reborn:block/rubber_log_dry", "x": 90, "y": 180 },
+    "axis=z,wood_type=tapped,facing=north":  { "model": "ic2reborn:block/rubber_log_dry", "x": 90 },
+    "axis=z,wood_type=tapped,facing=south":  { "model": "ic2reborn:block/rubber_log_dry", "x": 90, "y": 180 },
+    "axis=z,wood_type=tapped,facing=east":   { "model": "ic2reborn:block/rubber_log_dry", "x": 90, "y": 90 },
+    "axis=z,wood_type=tapped,facing=west":   { "model": "ic2reborn:block/rubber_log_dry", "x": 90, "y": 270 }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " P ",
+    "PPP",
+    "P  "
+  ],
+  "key": {
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:treetap"
+  }
+}

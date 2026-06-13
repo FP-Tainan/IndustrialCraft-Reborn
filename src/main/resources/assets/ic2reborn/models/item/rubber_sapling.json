@@ -1,0 +1,1 @@
+{ "parent": "minecraft:item/generated", "textures": { "layer0": "ic2reborn:block/rubber_sapling" } }
