@@ -1,7 +1,10 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base5",
   "textures": {
-    "all": "ic2reborn:block/batch_crafter",
-    "particle": "ic2reborn:block/batch_crafter"
+    "top": "ic2reborn:block/batch_crafter_top",
+    "bottom": "ic2reborn:block/batch_crafter_bottom",
+    "front": "ic2reborn:block/batch_crafter_front",
+    "back": "ic2reborn:block/batch_crafter_back",
+    "side": "ic2reborn:block/batch_crafter_side"
   }
 }

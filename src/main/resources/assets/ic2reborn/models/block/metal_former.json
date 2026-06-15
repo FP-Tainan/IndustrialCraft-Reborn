@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base",
   "textures": {
-    "all": "ic2reborn:block/metal_former",
-    "particle": "ic2reborn:block/metal_former"
+    "top": "ic2reborn:block/metal_former_top",
+    "bottom": "ic2reborn:block/metal_former_bottom",
+    "front": "ic2reborn:block/metal_former_front",
+    "side": "ic2reborn:block/metal_former_side"
   }
 }

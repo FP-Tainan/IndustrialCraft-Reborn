@@ -1,7 +1,10 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base5",
   "textures": {
-    "all": "ic2reborn:block/scanner",
-    "particle": "ic2reborn:block/scanner"
+    "top": "ic2reborn:block/scanner_top",
+    "bottom": "ic2reborn:block/scanner_bottom",
+    "front": "ic2reborn:block/scanner_front",
+    "back": "ic2reborn:block/scanner_back",
+    "side": "ic2reborn:block/scanner_side"
   }
 }

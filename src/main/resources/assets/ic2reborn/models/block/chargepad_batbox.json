@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base",
   "textures": {
-    "all": "ic2reborn:block/chargepad_batbox",
-    "particle": "ic2reborn:block/chargepad_batbox"
+    "top": "ic2reborn:block/chargepad_batbox_top",
+    "bottom": "ic2reborn:block/chargepad_batbox_bottom",
+    "front": "ic2reborn:block/chargepad_batbox_front",
+    "side": "ic2reborn:block/chargepad_batbox_side"
   }
 }

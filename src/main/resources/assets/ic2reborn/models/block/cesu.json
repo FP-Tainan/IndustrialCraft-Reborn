@@ -1,7 +1,10 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base5",
   "textures": {
-    "all": "ic2reborn:block/cesu",
-    "particle": "ic2reborn:block/cesu"
+    "top": "ic2reborn:block/cesu_top",
+    "bottom": "ic2reborn:block/cesu_bottom",
+    "front": "ic2reborn:block/cesu_front",
+    "back": "ic2reborn:block/cesu_back",
+    "side": "ic2reborn:block/cesu_side"
   }
 }

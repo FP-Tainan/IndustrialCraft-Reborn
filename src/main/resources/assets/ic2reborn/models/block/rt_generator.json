@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "ic2reborn:block/rt_generator",
-    "particle": "ic2reborn:block/rt_generator"
+    "top": "ic2reborn:block/rt_generator_top",
+    "bottom": "ic2reborn:block/rt_generator_bottom",
+    "side": "ic2reborn:block/rt_generator_side",
+    "particle": "ic2reborn:block/rt_generator_side"
   }
 }

@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base",
   "textures": {
-    "all": "ic2reborn:block/personal_chest",
-    "particle": "ic2reborn:block/personal_chest"
+    "top": "ic2reborn:block/personal_chest_top",
+    "bottom": "ic2reborn:block/personal_chest_bottom",
+    "front": "ic2reborn:block/personal_chest_front",
+    "side": "ic2reborn:block/personal_chest_side"
   }
 }

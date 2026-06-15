@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "ic2reborn:block/weighted_fluid_distributor"
+    },
+    "facing=east": {
+      "model": "ic2reborn:block/weighted_fluid_distributor",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "ic2reborn:block/weighted_fluid_distributor",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ic2reborn:block/weighted_fluid_distributor",
+      "y": 270
     }
   }
 }

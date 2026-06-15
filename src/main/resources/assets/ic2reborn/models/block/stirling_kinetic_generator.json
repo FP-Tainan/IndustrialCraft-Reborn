@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base",
   "textures": {
-    "all": "ic2reborn:block/stirling_kinetic_generator",
-    "particle": "ic2reborn:block/stirling_kinetic_generator"
+    "top": "ic2reborn:block/stirling_kinetic_generator_top",
+    "bottom": "ic2reborn:block/stirling_kinetic_generator_bottom",
+    "front": "ic2reborn:block/stirling_kinetic_generator_front",
+    "side": "ic2reborn:block/stirling_kinetic_generator_side"
   }
 }

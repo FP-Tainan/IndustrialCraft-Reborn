@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "ic2reborn:block/scanner"
+    },
+    "facing=east": {
+      "model": "ic2reborn:block/scanner",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "ic2reborn:block/scanner",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ic2reborn:block/scanner",
+      "y": 270
     }
   }
 }

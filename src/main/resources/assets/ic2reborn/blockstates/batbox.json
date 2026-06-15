@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "ic2reborn:block/batbox"
+    },
+    "facing=east": {
+      "model": "ic2reborn:block/batbox",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "ic2reborn:block/batbox",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ic2reborn:block/batbox",
+      "y": 270
     }
   }
 }

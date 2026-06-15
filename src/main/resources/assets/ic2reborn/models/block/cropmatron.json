@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "ic2reborn:block/cropmatron",
-    "particle": "ic2reborn:block/cropmatron"
+    "top": "ic2reborn:block/cropmatron_top",
+    "bottom": "ic2reborn:block/cropmatron_bottom",
+    "side": "ic2reborn:block/cropmatron_side",
+    "particle": "ic2reborn:block/cropmatron_side"
   }
 }

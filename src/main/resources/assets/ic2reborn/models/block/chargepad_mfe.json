@@ -1,7 +1,10 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base5",
   "textures": {
-    "all": "ic2reborn:block/chargepad_mfe",
-    "particle": "ic2reborn:block/chargepad_mfe"
+    "top": "ic2reborn:block/chargepad_mfe_top",
+    "bottom": "ic2reborn:block/chargepad_mfe_bottom",
+    "front": "ic2reborn:block/chargepad_mfe_front",
+    "back": "ic2reborn:block/chargepad_mfe_back",
+    "side": "ic2reborn:block/chargepad_mfe_side"
   }
 }

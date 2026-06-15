@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "ic2reborn:block/steam_repressurizer",
-    "particle": "ic2reborn:block/steam_repressurizer"
+    "top": "ic2reborn:block/steam_repressurizer_top",
+    "bottom": "ic2reborn:block/steam_repressurizer_bottom",
+    "side": "ic2reborn:block/steam_repressurizer_side",
+    "particle": "ic2reborn:block/steam_repressurizer_side"
   }
 }

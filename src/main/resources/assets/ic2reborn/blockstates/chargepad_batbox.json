@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "ic2reborn:block/chargepad_batbox"
+    },
+    "facing=east": {
+      "model": "ic2reborn:block/chargepad_batbox",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "ic2reborn:block/chargepad_batbox",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ic2reborn:block/chargepad_batbox",
+      "y": 270
     }
   }
 }

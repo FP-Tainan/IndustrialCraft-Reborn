@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "ic2reborn:block/wool_sheet",
-    "particle": "ic2reborn:block/wool_sheet"
+    "all": "minecraft:block/white_wool",
+    "particle": "minecraft:block/white_wool"
   }
 }

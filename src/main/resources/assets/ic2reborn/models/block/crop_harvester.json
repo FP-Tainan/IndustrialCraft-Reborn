@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "ic2reborn:block/crop_harvester",
-    "particle": "ic2reborn:block/crop_harvester"
+    "top": "ic2reborn:block/crop_harvester_top",
+    "bottom": "ic2reborn:block/crop_harvester_bottom",
+    "side": "ic2reborn:block/crop_harvester_side",
+    "particle": "ic2reborn:block/crop_harvester_side"
   }
 }

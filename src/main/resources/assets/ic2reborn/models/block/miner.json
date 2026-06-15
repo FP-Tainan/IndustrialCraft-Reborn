@@ -1,7 +1,10 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base5",
   "textures": {
-    "all": "ic2reborn:block/miner",
-    "particle": "ic2reborn:block/miner"
+    "top": "ic2reborn:block/miner_top",
+    "bottom": "ic2reborn:block/miner_bottom",
+    "front": "ic2reborn:block/miner_front",
+    "back": "ic2reborn:block/miner_back",
+    "side": "ic2reborn:block/miner_side"
   }
 }

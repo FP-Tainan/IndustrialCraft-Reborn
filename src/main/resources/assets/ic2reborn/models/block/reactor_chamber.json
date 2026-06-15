@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "ic2reborn:block/reactor_chamber",
-    "particle": "ic2reborn:block/reactor_chamber"
+    "top": "ic2reborn:block/reactor_chamber_top",
+    "bottom": "ic2reborn:block/reactor_chamber_bottom",
+    "side": "ic2reborn:block/reactor_chamber_side",
+    "particle": "ic2reborn:block/reactor_chamber_side"
   }
 }

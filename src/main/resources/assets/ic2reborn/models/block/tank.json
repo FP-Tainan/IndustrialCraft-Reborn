@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "ic2reborn:block/tank",
-    "particle": "ic2reborn:block/tank"
+    "top": "ic2reborn:block/tank_top",
+    "bottom": "ic2reborn:block/tank_bottom",
+    "side": "ic2reborn:block/tank_side",
+    "particle": "ic2reborn:block/tank_side"
   }
 }

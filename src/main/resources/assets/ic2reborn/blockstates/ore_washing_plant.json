@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "ic2reborn:block/ore_washing_plant"
+    },
+    "facing=east": {
+      "model": "ic2reborn:block/ore_washing_plant",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "ic2reborn:block/ore_washing_plant",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ic2reborn:block/ore_washing_plant",
+      "y": 270
     }
   }
 }

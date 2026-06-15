@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "all": "ic2reborn:block/electrolyzer",
-    "particle": "ic2reborn:block/electrolyzer"
+    "top": "ic2reborn:block/electrolyzer_top",
+    "bottom": "ic2reborn:block/electrolyzer_bottom",
+    "side": "ic2reborn:block/electrolyzer_side",
+    "particle": "ic2reborn:block/electrolyzer_side"
   }
 }

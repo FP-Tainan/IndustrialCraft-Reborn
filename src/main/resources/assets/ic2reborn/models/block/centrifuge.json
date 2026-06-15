@@ -1,7 +1,10 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base5",
   "textures": {
-    "all": "ic2reborn:block/centrifuge",
-    "particle": "ic2reborn:block/centrifuge"
+    "top": "ic2reborn:block/centrifuge_top",
+    "bottom": "ic2reborn:block/centrifuge_bottom",
+    "front": "ic2reborn:block/centrifuge_front",
+    "back": "ic2reborn:block/centrifuge_back",
+    "side": "ic2reborn:block/centrifuge_side"
   }
 }

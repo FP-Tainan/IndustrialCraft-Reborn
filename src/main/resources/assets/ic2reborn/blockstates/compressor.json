@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "ic2reborn:block/compressor"
+    },
+    "facing=east": {
+      "model": "ic2reborn:block/compressor",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "ic2reborn:block/compressor",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ic2reborn:block/compressor",
+      "y": 270
     }
   }
 }

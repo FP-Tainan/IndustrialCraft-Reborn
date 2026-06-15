@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ic2reborn:block/machine_base",
   "textures": {
-    "all": "ic2reborn:block/mfsu",
-    "particle": "ic2reborn:block/mfsu"
+    "top": "ic2reborn:block/mfsu_top",
+    "bottom": "ic2reborn:block/mfsu_bottom",
+    "front": "ic2reborn:block/mfsu_front",
+    "side": "ic2reborn:block/mfsu_side"
   }
 }
