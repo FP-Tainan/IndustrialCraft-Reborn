@@ -1,3 +1,7 @@
 {
-  "parent": "ic2reborn:block/iron_fence"
+  "parent": "minecraft:block/fence_inventory",
+  "textures": {
+    "texture": "ic2reborn:block/iron_fence",
+    "particle": "ic2reborn:block/iron_fence"
+  }
 }

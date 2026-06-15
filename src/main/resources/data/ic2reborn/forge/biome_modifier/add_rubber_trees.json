@@ -1,8 +1,6 @@
 {
   "type": "forge:add_features",
   "biomes": [
-    "minecraft:swamp",
-    "minecraft:mangrove_swamp",
     "minecraft:forest",
     "minecraft:birch_forest",
     "minecraft:old_growth_birch_forest",
@@ -16,6 +14,8 @@
     "minecraft:old_growth_pine_taiga",
     "minecraft:old_growth_spruce_taiga"
   ],
-  "features": [ "ic2reborn:rubber_tree" ],
+  "features": [
+    "ic2reborn:rubber_tree"
+  ],
   "step": "vegetal_decoration"
 }

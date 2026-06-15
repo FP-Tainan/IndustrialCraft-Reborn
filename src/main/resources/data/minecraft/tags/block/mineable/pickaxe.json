@@ -12,6 +12,9 @@
     "ic2reborn:macerator",
     "ic2reborn:machine_block",
     "ic2reborn:tin_ore",
-    "ic2reborn:uranium_ore"
+    "ic2reborn:uranium_ore",
+    "ic2reborn:reinforced_stone",
+    "ic2reborn:reinforced_glass",
+    "ic2reborn:iron_fence"
   ]
 }

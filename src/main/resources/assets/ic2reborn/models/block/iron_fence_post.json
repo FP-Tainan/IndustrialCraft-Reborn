@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/fence_post",
+  "textures": {
+    "texture": "ic2reborn:block/iron_fence",
+    "particle": "ic2reborn:block/iron_fence"
+  }
+}

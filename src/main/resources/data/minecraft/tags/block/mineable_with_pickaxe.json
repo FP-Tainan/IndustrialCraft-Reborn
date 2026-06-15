@@ -6,6 +6,9 @@
     "ic2reborn:lead_ore",
     "ic2reborn:deepslate_lead_ore",
     "ic2reborn:uranium_ore",
-    "ic2reborn:deepslate_uranium_ore"
+    "ic2reborn:deepslate_uranium_ore",
+    "ic2reborn:reinforced_stone",
+    "ic2reborn:iron_fence",
+    "ic2reborn:reinforced_glass"
   ]
 }

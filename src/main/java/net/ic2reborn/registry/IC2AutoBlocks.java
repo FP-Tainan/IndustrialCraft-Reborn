@@ -2,6 +2,7 @@ package net.ic2reborn.registry;
 import net.ic2reborn.IC2Reborn;
 import net.ic2reborn.block.MachineBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.DeferredRegister;
@@ -56,7 +57,7 @@ public class IC2AutoBlocks {
     public static final RegistryObject<Block> INDUSTRIAL_WORKBENCH = BLOCKS.register("industrial_workbench", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("industrial_workbench")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> IRIDIUM_STORAGE_BOX = BLOCKS.register("iridium_storage_box", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("iridium_storage_box")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> IRIDIUM_TANK = BLOCKS.register("iridium_tank", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("iridium_tank")).strength(3.5f, 6.0f)));
-    public static final RegistryObject<Block> IRON_FENCE = BLOCKS.register("iron_fence", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("iron_fence")).strength(3.5f, 6.0f)));
+    public static final RegistryObject<FenceBlock> IRON_FENCE = BLOCKS.register("iron_fence", () -> new FenceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("iron_fence")).strength(3.5f, 6.0f).noOcclusion()));
     public static final RegistryObject<Block> IRON_FURNACE = BLOCKS.register("iron_furnace", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("iron_furnace")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> IRON_STORAGE_BOX = BLOCKS.register("iron_storage_box", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("iron_storage_box")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> IRON_TANK = BLOCKS.register("iron_tank", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("iron_tank")).strength(3.5f, 6.0f)));
@@ -93,7 +94,8 @@ public class IC2AutoBlocks {
     public static final RegistryObject<Block> REACTOR_VESSEL = BLOCKS.register("reactor_vessel", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("reactor_vessel")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> RECYCLER = BLOCKS.register("recycler", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("recycler")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> REFRACTORY_BRICKS = BLOCKS.register("refractory_bricks", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("refractory_bricks")).strength(3.5f, 6.0f)));
-    public static final RegistryObject<Block> REINFORCED_GLASS = BLOCKS.register("reinforced_glass", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("reinforced_glass")).strength(0.3f, 3.0f)));
+    public static final RegistryObject<Block> REINFORCED_GLASS = BLOCKS.register("reinforced_glass", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).setId(BLOCKS.key("reinforced_glass")).strength(10.0f, 60.0f).requiresCorrectToolForDrops().noOcclusion()));
+    public static final RegistryObject<Block> REINFORCED_STONE = BLOCKS.register("reinforced_stone", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).setId(BLOCKS.key("reinforced_stone")).strength(10.0f, 60.0f).requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> REPLICATOR = BLOCKS.register("replicator", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("replicator")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> RESIN_SHEET = BLOCKS.register("resin_sheet", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("resin_sheet")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> RT_GENERATOR = BLOCKS.register("rt_generator", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("rt_generator")).strength(3.5f, 6.0f)));

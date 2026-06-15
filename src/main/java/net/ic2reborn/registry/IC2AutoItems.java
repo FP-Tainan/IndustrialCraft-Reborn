@@ -93,6 +93,7 @@ public class IC2AutoItems {
     public static final RegistryObject<BlockItem> RECYCLER = ITEMS.register("recycler", () -> new BlockItem(IC2AutoBlocks.RECYCLER.get(), new Item.Properties().setId(ITEMS.key("recycler"))));
     public static final RegistryObject<BlockItem> REFRACTORY_BRICKS = ITEMS.register("refractory_bricks", () -> new BlockItem(IC2AutoBlocks.REFRACTORY_BRICKS.get(), new Item.Properties().setId(ITEMS.key("refractory_bricks"))));
     public static final RegistryObject<BlockItem> REINFORCED_GLASS = ITEMS.register("reinforced_glass", () -> new BlockItem(IC2AutoBlocks.REINFORCED_GLASS.get(), new Item.Properties().setId(ITEMS.key("reinforced_glass"))));
+    public static final RegistryObject<BlockItem> REINFORCED_STONE = ITEMS.register("reinforced_stone", () -> new BlockItem(IC2AutoBlocks.REINFORCED_STONE.get(), new Item.Properties().setId(ITEMS.key("reinforced_stone"))));
     public static final RegistryObject<BlockItem> REPLICATOR = ITEMS.register("replicator", () -> new BlockItem(IC2AutoBlocks.REPLICATOR.get(), new Item.Properties().setId(ITEMS.key("replicator"))));
     public static final RegistryObject<BlockItem> RESIN_SHEET = ITEMS.register("resin_sheet", () -> new BlockItem(IC2AutoBlocks.RESIN_SHEET.get(), new Item.Properties().setId(ITEMS.key("resin_sheet"))));
     public static final RegistryObject<BlockItem> RT_GENERATOR = ITEMS.register("rt_generator", () -> new BlockItem(IC2AutoBlocks.RT_GENERATOR.get(), new Item.Properties().setId(ITEMS.key("rt_generator"))));
@@ -355,7 +356,6 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> REACTOR_HEAT_EXCHANGER = ITEMS.register("reactor_heat_exchanger", () -> new Item(new Item.Properties().setId(ITEMS.key("reactor_heat_exchanger"))));
     public static final RegistryObject<Item> REACTOR_HEAT_VENT = ITEMS.register("reactor_heat_vent", () -> new Item(new Item.Properties().setId(ITEMS.key("reactor_heat_vent"))));
     public static final RegistryObject<Item> REINFORCED_DOOR = ITEMS.register("reinforced_door", () -> new Item(new Item.Properties().setId(ITEMS.key("reinforced_door"))));
-    public static final RegistryObject<Item> REINFORCED_STONE = ITEMS.register("reinforced_stone", () -> new Item(new Item.Properties().setId(ITEMS.key("reinforced_stone"))));
     public static final RegistryObject<Item> REMOTE = ITEMS.register("remote", () -> new Item(new Item.Properties().setId(ITEMS.key("remote"))));
     public static final RegistryObject<Item> ROTOR_BRONZE = ITEMS.register("rotor_bronze", () -> new Item(new Item.Properties().setId(ITEMS.key("rotor_bronze"))));
     public static final RegistryObject<Item> ROTOR_CARBON = ITEMS.register("rotor_carbon", () -> new Item(new Item.Properties().setId(ITEMS.key("rotor_carbon"))));

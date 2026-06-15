@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
+  "render_type": "minecraft:translucent",
   "textures": {
     "all": "ic2reborn:block/reinforced_glass",
     "particle": "ic2reborn:block/reinforced_glass"
