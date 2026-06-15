@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "C C",
+    "PCP"
+  ],
+  "key": {
+    "P": "ic2reborn:plate_bronze",
+    "C": "ic2reborn:casing_bronze"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:bronze_storage_box"
+  }
+}

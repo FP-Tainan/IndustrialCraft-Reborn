@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WRW"
+  ],
+  "key": {
+    "W": "minecraft:white_carpet",
+    "R": "ic2reborn:resin_sheet"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:wool_sheet"
+  }
+}

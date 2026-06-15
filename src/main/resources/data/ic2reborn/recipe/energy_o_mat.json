@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RBR",
+    "CMC"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "C": "ic2reborn:cable_copper_insulated",
+    "M": "ic2reborn:machine_block",
+    "B": "ic2reborn:re_battery"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:energy_o_mat"
+  }
+}

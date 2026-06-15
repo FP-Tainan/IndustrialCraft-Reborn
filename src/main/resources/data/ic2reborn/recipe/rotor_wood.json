@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "ABA",
+    " A "
+  ],
+  "key": {
+    "A": "ic2reborn:wood_rotor_blade",
+    "B": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:rotor_wood"
+  }
+}

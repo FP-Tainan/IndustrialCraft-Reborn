@@ -1,11 +1,17 @@
 {
   "replace": false,
   "values": [
-    "ic2reborn:tin_ore",
-    "ic2reborn:deepslate_tin_ore",
-    "ic2reborn:lead_ore",
+    "ic2reborn:compressor",
     "ic2reborn:deepslate_lead_ore",
-    "ic2reborn:uranium_ore",
-    "ic2reborn:deepslate_uranium_ore"
+    "ic2reborn:deepslate_tin_ore",
+    "ic2reborn:deepslate_uranium_ore",
+    "ic2reborn:electric_furnace",
+    "ic2reborn:extractor",
+    "ic2reborn:iron_furnace",
+    "ic2reborn:lead_ore",
+    "ic2reborn:macerator",
+    "ic2reborn:machine_block",
+    "ic2reborn:tin_ore",
+    "ic2reborn:uranium_ore"
   ]
 }

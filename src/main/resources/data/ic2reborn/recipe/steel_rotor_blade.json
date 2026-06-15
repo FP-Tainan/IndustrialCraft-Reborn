@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "PSP",
+    "PSP"
+  ],
+  "key": {
+    "P": "ic2reborn:plate_steel",
+    "S": "ic2reborn:ingot_steel"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:steel_rotor_blade"
+  }
+}

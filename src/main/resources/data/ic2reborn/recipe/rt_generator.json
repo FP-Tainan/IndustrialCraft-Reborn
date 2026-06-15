@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "ICI",
+    "IGI"
+  ],
+  "key": {
+    "I": "ic2reborn:casing_iron",
+    "C": "ic2reborn:reactor_chamber",
+    "G": "ic2reborn:generator"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:rt_generator"
+  }
+}

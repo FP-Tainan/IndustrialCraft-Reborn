@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CC",
+    "CC"
+  ],
+  "key": {
+    "C": "ic2reborn:dust_coal"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:carbon_fibre"
+  }
+}

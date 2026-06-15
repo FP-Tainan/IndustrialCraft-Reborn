@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "rEr",
+    "CAC",
+    "rrr"
+  ],
+  "key": {
+    "r": "minecraft:redstone",
+    "E": "ic2reborn:advanced_re_battery",
+    "C": "ic2reborn:cable_gold_double_insulated",
+    "A": "ic2reborn:advanced_circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:obscurator"
+  }
+}

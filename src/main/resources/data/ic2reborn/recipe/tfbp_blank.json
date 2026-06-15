@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    " A ",
+    "R R"
+  ],
+  "key": {
+    "C": "ic2reborn:circuit",
+    "A": "ic2reborn:advanced_circuit",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:tfbp_blank"
+  }
+}

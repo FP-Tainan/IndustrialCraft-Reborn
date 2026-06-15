@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RCR",
+    "RIR",
+    "RCR"
+  ],
+  "key": {
+    "C": "ic2reborn:dense_plate_copper",
+    "R": "ic2reborn:thick_neutron_reflector",
+    "I": "ic2reborn:iridium"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:iridium_reflector"
+  }
+}

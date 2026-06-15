@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SCS",
+    "FTF",
+    "F F"
+  ],
+  "key": {
+    "T": "ic2reborn:casing_iron",
+    "C": "ic2reborn:circuit",
+    "F": "ic2reborn:fluid_cell",
+    "S": "ic2reborn:foam_sprayer"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cf_pack"
+  }
+}

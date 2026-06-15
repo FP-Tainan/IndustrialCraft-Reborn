@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SGS",
+    "TTT",
+    "VFV"
+  ],
+  "key": {
+    "T": "ic2reborn:teleporter",
+    "S": "ic2reborn:reinforced_stone",
+    "G": "ic2reborn:reinforced_glass",
+    "F": "ic2reborn:mfe",
+    "V": "ic2reborn:hv_transformer"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:replicator"
+  }
+}

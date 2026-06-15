@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "ic2reborn:block/weighted_item_distributor",
+    "particle": "ic2reborn:block/weighted_item_distributor"
+  }
+}

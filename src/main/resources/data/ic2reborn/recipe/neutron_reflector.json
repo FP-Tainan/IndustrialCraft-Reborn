@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TcT",
+    "cCc",
+    "TcT"
+  ],
+  "key": {
+    "c": "ic2reborn:dust_coal",
+    "C": "ic2reborn:plate_copper",
+    "T": "ic2reborn:dust_tin"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:neutron_reflector"
+  }
+}

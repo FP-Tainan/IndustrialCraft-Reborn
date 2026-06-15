@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "C C",
+    "PCP"
+  ],
+  "key": {
+    "P": "ic2reborn:plate_steel",
+    "C": "ic2reborn:casing_steel"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:steel_storage_box"
+  }
+}

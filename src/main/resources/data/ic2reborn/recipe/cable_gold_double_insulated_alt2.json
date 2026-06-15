@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:rubber",
+    "ic2reborn:rubber",
+    "ic2reborn:cable_gold"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cable_gold_double_insulated"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CPC",
+    "RBR"
+  ],
+  "key": {
+    "B": "ic2reborn:mfe",
+    "R": "ic2reborn:rubber",
+    "C": "ic2reborn:circuit",
+    "P": "minecraft:stone_pressure_plate"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:chargepad_mfe"
+  }
+}

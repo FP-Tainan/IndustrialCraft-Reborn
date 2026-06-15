@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ICI",
+    "GTG",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "I": "ic2reborn:casing_iron",
+    "T": "ic2reborn:cable_tin",
+    "C": "ic2reborn:cable_copper_insulated"
+  },
+  "result": {
+    "count": 8,
+    "id": "ic2reborn:luminator_flat"
+  }
+}

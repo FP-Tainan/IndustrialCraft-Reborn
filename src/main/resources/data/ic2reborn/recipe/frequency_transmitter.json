@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:circuit",
+    "ic2reborn:cable_copper_insulated"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:frequency_transmitter"
+  }
+}

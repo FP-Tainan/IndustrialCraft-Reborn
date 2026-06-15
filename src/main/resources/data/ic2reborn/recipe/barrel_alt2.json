@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": "ic2reborn:barrel"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:barrel"
+  }
+}

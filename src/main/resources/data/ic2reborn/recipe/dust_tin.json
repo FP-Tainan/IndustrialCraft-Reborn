@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "ic2reborn:dust_small_tin"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:dust_tin"
+  }
+}

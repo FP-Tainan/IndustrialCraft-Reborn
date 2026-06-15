@@ -1,19 +1,11 @@
 {
   "type": "minecraft:block",
-  "pools": [
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "ic2reborn:raw_uranium"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
-    }
-  ]
+  "pools": [{
+    "rolls": 1,
+    "entries": [{
+      "type": "minecraft:item",
+      "id": "ic2reborn:raw_uranium"
+    }],
+    "conditions": [{ "condition": "minecraft:survives_explosion" }]
+  }]
 }

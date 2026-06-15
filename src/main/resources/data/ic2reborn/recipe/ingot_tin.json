@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "B"
+  ],
+  "key": {
+    "B": "ic2reborn:tin_block"
+  },
+  "result": {
+    "count": 9,
+    "id": "ic2reborn:ingot_tin"
+  }
+}

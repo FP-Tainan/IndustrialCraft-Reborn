@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:broken_rubber_boat",
+    "ic2reborn:rubber"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:rubber_boat"
+  }
+}

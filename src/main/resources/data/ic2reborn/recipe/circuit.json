@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "RIR",
+    "CCC"
+  ],
+  "key": {
+    "I": "ic2reborn:plate_iron",
+    "R": "minecraft:redstone",
+    "C": "ic2reborn:cable_copper_insulated"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:circuit"
+  }
+}

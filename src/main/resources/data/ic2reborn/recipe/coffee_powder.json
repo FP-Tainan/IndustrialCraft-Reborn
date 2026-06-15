@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:coffee_beans"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:coffee_powder"
+  }
+}

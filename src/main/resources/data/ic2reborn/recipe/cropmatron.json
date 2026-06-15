@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "cBc",
+    "UMU",
+    "CCC"
+  ],
+  "key": {
+    "M": "ic2reborn:machine_block",
+    "C": "ic2reborn:crop_stick",
+    "c": "ic2reborn:circuit",
+    "B": "minecraft:chest",
+    "U": "ic2reborn:fluid_cell"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cropmatron"
+  }
+}

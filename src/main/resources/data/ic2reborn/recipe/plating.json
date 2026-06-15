@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:plate_lead",
+    "ic2reborn:advanced_alloy"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:plating"
+  }
+}

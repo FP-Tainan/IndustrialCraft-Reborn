@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "A A",
+    "ALA",
+    "AIA"
+  ],
+  "key": {
+    "L": "minecraft:leather_chestplate",
+    "I": "minecraft:iron_chestplate",
+    "A": "ic2reborn:advanced_alloy"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:alloy_chestplate"
+  }
+}

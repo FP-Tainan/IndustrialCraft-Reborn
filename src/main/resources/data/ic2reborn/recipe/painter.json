@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " CC",
+    " IC",
+    "I  "
+  ],
+  "key": {
+    "C": "#minecraft:wool",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:painter"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " c ",
+    "CED",
+    " c "
+  ],
+  "key": {
+    "E": "ic2reborn:hv_transformer",
+    "c": "ic2reborn:cable_iron_triple_insulated",
+    "D": "ic2reborn:lapotron_crystal",
+    "C": "ic2reborn:advanced_circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:ev_transformer"
+  }
+}

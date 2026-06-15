@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "c c",
+    "cCc",
+    "EME"
+  ],
+  "key": {
+    "E": "ic2reborn:fluid_cell",
+    "c": "ic2reborn:cable_copper_insulated",
+    "M": "ic2reborn:machine_block",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:electrolyzer"
+  }
+}

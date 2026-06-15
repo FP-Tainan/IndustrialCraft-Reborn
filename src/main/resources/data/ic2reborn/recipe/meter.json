@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "cCc",
+    "c c"
+  ],
+  "key": {
+    "G": "minecraft:glowstone_dust",
+    "c": "ic2reborn:cable_copper_insulated",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:meter"
+  }
+}

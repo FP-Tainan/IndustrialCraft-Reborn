@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ISI",
+    "S S",
+    "ISI"
+  ],
+  "key": {
+    "I": "ic2reborn:iridium",
+    "S": "ic2reborn:plate_steel"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:iridium_storage_box"
+  }
+}

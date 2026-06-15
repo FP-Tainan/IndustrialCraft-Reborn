@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CcC",
+    "CGC"
+  ],
+  "key": {
+    "C": "ic2reborn:carbon_plate",
+    "c": "ic2reborn:energy_crystal",
+    "G": "ic2reborn:nightvision_goggles"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:nano_helmet"
+  }
+}

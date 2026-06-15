@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "BSS",
+    "ECC"
+  ],
+  "key": {
+    "S": "ic2reborn:iron_shaft",
+    "B": "ic2reborn:copper_boiler",
+    "C": "ic2reborn:casing_steel",
+    "E": "ic2reborn:fluid_cell"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:steam_kinetic_generator"
+  }
+}

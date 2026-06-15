@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "CcC",
+    "CCC"
+  ],
+  "key": {
+    "c": "ic2reborn:plating",
+    "C": "ic2reborn:plate_copper"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:heat_plating"
+  }
+}

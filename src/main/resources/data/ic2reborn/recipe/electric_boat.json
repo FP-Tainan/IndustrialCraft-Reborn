@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "XmX",
+    "XrX"
+  ],
+  "key": {
+    "X": "ic2reborn:plate_iron",
+    "C": "ic2reborn:cable_copper_insulated",
+    "m": "ic2reborn:electric_motor",
+    "r": "ic2reborn:rotor_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:electric_boat"
+  }
+}

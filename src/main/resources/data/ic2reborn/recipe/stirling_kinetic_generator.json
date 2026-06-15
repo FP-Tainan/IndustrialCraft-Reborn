@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GPG",
+    "GMG",
+    "GPG"
+  ],
+  "key": {
+    "G": "minecraft:glass_bottle",
+    "P": "minecraft:piston",
+    "M": "ic2reborn:machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:stirling_kinetic_generator"
+  }
+}

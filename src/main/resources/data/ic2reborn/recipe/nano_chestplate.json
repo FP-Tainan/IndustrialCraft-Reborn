@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "C C",
+    "CcC",
+    "CCC"
+  ],
+  "key": {
+    "C": "ic2reborn:carbon_plate",
+    "c": "ic2reborn:energy_crystal"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:nano_chestplate"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "IBI",
+    "IGI"
+  ],
+  "key": {
+    "G": "ic2reborn:heat_conductor",
+    "B": "ic2reborn:machine_block",
+    "I": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:blast_furnace"
+  }
+}

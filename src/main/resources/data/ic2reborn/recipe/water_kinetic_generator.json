@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S S",
+    " M ",
+    "S S"
+  ],
+  "key": {
+    "S": "ic2reborn:iron_shaft",
+    "M": "ic2reborn:machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:water_kinetic_generator"
+  }
+}

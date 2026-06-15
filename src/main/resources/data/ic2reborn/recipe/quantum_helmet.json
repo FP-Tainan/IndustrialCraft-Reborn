@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GnG",
+    "ILI",
+    "CNC"
+  ],
+  "key": {
+    "N": "ic2reborn:hazmat_helmet",
+    "n": "ic2reborn:nano_helmet",
+    "I": "ic2reborn:iridium",
+    "L": "ic2reborn:lapotron_crystal",
+    "G": "ic2reborn:reinforced_glass",
+    "C": "ic2reborn:advanced_circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:quantum_helmet"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "C  ",
+    " C ",
+    " FC"
+  ],
+  "key": {
+    "F": "ic2reborn:fluid_cell",
+    "C": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:foam_sprayer"
+  }
+}

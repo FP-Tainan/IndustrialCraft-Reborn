@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TXT",
+    " E ",
+    "T T"
+  ],
+  "key": {
+    "E": "ic2reborn:electric_motor",
+    "T": "ic2reborn:plate_tin",
+    "X": "ic2reborn:treetap"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:upgrade_fluid_pulling"
+  }
+}

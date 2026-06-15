@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:carbon_fibre",
+    "ic2reborn:carbon_fibre"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:carbon_mesh"
+  }
+}

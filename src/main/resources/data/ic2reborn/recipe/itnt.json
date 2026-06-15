@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FFF",
+    "TTT",
+    "FFF"
+  ],
+  "key": {
+    "F": "minecraft:flint",
+    "T": "minecraft:tnt"
+  },
+  "result": {
+    "count": 4,
+    "id": "ic2reborn:itnt"
+  }
+}

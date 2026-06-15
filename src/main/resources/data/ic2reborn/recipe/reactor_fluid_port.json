@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "VVV",
+    "VCV",
+    "VVV"
+  ],
+  "key": {
+    "V": "ic2reborn:reactor_vessel",
+    "C": "ic2reborn:fluid_cell"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:reactor_fluid_port"
+  }
+}

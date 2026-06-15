@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CLC",
+    "LOL",
+    "CLC"
+  ],
+  "key": {
+    "C": "ic2reborn:advanced_heat_exchanger",
+    "L": "ic2reborn:lapotron_crystal",
+    "O": "ic2reborn:charging_energy_crystal"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:charging_lapotron_crystal"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:refractory_bricks",
+    "ic2reborn:plate_iron"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:coke_kiln"
+  }
+}

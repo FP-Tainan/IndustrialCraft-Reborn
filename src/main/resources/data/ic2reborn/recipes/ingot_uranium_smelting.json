@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "ic2reborn:raw_uranium",
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:ingot_uranium"
+  },
+  "experience": 1.0,
+  "cookingtime": 400
+}

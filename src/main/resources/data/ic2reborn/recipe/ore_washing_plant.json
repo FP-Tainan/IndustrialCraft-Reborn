@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "BAB",
+    "EWE"
+  ],
+  "key": {
+    "A": "ic2reborn:machine_block",
+    "E": "ic2reborn:electric_motor",
+    "B": "minecraft:bucket",
+    "W": "ic2reborn:circuit",
+    "I": "ic2reborn:plate_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:ore_washing_plant"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "IBI",
+    "IGI"
+  ],
+  "key": {
+    "G": "ic2reborn:heat_conductor",
+    "B": "ic2reborn:copper_boiler",
+    "I": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:steam_generator"
+  }
+}

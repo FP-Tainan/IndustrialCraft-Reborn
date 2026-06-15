@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SAS",
+    "CMC",
+    "SAS"
+  ],
+  "key": {
+    "M": "ic2reborn:machine_block",
+    "A": "ic2reborn:advanced_alloy",
+    "S": "ic2reborn:plate_steel",
+    "C": "ic2reborn:carbon_plate"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:advanced_machine_block"
+  }
+}

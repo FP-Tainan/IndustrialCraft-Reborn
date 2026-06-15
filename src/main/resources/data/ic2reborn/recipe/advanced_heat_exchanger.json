@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GcG",
+    "SCS",
+    "GcG"
+  ],
+  "key": {
+    "S": "ic2reborn:heat_exchanger",
+    "C": "ic2reborn:plate_copper",
+    "G": "ic2reborn:plate_lapis",
+    "c": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:advanced_heat_exchanger"
+  }
+}

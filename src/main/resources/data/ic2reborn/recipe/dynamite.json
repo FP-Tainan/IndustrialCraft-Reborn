@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:itnt",
+    "minecraft:string"
+  ],
+  "result": {
+    "count": 8,
+    "id": "ic2reborn:dynamite"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GCG",
+    "ALA",
+    "GCG"
+  ],
+  "key": {
+    "A": "ic2reborn:advanced_machine_block",
+    "L": "ic2reborn:lapotron_crystal",
+    "G": "minecraft:glowstone_dust",
+    "C": "ic2reborn:advanced_circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:matter_generator"
+  }
+}

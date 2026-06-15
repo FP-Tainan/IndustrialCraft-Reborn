@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "key": {
+    "A": "ic2reborn:plate_iron",
+    "B": "minecraft:stone"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:block_cutting_blade_iron"
+  }
+}

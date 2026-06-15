@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/compressor_top",
+    "bottom": "ic2reborn:block/compressor_bottom",
+    "front": "ic2reborn:block/compressor_front",
+    "side": "ic2reborn:block/compressor_side"
+  }
+}

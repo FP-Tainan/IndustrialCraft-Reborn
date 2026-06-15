@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CcC",
+    "TCT",
+    "CTC"
+  ],
+  "key": {
+    "c": "ic2reborn:circuit",
+    "T": "ic2reborn:plate_tin",
+    "C": "ic2reborn:plate_copper"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:heat_exchanger"
+  }
+}

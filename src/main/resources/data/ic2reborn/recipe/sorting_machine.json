@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "UBU",
+    "UMU",
+    "UCU"
+  ],
+  "key": {
+    "M": "ic2reborn:machine_block",
+    "U": "ic2reborn:upgrade_ejector",
+    "B": "ic2reborn:circuit",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:sorting_machine"
+  }
+}

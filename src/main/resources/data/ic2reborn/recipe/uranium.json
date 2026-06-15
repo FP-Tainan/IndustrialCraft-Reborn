@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "UUU",
+    "CCC",
+    "UUU"
+  ],
+  "key": {
+    "U": "ic2reborn:uranium_238",
+    "C": "ic2reborn:small_uranium_235"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:uranium"
+  }
+}

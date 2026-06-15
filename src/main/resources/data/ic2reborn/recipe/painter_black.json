@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:painter",
+    "minecraft:black_dye"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:painter_black"
+  }
+}

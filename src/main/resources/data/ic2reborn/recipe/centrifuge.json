@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CMC",
+    "RAR",
+    "RER"
+  ],
+  "key": {
+    "C": "ic2reborn:coil",
+    "R": "minecraft:iron_ingot",
+    "A": "ic2reborn:advanced_machine_block",
+    "M": "ic2reborn:mining_laser",
+    "E": "ic2reborn:electric_motor"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:centrifuge"
+  }
+}

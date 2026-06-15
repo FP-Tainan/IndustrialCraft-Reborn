@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "TBT",
+    "ICI"
+  ],
+  "key": {
+    "I": "ic2reborn:casing_iron",
+    "T": "ic2reborn:tank",
+    "B": "ic2reborn:copper_boiler",
+    "C": "ic2reborn:heat_conductor"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:steam_repressurizer"
+  }
+}

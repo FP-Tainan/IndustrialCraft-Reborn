@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CBC",
+    "MAT",
+    "CBC"
+  ],
+  "key": {
+    "A": "ic2reborn:advanced_machine_block",
+    "B": "ic2reborn:miner",
+    "C": "ic2reborn:advanced_alloy",
+    "T": "ic2reborn:teleporter",
+    "M": "ic2reborn:mfe"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:advanced_miner"
+  }
+}

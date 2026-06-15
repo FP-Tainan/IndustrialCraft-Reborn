@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "gCg",
+    "gCg",
+    "IGI"
+  ],
+  "key": {
+    "G": "ic2reborn:heat_conductor",
+    "C": "ic2reborn:fluid_cell",
+    "g": "minecraft:glass",
+    "I": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:liquid_heat_exchanger"
+  }
+}

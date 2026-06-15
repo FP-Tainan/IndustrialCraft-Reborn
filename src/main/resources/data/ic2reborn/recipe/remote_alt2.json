@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "TLT",
+    " F "
+  ],
+  "key": {
+    "C": "ic2reborn:cable_copper_insulated",
+    "F": "ic2reborn:frequency_transmitter",
+    "L": "ic2reborn:dust_lapis",
+    "T": "ic2reborn:casing_tin"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:remote"
+  }
+}

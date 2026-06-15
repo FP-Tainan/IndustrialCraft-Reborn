@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    "HMC"
+  ],
+  "key": {
+    "H": "ic2reborn:hammer",
+    "M": "ic2reborn:machine_block",
+    "C": "ic2reborn:cutter",
+    "T": "minecraft:crafting_table"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:industrial_workbench"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ICI",
+    "III"
+  ],
+  "key": {
+    "C": "minecraft:chest",
+    "I": "ic2reborn:casing_bronze"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:tool_box"
+  }
+}

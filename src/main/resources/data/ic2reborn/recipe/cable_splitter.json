@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " R ",
+    "ILI",
+    " R "
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "I": "ic2reborn:cable_iron_triple_insulated",
+    "L": "minecraft:lever"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cable_splitter"
+  }
+}

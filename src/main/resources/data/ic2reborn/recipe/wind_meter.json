@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "CAC",
+    " CB"
+  ],
+  "key": {
+    "C": "ic2reborn:casing_tin",
+    "A": "ic2reborn:casing_bronze",
+    "B": "ic2reborn:small_power_unit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:wind_meter"
+  }
+}

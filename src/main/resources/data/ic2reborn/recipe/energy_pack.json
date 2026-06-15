@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ALA",
+    "BLB",
+    "L L"
+  ],
+  "key": {
+    "L": "ic2reborn:casing_iron",
+    "A": "ic2reborn:advanced_circuit",
+    "B": "ic2reborn:energy_crystal"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:energy_pack"
+  }
+}

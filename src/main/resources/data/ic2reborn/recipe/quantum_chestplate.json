@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AnA",
+    "ILI",
+    "IJI"
+  ],
+  "key": {
+    "J": "ic2reborn:jetpack_electric",
+    "n": "ic2reborn:nano_chestplate",
+    "I": "ic2reborn:iridium",
+    "L": "ic2reborn:lapotron_crystal",
+    "A": "ic2reborn:advanced_alloy"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:quantum_chestplate"
+  }
+}

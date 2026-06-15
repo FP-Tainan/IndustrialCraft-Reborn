@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RDR",
+    "DRD",
+    "RDR"
+  ],
+  "key": {
+    "D": "ic2reborn:dust_diamond",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "count": 9,
+    "id": "ic2reborn:dust_energium"
+  }
+}

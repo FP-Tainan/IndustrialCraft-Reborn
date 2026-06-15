@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "CAC",
+    "MRM"
+  ],
+  "key": {
+    "S": "ic2reborn:reinforced_stone",
+    "R": "ic2reborn:advanced_circuit",
+    "A": "ic2reborn:advanced_machine_block",
+    "M": "ic2reborn:mining_laser",
+    "C": "ic2reborn:crystal_memory"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:pattern_storage"
+  }
+}

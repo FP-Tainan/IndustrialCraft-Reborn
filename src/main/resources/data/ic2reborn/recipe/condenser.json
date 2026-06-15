@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CIC",
+    "CAC",
+    "IBI"
+  ],
+  "key": {
+    "C": "ic2reborn:fluid_cell",
+    "I": "ic2reborn:casing_iron",
+    "B": "ic2reborn:circuit",
+    "A": "ic2reborn:machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:condenser"
+  }
+}

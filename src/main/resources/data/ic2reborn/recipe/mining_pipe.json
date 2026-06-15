@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    "I I",
+    "ITI"
+  ],
+  "key": {
+    "I": "ic2reborn:plate_iron",
+    "T": "ic2reborn:treetap"
+  },
+  "result": {
+    "count": 16,
+    "id": "ic2reborn:mining_pipe"
+  }
+}

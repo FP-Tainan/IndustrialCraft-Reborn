@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PcP",
+    "CCC",
+    "PGP"
+  ],
+  "key": {
+    "C": "ic2reborn:reactor_chamber",
+    "c": "ic2reborn:advanced_circuit",
+    "G": "ic2reborn:generator",
+    "P": "ic2reborn:dense_plate_lead"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:nuclear_reactor"
+  }
+}

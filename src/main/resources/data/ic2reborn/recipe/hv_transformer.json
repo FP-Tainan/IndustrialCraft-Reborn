@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " c ",
+    "CEB",
+    " c "
+  ],
+  "key": {
+    "E": "ic2reborn:mv_transformer",
+    "c": "ic2reborn:cable_gold_double_insulated",
+    "B": "ic2reborn:advanced_re_battery",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:hv_transformer"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MMM",
+    "MMM",
+    "MMM"
+  ],
+  "key": {
+    "M": "ic2reborn:ingot_bronze"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:bronze_block"
+  }
+}

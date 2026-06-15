@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "ICI",
+    "III"
+  ],
+  "key": {
+    "C": "minecraft:chest",
+    "I": "ic2reborn:casing_lead"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:containment_box"
+  }
+}

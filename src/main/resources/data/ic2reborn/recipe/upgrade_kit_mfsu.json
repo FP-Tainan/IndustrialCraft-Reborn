@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LCL",
+    "LML",
+    "LAL"
+  ],
+  "key": {
+    "M": "ic2reborn:wrench",
+    "A": "ic2reborn:advanced_machine_block",
+    "C": "ic2reborn:advanced_circuit",
+    "L": "ic2reborn:lapotron_crystal"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:upgrade_kit_mfsu"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PUP",
+    "U U",
+    "PUP"
+  ],
+  "key": {
+    "U": "ic2reborn:fluid_cell",
+    "P": "ic2reborn:plate_steel"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:steel_tank"
+  }
+}

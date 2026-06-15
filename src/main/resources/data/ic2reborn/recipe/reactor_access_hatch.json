@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "VVV",
+    "VHV",
+    "VVV"
+  ],
+  "key": {
+    "V": "ic2reborn:reactor_vessel",
+    "H": "minecraft:oak_trapdoor"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:reactor_access_hatch"
+  }
+}

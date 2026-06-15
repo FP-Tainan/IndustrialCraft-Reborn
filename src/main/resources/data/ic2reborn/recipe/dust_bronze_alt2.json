@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:dust_tin",
+    "ic2reborn:dust_copper",
+    "ic2reborn:dust_copper",
+    "ic2reborn:dust_copper"
+  ],
+  "result": {
+    "count": 4,
+    "id": "ic2reborn:dust_bronze"
+  }
+}

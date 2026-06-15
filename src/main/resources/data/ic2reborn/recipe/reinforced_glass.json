@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GAG",
+    "GGG",
+    "GAG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "A": "ic2reborn:advanced_alloy"
+  },
+  "result": {
+    "count": 7,
+    "id": "ic2reborn:reinforced_glass"
+  }
+}

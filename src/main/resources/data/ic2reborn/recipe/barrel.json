@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P",
+    "W",
+    "P"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "W": "ic2reborn:rubber_wood"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:barrel"
+  }
+}

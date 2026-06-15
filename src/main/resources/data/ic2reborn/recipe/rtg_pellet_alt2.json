@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRR",
+    "AAA",
+    "RRR"
+  ],
+  "key": {
+    "R": "ic2reborn:dense_plate_iron",
+    "A": "ic2reborn:plutonium"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:rtg_pellet"
+  }
+}

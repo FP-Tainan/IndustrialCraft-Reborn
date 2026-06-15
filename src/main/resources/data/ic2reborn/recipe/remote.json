@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " c ",
+    "GCG",
+    "TTT"
+  ],
+  "key": {
+    "c": "ic2reborn:cable_copper_insulated",
+    "G": "minecraft:glowstone_dust",
+    "C": "ic2reborn:circuit",
+    "T": "minecraft:tnt"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:remote"
+  }
+}

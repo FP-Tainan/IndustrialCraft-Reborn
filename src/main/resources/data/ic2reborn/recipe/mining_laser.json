@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRc",
+    "AAC",
+    " AA"
+  ],
+  "key": {
+    "A": "ic2reborn:advanced_alloy",
+    "C": "ic2reborn:advanced_circuit",
+    "c": "ic2reborn:energy_crystal",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:mining_laser"
+  }
+}

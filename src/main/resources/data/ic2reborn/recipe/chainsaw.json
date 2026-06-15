@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " II",
+    "III",
+    "BI "
+  ],
+  "key": {
+    "I": "ic2reborn:plate_iron",
+    "B": "ic2reborn:power_unit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:chainsaw"
+  }
+}

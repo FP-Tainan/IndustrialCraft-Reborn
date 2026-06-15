@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:ingot_tin",
+    "ic2reborn:hammer"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:plate_tin"
+  }
+}

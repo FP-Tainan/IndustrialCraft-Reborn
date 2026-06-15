@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:uranium_235"
+  ],
+  "result": {
+    "count": 9,
+    "id": "ic2reborn:small_uranium_235"
+  }
+}

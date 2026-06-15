@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "UUU",
+    "UUU",
+    "UUU"
+  ],
+  "key": {
+    "U": "ic2reborn:ingot_uranium"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:uranium_block"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD",
+    "DRD",
+    "DDD"
+  ],
+  "key": {
+    "D": "ic2reborn:dynamite",
+    "R": "minecraft:resin_brick"
+  },
+  "result": {
+    "count": 8,
+    "id": "ic2reborn:dynamite_sticky"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "SPS",
+    "PSP"
+  ],
+  "key": {
+    "P": "ic2reborn:plate_lead",
+    "S": "minecraft:stone"
+  },
+  "result": {
+    "count": 4,
+    "id": "ic2reborn:reactor_vessel"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LPL",
+    "P P",
+    "LPL"
+  ],
+  "key": {
+    "L": "#minecraft:logs",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:wooden_storage_box"
+  }
+}

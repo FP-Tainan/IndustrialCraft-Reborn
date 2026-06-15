@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IAI",
+    "ADA",
+    "IAI"
+  ],
+  "key": {
+    "I": "ic2reborn:iridium_ore",
+    "A": "ic2reborn:advanced_alloy",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:iridium"
+  }
+}

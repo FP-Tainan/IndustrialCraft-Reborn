@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " I ",
+    "ACA",
+    "HWH"
+  ],
+  "key": {
+    "H": "ic2reborn:hammer",
+    "W": "ic2reborn:wrench",
+    "C": "ic2reborn:advanced_machine_block",
+    "A": "ic2reborn:advanced_circuit",
+    "I": "ic2reborn:industrial_workbench"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:batch_crafter"
+  }
+}

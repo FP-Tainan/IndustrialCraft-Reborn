@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "R",
+    "G",
+    "C"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "G": "ic2reborn:grin_powder",
+    "C": "ic2reborn:fluid_cell"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:ic2weed_ex_cell"
+  }
+}

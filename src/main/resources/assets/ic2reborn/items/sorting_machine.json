@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "ic2reborn:block/sorting_machine"
+  }
+}

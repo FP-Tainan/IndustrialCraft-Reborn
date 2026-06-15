@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "BBB",
+    "TTT"
+  ],
+  "key": {
+    "I": "ic2reborn:plate_iron",
+    "B": "ic2reborn:plate_bronze",
+    "T": "ic2reborn:plate_tin"
+  },
+  "result": {
+    "count": 2,
+    "id": "ic2reborn:ingot_alloy"
+  }
+}

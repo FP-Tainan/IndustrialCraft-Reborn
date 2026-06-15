@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "C",
+    "B",
+    "M"
+  ],
+  "key": {
+    "B": "ic2reborn:machine_block",
+    "M": "ic2reborn:electric_motor",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:block_cutter"
+  }
+}

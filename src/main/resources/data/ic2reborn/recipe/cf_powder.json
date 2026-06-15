@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SAS",
+    "SCS",
+    "SAS"
+  ],
+  "key": {
+    "A": "minecraft:sand",
+    "C": "minecraft:clay_ball",
+    "S": "ic2reborn:dust_stone"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cf_powder"
+  }
+}

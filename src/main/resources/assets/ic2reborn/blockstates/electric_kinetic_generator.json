@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ic2reborn:block/electric_kinetic_generator"
+    }
+  }
+}

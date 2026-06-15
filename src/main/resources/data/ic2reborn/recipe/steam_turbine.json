@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "A",
+    "A",
+    "A"
+  ],
+  "key": {
+    "A": "ic2reborn:steam_turbine_blade"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:steam_turbine"
+  }
+}

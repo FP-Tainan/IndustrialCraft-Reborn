@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " O ",
+    "RGR",
+    "R#R"
+  ],
+  "key": {
+    "R": "ic2reborn:rubber",
+    "G": "minecraft:glass",
+    "#": "minecraft:iron_bars",
+    "O": "minecraft:orange_dye"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:hazmat_helmet"
+  }
+}

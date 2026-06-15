@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "II ",
+    "ISS",
+    "II "
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:hammer"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BB",
+    "S ",
+    "S "
+  ],
+  "key": {
+    "B": "ic2reborn:ingot_bronze",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:bronze_hoe"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    " G ",
+    "I I"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "ic2reborn:generator"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:wind_generator"
+  }
+}

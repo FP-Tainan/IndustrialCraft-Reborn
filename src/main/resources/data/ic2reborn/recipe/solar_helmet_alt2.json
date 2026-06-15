@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " H ",
+    " S ",
+    "CCC"
+  ],
+  "key": {
+    "H": "minecraft:iron_helmet",
+    "S": "ic2reborn:solar_generator",
+    "C": "ic2reborn:cable_copper_insulated"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:solar_helmet"
+  }
+}

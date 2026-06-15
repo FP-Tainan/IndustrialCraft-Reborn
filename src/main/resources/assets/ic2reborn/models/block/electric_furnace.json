@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/electric_furnace_top",
+    "bottom": "ic2reborn:block/electric_furnace_bottom",
+    "front": "ic2reborn:block/electric_furnace_front",
+    "side": "ic2reborn:block/electric_furnace_side"
+  }
+}

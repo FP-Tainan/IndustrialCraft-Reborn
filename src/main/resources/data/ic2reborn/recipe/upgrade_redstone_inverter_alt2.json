@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T T",
+    " L ",
+    "T T"
+  ],
+  "key": {
+    "L": "minecraft:lever",
+    "T": "ic2reborn:dense_plate_tin"
+  },
+  "result": {
+    "count": 9,
+    "id": "ic2reborn:upgrade_redstone_inverter"
+  }
+}

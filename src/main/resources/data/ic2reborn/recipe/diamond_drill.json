@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " D ",
+    "DdD"
+  ],
+  "key": {
+    "D": "minecraft:diamond",
+    "d": "ic2reborn:drill"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:diamond_drill"
+  }
+}

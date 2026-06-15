@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TMT",
+    "TCT"
+  ],
+  "key": {
+    "T": "ic2reborn:treetap",
+    "M": "ic2reborn:machine_block",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:extractor"
+  }
+}

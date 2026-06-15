@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "InI",
+    "RLR"
+  ],
+  "key": {
+    "n": "ic2reborn:nano_boots",
+    "I": "ic2reborn:iridium",
+    "L": "ic2reborn:lapotron_crystal",
+    "R": "ic2reborn:rubber_boots"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:quantum_boots"
+  }
+}

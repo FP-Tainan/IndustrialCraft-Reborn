@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "B",
+    "M",
+    "F"
+  ],
+  "key": {
+    "B": "ic2reborn:heat_conductor",
+    "F": "minecraft:furnace",
+    "M": "ic2reborn:machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:solid_heat_generator"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CRC",
+    "RCR",
+    "CRC"
+  ],
+  "key": {
+    "C": "ic2reborn:plate_copper",
+    "R": "ic2reborn:neutron_reflector"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:thick_neutron_reflector"
+  }
+}

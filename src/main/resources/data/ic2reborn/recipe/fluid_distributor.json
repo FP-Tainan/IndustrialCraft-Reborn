@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "UUU",
+    "UMU",
+    "CCC"
+  ],
+  "key": {
+    "M": "ic2reborn:machine_block",
+    "U": "ic2reborn:upgrade_fluid_ejector",
+    "C": "ic2reborn:fluid_cell"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:fluid_distributor"
+  }
+}

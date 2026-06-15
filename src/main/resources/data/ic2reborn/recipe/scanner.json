@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "MLM",
+    "CAC"
+  ],
+  "key": {
+    "L": "ic2reborn:luminator_flat",
+    "A": "ic2reborn:advanced_machine_block",
+    "C": "ic2reborn:advanced_circuit",
+    "M": "ic2reborn:electric_motor",
+    "G": "ic2reborn:reinforced_glass",
+    "P": "ic2reborn:plate_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:scanner"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " E ",
+    "TMT",
+    "KKK"
+  ],
+  "key": {
+    "E": "ic2reborn:circuit",
+    "T": "ic2reborn:tool_box",
+    "M": "ic2reborn:machine_block",
+    "K": "ic2reborn:coil"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:metal_former"
+  }
+}

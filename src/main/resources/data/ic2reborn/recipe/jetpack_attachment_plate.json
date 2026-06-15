@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IAI",
+    "CRC",
+    "IAI"
+  ],
+  "key": {
+    "R": "ic2reborn:plate_steel",
+    "A": "ic2reborn:advanced_alloy",
+    "C": "ic2reborn:carbon_plate",
+    "I": "ic2reborn:iridium_shard"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:jetpack_attachment_plate"
+  }
+}

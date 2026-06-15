@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/extractor_top",
+    "bottom": "ic2reborn:block/extractor_bottom",
+    "front": "ic2reborn:block/extractor_front",
+    "side": "ic2reborn:block/extractor_side"
+  }
+}

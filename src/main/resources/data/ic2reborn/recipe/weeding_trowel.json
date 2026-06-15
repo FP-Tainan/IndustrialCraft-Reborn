@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    " I ",
+    "RIR"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "R": "ic2reborn:rubber"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:weeding_trowel"
+  }
+}

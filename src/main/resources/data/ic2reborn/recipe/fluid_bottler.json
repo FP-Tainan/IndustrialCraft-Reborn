@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    " T ",
+    "CMC"
+  ],
+  "key": {
+    "T": "ic2reborn:fluid_cell",
+    "M": "ic2reborn:machine_block",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:fluid_bottler"
+  }
+}

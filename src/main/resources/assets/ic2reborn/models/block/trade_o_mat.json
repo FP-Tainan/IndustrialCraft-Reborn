@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "ic2reborn:block/trade_o_mat",
+    "particle": "ic2reborn:block/trade_o_mat"
+  }
+}

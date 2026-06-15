@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#I#",
+    "IMI",
+    "#I#"
+  ],
+  "key": {
+    "M": "ic2reborn:electric_motor",
+    "I": "ic2reborn:plate_iron",
+    "#": "minecraft:iron_bars"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:heat_vent"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TET",
+    "LML",
+    "TCT"
+  ],
+  "key": {
+    "T": "ic2reborn:plate_tin",
+    "E": "minecraft:ender_pearl",
+    "L": "minecraft:lapis_lazuli",
+    "M": "ic2reborn:machine_block",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:chunk_loader"
+  }
+}

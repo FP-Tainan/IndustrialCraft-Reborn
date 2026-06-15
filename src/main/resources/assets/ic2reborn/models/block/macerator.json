@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/macerator_top",
+    "bottom": "ic2reborn:block/macerator_bottom",
+    "front": "ic2reborn:block/macerator_front",
+    "side": "ic2reborn:block/macerator_side"
+  }
+}

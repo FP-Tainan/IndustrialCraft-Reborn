@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "CGC",
+    "IBI"
+  ],
+  "key": {
+    "I": "ic2reborn:casing_iron",
+    "C": "ic2reborn:fluid_cell",
+    "G": "ic2reborn:electric_motor",
+    "B": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:fluid_regulator"
+  }
+}

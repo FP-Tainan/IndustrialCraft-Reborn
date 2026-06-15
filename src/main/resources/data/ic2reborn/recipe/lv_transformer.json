@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "PcP",
+    "PCP"
+  ],
+  "key": {
+    "P": "#minecraft:planks",
+    "C": "ic2reborn:cable_tin_insulated",
+    "c": "ic2reborn:coil"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:lv_transformer"
+  }
+}

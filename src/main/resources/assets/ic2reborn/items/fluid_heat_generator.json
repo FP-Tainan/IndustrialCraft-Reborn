@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "ic2reborn:block/fluid_heat_generator"
+  }
+}

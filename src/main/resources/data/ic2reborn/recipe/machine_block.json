@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "I I",
+    "III"
+  ],
+  "key": {
+    "I": "ic2reborn:plate_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:machine_block"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IBI",
+    "ICI",
+    "IGI"
+  ],
+  "key": {
+    "I": "ic2reborn:casing_iron",
+    "B": "ic2reborn:re_battery",
+    "G": "ic2reborn:heat_conductor",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:electric_heat_generator"
+  }
+}

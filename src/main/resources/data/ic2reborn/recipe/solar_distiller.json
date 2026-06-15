@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "G G",
+    "CMC"
+  ],
+  "key": {
+    "C": "ic2reborn:fluid_cell",
+    "M": "ic2reborn:machine_block",
+    "G": "minecraft:glass"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:solar_distiller"
+  }
+}

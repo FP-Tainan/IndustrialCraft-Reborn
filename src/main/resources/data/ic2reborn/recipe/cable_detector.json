@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "RIR",
+    " R "
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "I": "ic2reborn:cable_iron_triple_insulated",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cable_detector"
+  }
+}

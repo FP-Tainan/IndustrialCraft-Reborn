@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ic2reborn:block/weighted_item_distributor"
+    }
+  }
+}

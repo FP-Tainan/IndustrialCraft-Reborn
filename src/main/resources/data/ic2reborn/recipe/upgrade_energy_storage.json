@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "www",
+    "WBW",
+    "wEw"
+  ],
+  "key": {
+    "w": "#minecraft:planks",
+    "W": "ic2reborn:cable_copper_insulated",
+    "B": "ic2reborn:re_battery",
+    "E": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:upgrade_energy_storage"
+  }
+}

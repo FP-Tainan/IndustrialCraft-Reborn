@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRR",
+    "CMC"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "C": "minecraft:chest",
+    "M": "ic2reborn:machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:trade_o_mat"
+  }
+}

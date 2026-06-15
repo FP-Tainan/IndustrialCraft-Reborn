@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "CGC",
+    " C "
+  ],
+  "key": {
+    "C": "ic2reborn:casing_tin",
+    "G": "minecraft:glass_pane"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:fluid_cell"
+  }
+}

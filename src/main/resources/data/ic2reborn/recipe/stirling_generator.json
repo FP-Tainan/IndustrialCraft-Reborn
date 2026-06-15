@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IHI",
+    "ICI",
+    "III"
+  ],
+  "key": {
+    "C": "ic2reborn:generator",
+    "H": "ic2reborn:heat_conductor",
+    "I": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:stirling_generator"
+  }
+}

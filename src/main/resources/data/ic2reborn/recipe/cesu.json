@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PCP",
+    "BBB",
+    "PPP"
+  ],
+  "key": {
+    "P": "ic2reborn:plate_bronze",
+    "C": "ic2reborn:cable_copper_insulated",
+    "B": "ic2reborn:advanced_re_battery"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cesu"
+  }
+}

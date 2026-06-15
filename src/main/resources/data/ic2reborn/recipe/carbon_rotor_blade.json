@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "PSP",
+    "PSP"
+  ],
+  "key": {
+    "P": "ic2reborn:carbon_plate",
+    "S": "ic2reborn:carbon_mesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:carbon_rotor_blade"
+  }
+}

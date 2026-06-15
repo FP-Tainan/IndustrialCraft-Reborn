@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "ic2reborn:raw_lead",
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:ingot_lead"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

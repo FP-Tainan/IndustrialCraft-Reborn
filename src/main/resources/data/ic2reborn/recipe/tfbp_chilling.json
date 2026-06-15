@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "S#S",
+    " S "
+  ],
+  "key": {
+    "#": "ic2reborn:tfbp_blank",
+    "S": "minecraft:snowball"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:tfbp_chilling"
+  }
+}

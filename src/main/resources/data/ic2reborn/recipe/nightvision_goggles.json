@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XbX",
+    "LGL",
+    "RCR"
+  ],
+  "key": {
+    "X": "ic2reborn:advanced_heat_exchanger",
+    "b": "ic2reborn:advanced_re_battery",
+    "L": "ic2reborn:luminator_flat",
+    "G": "ic2reborn:reinforced_glass",
+    "R": "ic2reborn:rubber",
+    "C": "ic2reborn:advanced_circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:nightvision_goggles"
+  }
+}

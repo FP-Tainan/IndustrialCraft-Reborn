@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "   ",
+    "CCC"
+  ],
+  "key": {
+    "C": "ic2reborn:casing_steel"
+  },
+  "result": {
+    "count": 6,
+    "id": "ic2reborn:pipe"
+  }
+}

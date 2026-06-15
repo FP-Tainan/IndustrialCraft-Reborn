@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "CMC",
+    "III"
+  ],
+  "key": {
+    "M": "ic2reborn:machine_block",
+    "C": "minecraft:chest",
+    "I": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:item_buffer"
+  }
+}

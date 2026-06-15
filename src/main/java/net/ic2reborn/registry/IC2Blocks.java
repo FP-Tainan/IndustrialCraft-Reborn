@@ -3,7 +3,6 @@ package net.ic2reborn.registry;
 import net.ic2reborn.IC2Reborn;
 import net.ic2reborn.block.*;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,54 +16,79 @@ public class IC2Blocks {
 
     public static final RegistryObject<RubberLogDropBlock> RUBBER_LOG =
             BLOCKS.register("rubber_log", () -> new RubberLogDropBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)
-                            .setId(BLOCKS.key("rubber_log"))));
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("rubber_log"))
+                            .sound(SoundType.WOOD)
+                            .strength(2.0f, 2.0f)));
 
     public static final RegistryObject<RubberLeavesBlock> RUBBER_LEAVES =
             BLOCKS.register("rubber_leaves", () -> new RubberLeavesBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)
-                            .setId(BLOCKS.key("rubber_leaves"))));
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("rubber_leaves"))
+                            .sound(SoundType.GRASS)
+                            .strength(0.2f, 0.2f)
+                            .noOcclusion()));
 
     public static final RegistryObject<RubberSaplingBlock> RUBBER_SAPLING =
             BLOCKS.register("rubber_sapling", () -> new RubberSaplingBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING)
-                            .setId(BLOCKS.key("rubber_sapling"))));
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("rubber_sapling"))
+                            .sound(SoundType.GRASS)
+                            .strength(0.0f)
+                            .noOcclusion()));
 
-    // Copia TUDO do iron_ore — mapColor, instrument, som, força, requiresCorrectToolForDrops
-    // Só muda o setId
+    // iron ore = 3.0f hardness - mesma dureza
     public static final RegistryObject<OreBlock> TIN_ORE =
             BLOCKS.register("tin_ore", () -> new OreBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)
-                            .setId(BLOCKS.key("tin_ore")),
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("tin_ore"))
+                            .sound(SoundType.STONE)
+                            .strength(3.0f, 3.0f)
+                            .requiresCorrectToolForDrops(),
                     () -> IC2Items.RAW_TIN.get()));
 
     public static final RegistryObject<OreBlock> DEEPSLATE_TIN_ORE =
             BLOCKS.register("deepslate_tin_ore", () -> new OreBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)
-                            .setId(BLOCKS.key("deepslate_tin_ore")),
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("deepslate_tin_ore"))
+                            .sound(SoundType.DEEPSLATE)
+                            .strength(4.5f, 3.0f)
+                            .requiresCorrectToolForDrops(),
                     () -> IC2Items.RAW_TIN.get()));
 
     public static final RegistryObject<OreBlock> LEAD_ORE =
             BLOCKS.register("lead_ore", () -> new OreBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)
-                            .setId(BLOCKS.key("lead_ore")),
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("lead_ore"))
+                            .sound(SoundType.STONE)
+                            .strength(3.0f, 3.0f)
+                            .requiresCorrectToolForDrops(),
                     () -> IC2Items.RAW_LEAD.get()));
 
     public static final RegistryObject<OreBlock> DEEPSLATE_LEAD_ORE =
             BLOCKS.register("deepslate_lead_ore", () -> new OreBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)
-                            .setId(BLOCKS.key("deepslate_lead_ore")),
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("deepslate_lead_ore"))
+                            .sound(SoundType.DEEPSLATE)
+                            .strength(4.5f, 3.0f)
+                            .requiresCorrectToolForDrops(),
                     () -> IC2Items.RAW_LEAD.get()));
 
     public static final RegistryObject<OreBlock> URANIUM_ORE =
             BLOCKS.register("uranium_ore", () -> new OreBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)
-                            .setId(BLOCKS.key("uranium_ore")),
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("uranium_ore"))
+                            .sound(SoundType.STONE)
+                            .strength(3.0f, 3.0f)
+                            .requiresCorrectToolForDrops(),
                     () -> IC2Items.RAW_URANIUM.get()));
 
     public static final RegistryObject<OreBlock> DEEPSLATE_URANIUM_ORE =
             BLOCKS.register("deepslate_uranium_ore", () -> new OreBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)
-                            .setId(BLOCKS.key("deepslate_uranium_ore")),
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("deepslate_uranium_ore"))
+                            .sound(SoundType.DEEPSLATE)
+                            .strength(4.5f, 3.0f)
+                            .requiresCorrectToolForDrops(),
                     () -> IC2Items.RAW_URANIUM.get()));
 }

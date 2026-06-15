@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "cBc",
+    "UMU",
+    "PAP"
+  ],
+  "key": {
+    "M": "ic2reborn:machine_block",
+    "P": "ic2reborn:plate_iron",
+    "c": "ic2reborn:circuit",
+    "B": "minecraft:chest",
+    "U": "minecraft:shears",
+    "A": "ic2reborn:cropnalyzer"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:crop_harvester"
+  }
+}

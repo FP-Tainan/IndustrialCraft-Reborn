@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CgC",
+    "gCg",
+    "cGc"
+  ],
+  "key": {
+    "G": "ic2reborn:generator",
+    "C": "ic2reborn:dust_coal",
+    "g": "minecraft:glass",
+    "c": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:solar_generator"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CUC",
+    "UMU",
+    "CIC"
+  ],
+  "key": {
+    "M": "ic2reborn:machine_block",
+    "C": "minecraft:chest",
+    "U": "ic2reborn:upgrade_ejector",
+    "I": "ic2reborn:upgrade_pulling"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:weighted_item_distributor"
+  }
+}

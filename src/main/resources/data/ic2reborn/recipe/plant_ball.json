@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "P P",
+    "PPP"
+  ],
+  "key": {
+    "P": "minecraft:wheat"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:plant_ball"
+  }
+}

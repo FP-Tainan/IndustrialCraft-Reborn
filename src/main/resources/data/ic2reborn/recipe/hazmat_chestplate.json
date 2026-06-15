@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "R R",
+    "ROR",
+    "ROR"
+  ],
+  "key": {
+    "R": "ic2reborn:rubber",
+    "O": "minecraft:orange_dye"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:hazmat_chestplate"
+  }
+}

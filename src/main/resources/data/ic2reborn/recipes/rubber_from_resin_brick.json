@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "minecraft:resin_brick",
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:rubber"
+  },
+  "experience": 0.2,
+  "cookingtime": 200
+}

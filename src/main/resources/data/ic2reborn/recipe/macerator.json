@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FFF",
+    "SMS",
+    " C "
+  ],
+  "key": {
+    "F": "minecraft:flint",
+    "S": "minecraft:cobblestone",
+    "M": "ic2reborn:machine_block",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:macerator"
+  }
+}

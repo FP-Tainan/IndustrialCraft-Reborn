@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "CCC",
+    "IGI"
+  ],
+  "key": {
+    "C": "ic2reborn:fluid_cell",
+    "G": "ic2reborn:heat_conductor",
+    "I": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:fermenter"
+  }
+}

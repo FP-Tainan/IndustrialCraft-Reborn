@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "VVV",
+    "VRV",
+    "VVV"
+  ],
+  "key": {
+    "V": "ic2reborn:reactor_vessel",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:reactor_redstone_port"
+  }
+}

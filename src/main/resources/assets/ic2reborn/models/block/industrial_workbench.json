@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "ic2reborn:block/industrial_workbench",
+    "particle": "ic2reborn:block/industrial_workbench"
+  }
+}

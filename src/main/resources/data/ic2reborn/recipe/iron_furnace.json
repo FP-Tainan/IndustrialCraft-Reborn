@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " I ",
+    "I I",
+    "IFI"
+  ],
+  "key": {
+    "I": "ic2reborn:plate_iron",
+    "F": "minecraft:furnace"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:iron_furnace"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "WTW",
+    "GEG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "W": "ic2reborn:cable_gold_double_insulated",
+    "T": "ic2reborn:mv_transformer",
+    "E": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:upgrade_transformer"
+  }
+}

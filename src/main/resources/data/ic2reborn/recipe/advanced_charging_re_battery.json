@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "EBE",
+    "BOB",
+    "EBE"
+  ],
+  "key": {
+    "E": "ic2reborn:heat_exchanger",
+    "B": "ic2reborn:advanced_re_battery",
+    "O": "ic2reborn:charging_re_battery"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:advanced_charging_re_battery"
+  }
+}

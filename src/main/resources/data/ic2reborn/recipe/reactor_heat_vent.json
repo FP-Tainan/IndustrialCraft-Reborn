@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "CVC",
+    "CCC"
+  ],
+  "key": {
+    "V": "ic2reborn:heat_vent",
+    "C": "ic2reborn:plate_copper"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:reactor_heat_vent"
+  }
+}

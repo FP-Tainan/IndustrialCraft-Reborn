@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GTG",
+    "DMD",
+    "GDG"
+  ],
+  "key": {
+    "T": "ic2reborn:tfbp_blank",
+    "G": "minecraft:glowstone_dust",
+    "D": "minecraft:dirt",
+    "M": "ic2reborn:advanced_machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:terraformer"
+  }
+}

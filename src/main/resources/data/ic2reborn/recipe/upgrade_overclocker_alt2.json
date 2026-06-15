@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "WEW"
+  ],
+  "key": {
+    "C": "ic2reborn:tri_heat_storage",
+    "W": "ic2reborn:cable_copper_insulated",
+    "E": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 6,
+    "id": "ic2reborn:upgrade_overclocker"
+  }
+}

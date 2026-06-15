@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "ABA",
+    " A "
+  ],
+  "key": {
+    "A": "ic2reborn:bronze_rotor_blade",
+    "B": "ic2reborn:bronze_shaft"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:rotor_bronze"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SOS",
+    "OSO",
+    "SOS"
+  ],
+  "key": {
+    "O": "ic2reborn:dust_obsidian",
+    "S": "ic2reborn:dust_silicon_dioxide"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:raw_crystal_memory"
+  }
+}

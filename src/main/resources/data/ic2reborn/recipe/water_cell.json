@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:fluid_cell",
+    "minecraft:water_bucket"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:water_cell"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GFG",
+    "CMC",
+    "GDG"
+  ],
+  "key": {
+    "M": "ic2reborn:advanced_machine_block",
+    "C": "ic2reborn:glass_fibre_cable",
+    "F": "ic2reborn:frequency_transmitter",
+    "G": "ic2reborn:advanced_circuit",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:teleporter"
+  }
+}

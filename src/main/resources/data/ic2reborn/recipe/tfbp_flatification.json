@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " D ",
+    "D#D",
+    " D "
+  ],
+  "key": {
+    "#": "ic2reborn:tfbp_blank",
+    "D": "minecraft:dirt"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:tfbp_flatification"
+  }
+}

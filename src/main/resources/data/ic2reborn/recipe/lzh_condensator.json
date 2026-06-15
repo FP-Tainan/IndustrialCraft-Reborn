@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RVR",
+    "CLC",
+    "RSR"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "V": "ic2reborn:reactor_heat_vent",
+    "S": "ic2reborn:reactor_heat_exchanger",
+    "C": "ic2reborn:rsh_condensator",
+    "L": "minecraft:lapis_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:lzh_condensator"
+  }
+}

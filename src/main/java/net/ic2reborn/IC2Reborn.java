@@ -2,6 +2,8 @@ package net.ic2reborn;
 
 import com.mojang.logging.LogUtils;
 import net.ic2reborn.registry.IC2Blocks;
+import net.ic2reborn.registry.IC2AutoBlocks;
+import net.ic2reborn.registry.IC2AutoItems;
 import net.ic2reborn.registry.IC2Items;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -47,6 +49,7 @@ public class IC2Reborn {
                         output.accept(IC2Items.INGOT_TIN.get());
                         output.accept(IC2Items.INGOT_LEAD.get());
                         output.accept(IC2Items.INGOT_URANIUM.get());
+                        IC2AutoItems.ITEMS.getEntries().forEach(entry -> output.accept(entry.get()));
                     })
                     .build());
 
@@ -54,6 +57,8 @@ public class IC2Reborn {
         var modBusGroup = context.getModBusGroup();
         IC2Blocks.BLOCKS.register(modBusGroup);
         IC2Items.ITEMS.register(modBusGroup);
+        IC2AutoBlocks.BLOCKS.register(modBusGroup);
+        IC2AutoItems.ITEMS.register(modBusGroup);
         TABS.register(modBusGroup);
         LOGGER.info("IC2 Reborn — Módulo 1: Natureza carregado!");
     }

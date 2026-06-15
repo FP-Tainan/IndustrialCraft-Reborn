@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:iodine",
+    "ic2reborn:plate_tin"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:iodine_tablet"
+  }
+}

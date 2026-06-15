@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " U ",
+    "CIC",
+    " U "
+  ],
+  "key": {
+    "U": "ic2reborn:dual_uranium_fuel_rod",
+    "I": "ic2reborn:plate_iron",
+    "C": "ic2reborn:plate_copper"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:quad_uranium_fuel_rod"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "GSG",
+    " G "
+  ],
+  "key": {
+    "S": "ic2reborn:heat_exchanger",
+    "G": "ic2reborn:plate_gold"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:component_heat_exchanger"
+  }
+}

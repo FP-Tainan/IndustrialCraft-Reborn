@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": "ic2reborn:scrap"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:scrap_box"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "A A",
+    " A ",
+    "I I"
+  ],
+  "key": {
+    "A": "ic2reborn:plate_iron",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cutter"
+  }
+}

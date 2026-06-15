@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " AC",
+    "BIM",
+    " AC"
+  ],
+  "key": {
+    "C": "ic2reborn:casing_iron",
+    "B": "ic2reborn:re_battery",
+    "I": "ic2reborn:circuit",
+    "M": "ic2reborn:electric_motor",
+    "A": "ic2reborn:cable_copper"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:small_power_unit"
+  }
+}

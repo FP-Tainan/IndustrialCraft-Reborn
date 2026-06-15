@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IBI",
+    "ISI",
+    "IMI"
+  ],
+  "key": {
+    "I": "ic2reborn:casing_iron",
+    "B": "ic2reborn:re_battery",
+    "M": "ic2reborn:electric_motor",
+    "S": "ic2reborn:iron_shaft"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:electric_kinetic_generator"
+  }
+}

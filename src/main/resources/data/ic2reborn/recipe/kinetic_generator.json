@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "MES",
+    "III"
+  ],
+  "key": {
+    "M": "ic2reborn:generator",
+    "S": "ic2reborn:iron_shaft",
+    "E": "ic2reborn:electric_motor",
+    "I": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:kinetic_generator"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": "ic2reborn:coal_block",
+    "O": "minecraft:obsidian"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:coal_chunk"
+  }
+}

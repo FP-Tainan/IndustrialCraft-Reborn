@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    "ISI",
+    "CCC"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "S": "#minecraft:wool",
+    "C": "ic2reborn:cable_copper_insulated"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:static_boots"
+  }
+}

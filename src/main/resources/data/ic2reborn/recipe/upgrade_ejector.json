@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T T",
+    " P ",
+    "T T"
+  ],
+  "key": {
+    "T": "ic2reborn:plate_tin",
+    "P": "minecraft:piston"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:upgrade_ejector"
+  }
+}

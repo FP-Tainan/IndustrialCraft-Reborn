@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRR",
+    "RMR",
+    "ICI"
+  ],
+  "key": {
+    "M": "ic2reborn:mv_transformer",
+    "R": "minecraft:redstone",
+    "C": "ic2reborn:circuit",
+    "I": "ic2reborn:casing_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:tesla_coil"
+  }
+}

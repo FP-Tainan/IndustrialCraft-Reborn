@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ICI",
+    "IBI",
+    "G G"
+  ],
+  "key": {
+    "I": "ic2reborn:casing_iron",
+    "C": "ic2reborn:advanced_circuit",
+    "B": "ic2reborn:batbox",
+    "G": "minecraft:glowstone_dust"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:jetpack_electric"
+  }
+}

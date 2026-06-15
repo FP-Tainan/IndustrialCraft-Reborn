@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ICI",
+    "IFI",
+    "R R"
+  ],
+  "key": {
+    "I": "ic2reborn:casing_iron",
+    "C": "ic2reborn:circuit",
+    "F": "ic2reborn:fluid_cell",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:jetpack"
+  }
+}

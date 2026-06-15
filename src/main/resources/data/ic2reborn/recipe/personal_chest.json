@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "c",
+    "M",
+    "C"
+  ],
+  "key": {
+    "c": "ic2reborn:circuit",
+    "C": "minecraft:chest",
+    "M": "ic2reborn:machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:personal_chest"
+  }
+}

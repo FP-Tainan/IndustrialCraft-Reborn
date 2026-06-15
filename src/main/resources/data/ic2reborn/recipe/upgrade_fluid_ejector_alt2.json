@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T T",
+    " E ",
+    "T T"
+  ],
+  "key": {
+    "E": "ic2reborn:electric_motor",
+    "T": "ic2reborn:dense_plate_tin"
+  },
+  "result": {
+    "count": 9,
+    "id": "ic2reborn:upgrade_fluid_ejector"
+  }
+}

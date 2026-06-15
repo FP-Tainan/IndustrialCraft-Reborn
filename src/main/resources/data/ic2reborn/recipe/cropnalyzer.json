@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "cc ",
+    "RGR",
+    "RCR"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "c": "ic2reborn:cable_copper_insulated",
+    "R": "minecraft:redstone",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:cropnalyzer"
+  }
+}

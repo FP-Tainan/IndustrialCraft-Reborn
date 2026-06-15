@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "CSC",
+    "CCC"
+  ],
+  "key": {
+    "S": "ic2reborn:heat_exchanger",
+    "C": "ic2reborn:plate_copper"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:reactor_heat_exchanger"
+  }
+}

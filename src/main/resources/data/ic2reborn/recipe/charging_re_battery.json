@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CBC",
+    "B B",
+    "CBC"
+  ],
+  "key": {
+    "B": "ic2reborn:re_battery",
+    "C": "ic2reborn:circuit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:charging_re_battery"
+  }
+}

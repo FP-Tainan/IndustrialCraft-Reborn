@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:machine_block",
+    "minecraft:lever"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:manual_kinetic_generator"
+  }
+}

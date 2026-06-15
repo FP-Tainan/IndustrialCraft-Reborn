@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "mMm",
+    "M#M",
+    "mMm"
+  ],
+  "key": {
+    "#": "ic2reborn:tfbp_blank",
+    "M": "minecraft:brown_mushroom",
+    "m": "minecraft:mycelium"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:tfbp_mushroom"
+  }
+}

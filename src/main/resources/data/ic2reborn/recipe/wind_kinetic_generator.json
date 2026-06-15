@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SMS"
+  ],
+  "key": {
+    "M": "ic2reborn:machine_block",
+    "S": "ic2reborn:iron_shaft"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:wind_kinetic_generator"
+  }
+}

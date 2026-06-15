@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ECE",
+    "CMC",
+    "EBE"
+  ],
+  "key": {
+    "E": "ic2reborn:upgrade_ejector",
+    "C": "ic2reborn:lzh_condensator",
+    "M": "ic2reborn:advanced_machine_block",
+    "B": "ic2reborn:item_buffer_2"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:rci_lzh"
+  }
+}

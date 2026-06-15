@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#T#",
+    "TVT",
+    "#T#"
+  ],
+  "key": {
+    "V": "ic2reborn:heat_vent",
+    "#": "minecraft:iron_bars",
+    "T": "ic2reborn:plate_tin"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:component_heat_vent"
+  }
+}

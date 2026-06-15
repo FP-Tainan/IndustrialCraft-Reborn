@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PDP",
+    "GCG",
+    "cSc"
+  ],
+  "key": {
+    "S": "ic2reborn:scanner",
+    "c": "ic2reborn:cable_gold_double_insulated",
+    "G": "minecraft:glowstone_dust",
+    "C": "ic2reborn:advanced_circuit",
+    "P": "ic2reborn:casing_gold",
+    "D": "ic2reborn:energy_crystal"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:advanced_scanner"
+  }
+}

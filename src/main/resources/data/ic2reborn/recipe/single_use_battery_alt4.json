@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "c",
+    "R",
+    "C"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "C": "ic2reborn:dust_coal_fuel",
+    "c": "ic2reborn:cable_copper_insulated"
+  },
+  "result": {
+    "count": 8,
+    "id": "ic2reborn:single_use_battery"
+  }
+}

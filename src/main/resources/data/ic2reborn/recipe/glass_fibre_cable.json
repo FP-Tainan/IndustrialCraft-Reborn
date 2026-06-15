@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "DRD",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "R": "ic2reborn:dust_silver",
+    "D": "ic2reborn:dust_energium"
+  },
+  "result": {
+    "count": 6,
+    "id": "ic2reborn:glass_fibre_cable"
+  }
+}

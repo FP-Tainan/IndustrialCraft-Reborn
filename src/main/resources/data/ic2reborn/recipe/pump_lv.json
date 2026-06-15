@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:pipe",
+    "minecraft:piston",
+    "ic2reborn:cable_copper_insulated"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:pump_lv"
+  }
+}

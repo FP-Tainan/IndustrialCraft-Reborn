@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TCT",
+    "TcT",
+    "TCT"
+  ],
+  "key": {
+    "C": "ic2reborn:tri_heat_storage",
+    "T": "ic2reborn:plate_tin",
+    "c": "ic2reborn:plate_iron"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:hex_heat_storage"
+  }
+}

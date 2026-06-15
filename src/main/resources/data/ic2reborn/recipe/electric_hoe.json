@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "II",
+    " I",
+    " B"
+  ],
+  "key": {
+    "I": "ic2reborn:plate_iron",
+    "B": "ic2reborn:small_power_unit"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:electric_hoe"
+  }
+}

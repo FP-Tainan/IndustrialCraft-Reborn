@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RCR",
+    "RCR",
+    "RCR"
+  ],
+  "key": {
+    "R": "ic2reborn:rubber",
+    "C": "ic2reborn:plate_copper"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:heat_conductor"
+  }
+}
