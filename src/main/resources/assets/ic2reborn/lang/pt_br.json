@@ -425,5 +425,19 @@
   "item.ic2reborn.wood_rotor_blade": "Pá de Rotor de Madeira",
   "item.ic2reborn.wrench": "Chave Inglesa",
   "item.ic2reborn.wrench_new": "Chave Inglesa Nova",
-  "itemGroup.ic2reborn": "IndustrialCraft 2 Reborn"
+  "itemGroup.ic2reborn": "IndustrialCraft 2 Reborn",
+  "block.ic2reborn.cable_copper": "Cabo de Cobre",
+  "block.ic2reborn.cable_copper_insulated": "Cabo de Cobre Isolado",
+  "block.ic2reborn.cable_tin": "Cabo de Estanho",
+  "block.ic2reborn.cable_tin_insulated": "Cabo de Estanho Isolado",
+  "block.ic2reborn.cable_gold": "Cabo de Ouro",
+  "block.ic2reborn.cable_gold_insulated": "Cabo de Ouro Isolado",
+  "block.ic2reborn.cable_gold_double_insulated": "Cabo de Ouro com Isolamento Duplo",
+  "block.ic2reborn.cable_iron": "Cabo de Ferro",
+  "block.ic2reborn.cable_iron_insulated": "Cabo de Ferro Isolado",
+  "block.ic2reborn.cable_iron_double_insulated": "Cabo de Ferro com Isolamento Duplo",
+  "block.ic2reborn.cable_iron_triple_insulated": "Cabo de Ferro com Isolamento Triplo",
+  "block.ic2reborn.cable_detector": "Cabo Detector",
+  "block.ic2reborn.cable_splitter": "Divisor de Cabos",
+  "block.ic2reborn.glass_fibre_cable": "Cabo de Fibra de Vidro"
 }

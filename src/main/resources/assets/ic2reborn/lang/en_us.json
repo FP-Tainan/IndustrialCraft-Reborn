@@ -425,5 +425,19 @@
   "item.ic2reborn.wood_rotor_blade": "Wood Rotor Blade",
   "item.ic2reborn.wrench": "Wrench",
   "item.ic2reborn.wrench_new": "Wrench New",
-  "itemGroup.ic2reborn": "IndustrialCraft 2 Reborn"
+  "itemGroup.ic2reborn": "IndustrialCraft 2 Reborn",
+  "block.ic2reborn.cable_copper": "Cable Copper",
+  "block.ic2reborn.cable_copper_insulated": "Cable Copper Insulated",
+  "block.ic2reborn.cable_tin": "Cable Tin",
+  "block.ic2reborn.cable_tin_insulated": "Cable Tin Insulated",
+  "block.ic2reborn.cable_gold": "Cable Gold",
+  "block.ic2reborn.cable_gold_insulated": "Cable Gold Insulated",
+  "block.ic2reborn.cable_gold_double_insulated": "Cable Gold Double Insulated",
+  "block.ic2reborn.cable_iron": "Cable Iron",
+  "block.ic2reborn.cable_iron_insulated": "Cable Iron Insulated",
+  "block.ic2reborn.cable_iron_double_insulated": "Cable Iron Double Insulated",
+  "block.ic2reborn.cable_iron_triple_insulated": "Cable Iron Triple Insulated",
+  "block.ic2reborn.cable_detector": "Cable Detector",
+  "block.ic2reborn.cable_splitter": "Cable Splitter",
+  "block.ic2reborn.glass_fibre_cable": "Glass Fibre cable"
 }

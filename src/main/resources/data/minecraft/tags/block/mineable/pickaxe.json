@@ -15,6 +15,20 @@
     "ic2reborn:uranium_ore",
     "ic2reborn:reinforced_stone",
     "ic2reborn:reinforced_glass",
-    "ic2reborn:iron_fence"
+    "ic2reborn:iron_fence",
+    "ic2reborn:cable_copper",
+    "ic2reborn:cable_copper_insulated",
+    "ic2reborn:cable_detector",
+    "ic2reborn:cable_gold",
+    "ic2reborn:cable_gold_double_insulated",
+    "ic2reborn:cable_gold_insulated",
+    "ic2reborn:cable_iron",
+    "ic2reborn:cable_iron_double_insulated",
+    "ic2reborn:cable_iron_insulated",
+    "ic2reborn:cable_iron_triple_insulated",
+    "ic2reborn:cable_splitter",
+    "ic2reborn:cable_tin",
+    "ic2reborn:cable_tin_insulated",
+    "ic2reborn:glass_fibre_cable"
   ]
 }
