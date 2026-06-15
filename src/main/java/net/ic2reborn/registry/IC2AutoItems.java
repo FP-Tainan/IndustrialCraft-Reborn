@@ -200,6 +200,9 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> CROP_STICK = ITEMS.register("crop_stick", () -> new Item(new Item.Properties().setId(ITEMS.key("crop_stick"))));
     public static final RegistryObject<Item> CROPNALYZER = ITEMS.register("cropnalyzer", () -> new Item(new Item.Properties().setId(ITEMS.key("cropnalyzer"))));
     public static final RegistryObject<Item> CROWBAR = ITEMS.register("crowbar", () -> new Item(new Item.Properties().setId(ITEMS.key("crowbar"))));
+    public static final RegistryObject<Item> CRUSHED_COPPER = ITEMS.register("crushed_copper", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_copper"))));
+    public static final RegistryObject<Item> CRUSHED_GOLD = ITEMS.register("crushed_gold", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_gold"))));
+    public static final RegistryObject<Item> CRUSHED_IRON = ITEMS.register("crushed_iron", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_iron"))));
     public static final RegistryObject<Item> CRUSHED_LEAD = ITEMS.register("crushed_lead", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_lead"))));
     public static final RegistryObject<Item> CRUSHED_SILVER = ITEMS.register("crushed_silver", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_silver"))));
     public static final RegistryObject<Item> CRUSHED_TIN = ITEMS.register("crushed_tin", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_tin"))));
@@ -335,6 +338,9 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> POWER_UNIT = ITEMS.register("power_unit", () -> new Item(new Item.Properties().setId(ITEMS.key("power_unit"))));
     public static final RegistryObject<Item> PUMP_LV = ITEMS.register("pump_lv", () -> new Item(new Item.Properties().setId(ITEMS.key("pump_lv"))));
     public static final RegistryObject<Item> PUMP_MV = ITEMS.register("pump_mv", () -> new Item(new Item.Properties().setId(ITEMS.key("pump_mv"))));
+    public static final RegistryObject<Item> PURIFIED_COPPER = ITEMS.register("purified_copper", () -> new Item(new Item.Properties().setId(ITEMS.key("purified_copper"))));
+    public static final RegistryObject<Item> PURIFIED_GOLD = ITEMS.register("purified_gold", () -> new Item(new Item.Properties().setId(ITEMS.key("purified_gold"))));
+    public static final RegistryObject<Item> PURIFIED_IRON = ITEMS.register("purified_iron", () -> new Item(new Item.Properties().setId(ITEMS.key("purified_iron"))));
     public static final RegistryObject<Item> PURIFIED_LEAD = ITEMS.register("purified_lead", () -> new Item(new Item.Properties().setId(ITEMS.key("purified_lead"))));
     public static final RegistryObject<Item> PURIFIED_SILVER = ITEMS.register("purified_silver", () -> new Item(new Item.Properties().setId(ITEMS.key("purified_silver"))));
     public static final RegistryObject<Item> PURIFIED_TIN = ITEMS.register("purified_tin", () -> new Item(new Item.Properties().setId(ITEMS.key("purified_tin"))));
