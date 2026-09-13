@@ -10,3 +10,5 @@ pluginManagement {
 }
 
 rootProject.name = 'ic2reborn'
+
+include 'craft-energy'

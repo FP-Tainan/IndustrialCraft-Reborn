@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "craftenergy",
+  "version": "${version}",
+  "name": "Craft Energy",
+  "description": "Sistema de energia elétrica compartilhado para mods industriais: CW (Craft Watts), MV (Mine Volts), RA (Red Ampères) e CWh.",
+  "authors": [
+    "Tainan Fermino Peres"
+  ],
+  "license": "All Rights Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.craftenergy.fabric.CraftEnergyMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

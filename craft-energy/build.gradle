@@ -1,23 +1,12 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+    id 'net.fabricmc.fabric-loom'
 }
 
-version = project.mod_version
+version = project.craftenergy_version
 group = project.maven_group
 
 base {
-    archivesName = project.archives_base_name
-}
-
-loom {
-    mods {
-        "ic2reborn" {
-            sourceSet sourceSets.main
-        }
-        "craftenergy" {
-            sourceSet "main", ":craft-energy"
-        }
-    }
+    archivesName = 'craftenergy'
 }
 
 dependencies {
@@ -25,9 +14,9 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-    // Biblioteca de energia CW/MV/RA, empacotada dentro do jar do IC2 Reborn
-    implementation project(':craft-energy')
-    include project(':craft-energy')
+    testImplementation platform("org.junit:junit-bom:${project.junit_version}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 processResources {
@@ -46,9 +35,12 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-    // Minecraft 26.x ships Java 25
     toolchain.languageVersion = JavaLanguageVersion.of(25)
     withSourcesJar()
     sourceCompatibility = JavaVersion.VERSION_25
     targetCompatibility = JavaVersion.VERSION_25
+}
+
+test {
+    useJUnitPlatform()
 }
