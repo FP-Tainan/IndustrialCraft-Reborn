@@ -336,11 +336,11 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> REACTOR_HEAT_VENT = ITEMS.register("reactor_heat_vent", () -> new Item(new Item.Properties().setId(ITEMS.key("reactor_heat_vent"))));
     public static final RegistryObject<Item> REINFORCED_DOOR = ITEMS.register("reinforced_door", () -> new Item(new Item.Properties().setId(ITEMS.key("reinforced_door"))));
     public static final RegistryObject<Item> REMOTE = ITEMS.register("remote", () -> new Item(new Item.Properties().setId(ITEMS.key("remote"))));
-    public static final RegistryObject<Item> ROTOR_BRONZE = ITEMS.register("rotor_bronze", () -> new Item(new Item.Properties().setId(ITEMS.key("rotor_bronze"))));
-    public static final RegistryObject<Item> ROTOR_CARBON = ITEMS.register("rotor_carbon", () -> new Item(new Item.Properties().setId(ITEMS.key("rotor_carbon"))));
-    public static final RegistryObject<Item> ROTOR_IRON = ITEMS.register("rotor_iron", () -> new Item(new Item.Properties().setId(ITEMS.key("rotor_iron"))));
-    public static final RegistryObject<Item> ROTOR_STEEL = ITEMS.register("rotor_steel", () -> new Item(new Item.Properties().setId(ITEMS.key("rotor_steel"))));
-    public static final RegistryObject<Item> ROTOR_WOOD = ITEMS.register("rotor_wood", () -> new Item(new Item.Properties().setId(ITEMS.key("rotor_wood"))));
+    public static final RegistryObject<Item> ROTOR_BRONZE = ITEMS.register("rotor_bronze", () -> new net.ic2reborn.item.RotorItem(new Item.Properties().setId(ITEMS.key("rotor_bronze")), 7, 86400, 0.5F, 14, 75, true));
+    public static final RegistryObject<Item> ROTOR_CARBON = ITEMS.register("rotor_carbon", () -> new net.ic2reborn.item.RotorItem(new Item.Properties().setId(ITEMS.key("rotor_carbon")), 11, 604800, 1.0F, 20, 110, true));
+    public static final RegistryObject<Item> ROTOR_IRON = ITEMS.register("rotor_iron", () -> new net.ic2reborn.item.RotorItem(new Item.Properties().setId(ITEMS.key("rotor_iron")), 7, 86400, 0.5F, 14, 75, true));
+    public static final RegistryObject<Item> ROTOR_STEEL = ITEMS.register("rotor_steel", () -> new net.ic2reborn.item.RotorItem(new Item.Properties().setId(ITEMS.key("rotor_steel")), 9, 172800, 0.75F, 17, 90, true));
+    public static final RegistryObject<Item> ROTOR_WOOD = ITEMS.register("rotor_wood", () -> new net.ic2reborn.item.RotorItem(new Item.Properties().setId(ITEMS.key("rotor_wood")), 5, 10800, 0.25F, 10, 60, false));
     public static final RegistryObject<Item> RSH_CONDENSATOR = ITEMS.register("rsh_condensator", () -> new Item(new Item.Properties().setId(ITEMS.key("rsh_condensator"))));
     public static final RegistryObject<Item> RTG_PELLET = ITEMS.register("rtg_pellet", () -> new Item(new Item.Properties().setId(ITEMS.key("rtg_pellet"))));
     public static final RegistryObject<Item> RUBBER_BOAT = ITEMS.register("rubber_boat", () -> new Item(new Item.Properties().setId(ITEMS.key("rubber_boat"))));

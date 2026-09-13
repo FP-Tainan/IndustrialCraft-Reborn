@@ -14,7 +14,9 @@
       "net.ic2reborn.test.IC2FluidsGameTest",
       "net.ic2reborn.test.ProcessingMachinesGameTest",
       "net.ic2reborn.test.MinerGameTest",
-      "net.ic2reborn.test.HeatGameTest"
+      "net.ic2reborn.test.HeatGameTest",
+      "net.ic2reborn.test.KineticGameTest",
+      "net.ic2reborn.test.CableWaterGameTest"
     ]
   },
   "depends": {

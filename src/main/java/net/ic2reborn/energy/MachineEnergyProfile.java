@@ -17,7 +17,7 @@ import net.ic2reborn.menu.MachineGuiType;
  */
 public record MachineEnergyProfile(Role role, int voltage, long power, long capacity, int operationTicks,
                                    int highVoltage, double efficiency) {
-    public enum Role { NONE, GENERATOR, STORAGE, PROCESSOR, TRANSFORMER, HEAT }
+    public enum Role { NONE, GENERATOR, STORAGE, PROCESSOR, TRANSFORMER, HEAT, KINETIC }
 
     public static final MachineEnergyProfile NONE = new MachineEnergyProfile(Role.NONE, 0, 0, 0, 0, 0, 0.0);
 
@@ -51,6 +51,12 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
             // IC2: 1.000 EU guardados; o consumo depende da broca (3.000 CW com a perfuradora)
             case MINER -> new MachineEnergyProfile(Role.PROCESSOR, 220, 3_000, EnergyUnits.fromCWh(500), 0, 0, 0.0);
             // calor (HU) sem eletricidade: fermentador e geradores de calor sólido, fluido e RT
+            // energia cinética (KU) sem eletricidade: rotores e manivela
+            case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR, MANUAL_KINETIC_GENERATOR -> new MachineEnergyProfile(Role.KINETIC, 0, 0, 0, 0, 0, 0.0);
+            // IC2: 4 KU = 1 EU → 125 CW por KU; saída a partir de MV
+            case KINETIC_GENERATOR -> simple(Role.GENERATOR, 1_000, 250_000, 500_000);
+            // IC2: 10 motores × 100 KU/t, 10.000 EU guardados
+            case ELECTRIC_KINETIC_GENERATOR -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 125_000, EnergyUnits.fromCWh(5_000), 0, 0, 0.0);
             case FERMENTER, SOLID_HEAT_GENERATOR, FLUID_HEAT_GENERATOR, RT_HEAT_GENERATOR -> new MachineEnergyProfile(Role.HEAT, 0, 0, 0, 0, 0, 0.0);
             // IC2: 10 HU/t por bobina, 1 HU = 1 EU → 500 CW; 10.000 EU guardados
             case ELECTRIC_HEAT_GENERATOR -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 50_000, EnergyUnits.fromCWh(5_000), 0, 0, 0.0);

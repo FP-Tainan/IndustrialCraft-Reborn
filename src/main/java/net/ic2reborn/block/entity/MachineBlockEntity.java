@@ -187,6 +187,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case FLUID_HEAT_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, -1, -1, 0, 1);
                 // 10 bobinas e a descarga
                 case ELECTRIC_HEAT_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, 10, -1, -1, -1);
+                // 10 motores e a descarga
+                case ELECTRIC_KINETIC_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, 10, -1, -1, -1);
                 // duas entradas (A, B) e duas saídas
                 case INDUCTION_FURNACE -> new Slots(0, 1, new int[]{2, 3}, 4, -1, -1, -1);
                 case CENTRIFUGE -> new Slots(0, -1, new int[]{2, 3, 4}, 1, -1, -1, -1);
@@ -221,6 +223,20 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private int transmitHeat;
     private long heatStore;
     private boolean heatWorking;
+
+    // energia cinética (KU)
+    private long kineticStore;
+    private int kuOutput;
+    private double windStrength;
+    private int rotorCrossSection;
+    private int rotorObstructed;
+    private boolean rotorActive;
+    private int kineticTicker;
+    private int waterBiome = -1;
+    private @Nullable Direction waterFacing;
+    private int distanceToNormalBiome;
+    private int manualClicks;
+    private boolean kineticWorking;
 
     private long energy;
     private int progress;
@@ -334,7 +350,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case GENERATOR -> new GeneratorNode();
             case STORAGE -> new StorageInput();
             case PROCESSOR -> new ProcessorNode();
-            case TRANSFORMER, HEAT, NONE -> null;
+            case TRANSFORMER, HEAT, KINETIC, NONE -> null;
         };
         this.storageOutput = this.profile.role() == MachineEnergyProfile.Role.STORAGE ? new StorageOutput() : null;
 
@@ -485,6 +501,11 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             if (face == null) return null;
             return face == front() ? this.transformer.highSide() : this.transformer.lowSide();
         }
+        // IC2: a face cinética (frente) do gerador cinético e do cinético elétrico não troca eletricidade
+        if ((this.guiType == MachineGuiType.KINETIC_GENERATOR || this.guiType == MachineGuiType.ELECTRIC_KINETIC_GENERATOR)
+                && face != null && face == front()) {
+            return null;
+        }
         if (this.storageOutput != null && face != null && face == front()) {
             return this.storageOutput;
         }
@@ -517,16 +538,19 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case WATER_GENERATOR -> tickWater(level);
                 case WIND_GENERATOR -> tickWind(level);
                 case GEO_GENERATOR -> tickGeo();
+                case KINETIC_GENERATOR -> tickKineticGenerator(level);
                 case SEMIFLUID_GENERATOR -> tickSemifluid();
                 default -> tickGenerator(level);
             };
             case PROCESSOR -> switch (this.guiType) {
+                case ELECTRIC_KINETIC_GENERATOR -> tickElectricKinetic();
                 case ELECTRIC_HEAT_GENERATOR -> tickElectricHeat();
                 case MINER -> this.miner != null && this.miner.tick(level);
                 case INDUCTION_FURNACE -> tickInduction(level);
                 case CENTRIFUGE -> tickCentrifugeHeat(level) | tickProcessor(level);
                 default -> tickProcessor(level);
             };
+            case KINETIC -> tickKineticSource(level);
             case HEAT -> tickHeatMachine(level);
             case TRANSFORMER -> tickTransformer(level);
             case STORAGE, NONE -> false;
@@ -536,6 +560,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         boolean working = switch (this.profile.role()) {
             case GENERATOR -> this.energy > energyBefore;
             case PROCESSOR -> this.energy < energyBefore;
+            case KINETIC -> this.kineticWorking;
             case HEAT -> this.heatWorking;
             case TRANSFORMER -> this.transformer != null && this.transformer.mode() == BufferedTransformer.Mode.STEP_UP;
             case STORAGE, NONE -> false;
@@ -884,6 +909,295 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         }
         this.maxHeat = this.workHeat;
         return this.heat != before;
+    }
+
+    // ── energia cinética (IC2: IKineticSource) ────────────────────────────
+    /** Gerador cinético do IC2: 4 KU = 1 EU → 125 CW por KU. */
+    private static final long CW_PER_KU = 125;
+    /** Buffer dos geradores cinéticos elétrico e manual. */
+    private static final int KINETIC_BUFFER = 1_000;
+    private static final int MOTOR_SLOTS = 10;
+    private static final int MOTOR_KU = 100;
+    private static final int MANUAL_CLICK_KU = 400;
+    private static final int MANUAL_CLICKS_PER_TICK = 10;
+    private static final int WIND_TICK_RATE = 32;
+    private static final int WATER_TICK_RATE = 20;
+    private static final float WIND_OUTPUT = 10.0F;
+    private static final float WATER_OUTPUT = 0.2F;
+    private static final int BIOME_INVALID = 0;
+    private static final int BIOME_OCEAN = 1;
+    private static final int BIOME_RIVER = 2;
+
+    public boolean isKineticSource() {
+        return switch (this.guiType) {
+            case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR, MANUAL_KINETIC_GENERATOR, ELECTRIC_KINETIC_GENERATOR -> true;
+            default -> false;
+        };
+    }
+
+    /**
+     * Entrega KU a quem pede pela face {@code side} desta máquina. Como no IC2: eólico e água entregam
+     * pelas costas (o rotor fica na frente), o elétrico pela frente e o manual por qualquer lado.
+     */
+    public int drawKinetic(Direction side, int request, boolean simulate) {
+        return switch (this.guiType) {
+            case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR -> side.getOpposite() == front() ? Math.min(request, this.kuOutput) : 0;
+            case MANUAL_KINETIC_GENERATOR -> takeKinetic(Math.min(request, this.kineticStore), simulate);
+            case ELECTRIC_KINETIC_GENERATOR -> side == front() ? takeKinetic(Math.min(request, Math.min(maxMotorKu(), this.kineticStore)), simulate) : 0;
+            default -> 0;
+        };
+    }
+
+    private int kineticBandwidth(Direction side) {
+        return switch (this.guiType) {
+            case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR -> side.getOpposite() == front() ? this.kuOutput : 0;
+            case MANUAL_KINETIC_GENERATOR -> KINETIC_BUFFER;
+            case ELECTRIC_KINETIC_GENERATOR -> side == front() ? maxMotorKu() : 0;
+            default -> 0;
+        };
+    }
+
+    private int takeKinetic(long amount, boolean simulate) {
+        int drawn = (int) Math.max(0, amount);
+        if (!simulate && drawn > 0) {
+            this.kineticStore -= drawn;
+            setChanged();
+        }
+        return drawn;
+    }
+
+    private int maxMotorKu() {
+        return countItems(MOTOR_SLOTS, IC2AutoItems.ELECTRIC_MOTOR.get()) * MOTOR_KU;
+    }
+
+    /** Manivela do gerador manual: 400 KU por clique (até 1.000), gasta fome; precisa ter mais de 6 de fome. */
+    public void crank(Player player) {
+        if (this.guiType != MachineGuiType.MANUAL_KINETIC_GENERATOR) return;
+        if (player.getFoodData().getFoodLevel() <= 6 || this.manualClicks >= MANUAL_CLICKS_PER_TICK) return;
+        this.kineticStore = Math.min(this.kineticStore + MANUAL_CLICK_KU, KINETIC_BUFFER);
+        player.causeFoodExhaustion(0.25F);
+        this.manualClicks++;
+        setChanged();
+    }
+
+    /**
+     * Estado para a GUI. Eólico: 0 sem rotor, 1 sem espaço, 2 vento fraco, 3 produzindo.
+     * Água: 0 bioma errado, 1 sem rotor, 2 sem espaço/água, 3 produzindo.
+     */
+    public int kineticStatus() {
+        boolean water = this.guiType == MachineGuiType.WATER_KINETIC_GENERATOR;
+        if (water && this.waterBiome == BIOME_INVALID) return 0;
+        int offset = water ? 1 : 0;
+        if (rotorItem() == null) return offset;
+        if (!this.rotorActive) return offset + 1;
+        if (this.kuOutput <= 0) return water ? 3 : 2;
+        return 3;
+    }
+
+    private boolean tickKineticSource(Level level) {
+        return switch (this.guiType) {
+            case WIND_KINETIC_GENERATOR -> tickWindKinetic(level);
+            case WATER_KINETIC_GENERATOR -> tickWaterKinetic(level);
+            case MANUAL_KINETIC_GENERATOR -> {
+                this.manualClicks = 0;
+                this.kineticWorking = this.kineticStore > 0;
+                yield false;
+            }
+            default -> false;
+        };
+    }
+
+    private @Nullable net.ic2reborn.item.RotorItem rotorItem() {
+        if (!(this.inventory.getItem(0).getItem() instanceof net.ic2reborn.item.RotorItem rotor)) return null;
+        return this.guiType == MachineGuiType.WATER_KINETIC_GENERATOR && !rotor.acceptsWater() ? null : rotor;
+    }
+
+    private int rotorDiameter() {
+        net.ic2reborn.item.RotorItem rotor = rotorItem();
+        if (rotor == null) return 0;
+        return this.guiType == MachineGuiType.WATER_KINETIC_GENERATOR && this.waterBiome == BIOME_RIVER
+                ? (rotor.diameter() + 1) * 2 / 3 : rotor.diameter();
+    }
+
+    private void damageRotor(int amount) {
+        ItemStack stack = this.inventory.getItem(0);
+        if (stack.isEmpty() || !stack.isDamageableItem()) return;
+        int damage = stack.getDamageValue() + amount;
+        if (damage >= stack.getMaxDamage()) {
+            this.inventory.setItem(0, ItemStack.EMPTY);
+        } else {
+            stack.setDamageValue(damage);
+            this.inventory.setItem(0, stack);
+        }
+    }
+
+    private int rotorHealth() {
+        ItemStack stack = this.inventory.getItem(0);
+        if (stack.isEmpty() || stack.getMaxDamage() <= 0) return 0;
+        return 100 - stack.getDamageValue() * 100 / stack.getMaxDamage();
+    }
+
+    /**
+     * Espaço do rotor (IC2: checkSpace). Com {@code onlyRotor}, olha só o plano logo na frente; senão,
+     * um volume o dobro do rotor e {@code length} para frente e para trás. Conta as colunas ocupadas
+     * (não ar no eólico, não água no de água); -1 se houver outro gerador igual no volume.
+     */
+    private int checkRotorSpace(Level level, int length, boolean onlyRotor) {
+        boolean water = this.guiType == MachineGuiType.WATER_KINETIC_GENERATOR;
+        int box = rotorDiameter() / 2;
+        int start = 0;
+        if (onlyRotor) {
+            length = 1;
+            start = length + 1;
+        } else {
+            box *= 2;
+        }
+        Direction forward = front();
+        Direction right = forward.getClockWise(Direction.Axis.Y);
+        int occupiedColumns = 0;
+        for (int up = -box; up <= box; up++) {
+            for (int side = -box; side <= box; side++) {
+                boolean occupied = false;
+                for (int fwd = start - length; fwd <= length; fwd++) {
+                    BlockPos pos = this.worldPosition.offset(fwd * forward.getStepX() + side * right.getStepX(), up,
+                            fwd * forward.getStepZ() + side * right.getStepZ());
+                    BlockState state = level.getBlockState(pos);
+                    boolean blocked = water ? !state.is(net.minecraft.world.level.block.Blocks.WATER) : !state.isAir();
+                    if (blocked) {
+                        occupied = true;
+                        if ((up != 0 || side != 0 || fwd != 0) && !onlyRotor
+                                && level.getBlockEntity(pos) instanceof MachineBlockEntity other && other.guiType == this.guiType) {
+                            return -1;
+                        }
+                    }
+                }
+                if (occupied) occupiedColumns++;
+            }
+        }
+        return occupiedColumns;
+    }
+
+    /** Eólico do IC2: a cada 32 ticks mede o vento na altura do bloco, descontando obstruções. */
+    private boolean tickWindKinetic(Level level) {
+        if (this.kineticTicker++ % WIND_TICK_RATE != 0 || !(level instanceof ServerLevel serverLevel)) return false;
+        net.ic2reborn.item.RotorItem rotor = rotorItem();
+        this.maxHeat = rotorDiameter() / 2;
+        this.rotorActive = rotor != null && checkRotorSpace(level, 1, true) == 0;
+        boolean changed = false;
+        this.windStrength = 0;
+        if (this.rotorActive) {
+            int diameter = rotorDiameter();
+            this.rotorCrossSection = (diameter / 2 * 2 * 2 + 1) * (diameter / 2 * 2 * 2 + 1);
+            this.rotorObstructed = checkRotorSpace(level, diameter * 3, false);
+            if (this.rotorObstructed > 0 && this.rotorObstructed <= (diameter + 1) / 2) this.rotorObstructed = 0;
+            if (this.rotorObstructed >= 0) {
+                double wind = WindSim.get(serverLevel).windAt(serverLevel, this.worldPosition.getY());
+                wind *= 1.0 - Math.pow((double) this.rotorObstructed / this.rotorCrossSection, 2.0);
+                this.windStrength = Math.max(0.0, wind);
+                if (this.windStrength >= rotor.minWind()) {
+                    damageRotor(this.windStrength <= rotor.maxWind() ? 1 : 4);
+                    changed = true;
+                }
+            }
+        }
+        rotor = rotorItem();
+        this.kuOutput = this.rotorActive && rotor != null && this.windStrength >= rotor.minWind()
+                ? (int) (this.windStrength * WIND_OUTPUT * rotor.efficiency()) : 0;
+        this.kineticWorking = this.kuOutput > 0;
+        this.progress = this.kuOutput;
+        this.maxProgress = rotorHealth();
+        return changed;
+    }
+
+    /**
+     * Água do IC2: só em oceano (maré, segue o dia) ou rio (correnteza); a força depende de quão
+     * longe está a margem na direção do rotor. O rotor de madeira não serve.
+     */
+    private boolean tickWaterKinetic(Level level) {
+        if (this.kineticTicker++ % WATER_TICK_RATE != 0) return false;
+        Direction facing = front();
+        if (this.waterBiome < 0 || this.waterFacing != facing) {
+            net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biome = level.getBiome(this.worldPosition);
+            this.waterBiome = biome.is(net.minecraft.tags.BiomeTags.IS_OCEAN) ? BIOME_OCEAN
+                    : biome.is(net.minecraft.tags.BiomeTags.IS_RIVER) ? BIOME_RIVER : BIOME_INVALID;
+            this.waterFacing = facing;
+            this.distanceToNormalBiome = 200;
+            for (int distance = 1; distance < 200; distance++) {
+                if (!isWaterBiome(level, this.worldPosition.relative(facing, distance))
+                        || !isWaterBiome(level, this.worldPosition.relative(facing, -distance))) {
+                    this.distanceToNormalBiome = distance;
+                    break;
+                }
+            }
+        }
+
+        this.kuOutput = 0;
+        this.rotorActive = false;
+        boolean changed = false;
+        net.ic2reborn.item.RotorItem rotor = rotorItem();
+        this.maxHeat = rotorDiameter() / 2;
+        if (this.waterBiome != BIOME_INVALID && rotor != null && checkRotorSpace(level, 1, true) == 0) {
+            this.rotorActive = true;
+            int diameter = rotorDiameter();
+            this.rotorCrossSection = (diameter / 2 * 2 * 2 + 1) * (diameter / 2 * 2 * 2 + 1);
+            this.rotorObstructed = checkRotorSpace(level, diameter * 3, false);
+            if (this.rotorObstructed > 0 && this.rotorObstructed <= (diameter + 1) / 2) this.rotorObstructed = 0;
+            if (this.rotorObstructed >= 0) {
+                double obstruction = (double) this.rotorObstructed / this.rotorCrossSection;
+                int waterFlow;
+                if (this.waterBiome == BIOME_OCEAN) {
+                    double tide = Math.sin(level.getOverworldClockTime() * Math.PI / 6000.0);
+                    tide *= Math.abs(tide);
+                    double speed = tide * this.distanceToNormalBiome / 100.0 * (1.0 - obstruction * obstruction);
+                    waterFlow = (int) ((int) (speed * 3000.0) * rotor.efficiency());
+                    damageRotor(2);
+                } else {
+                    double speed = Math.max(20, Math.min(50, this.distanceToNormalBiome)) / 50.0;
+                    waterFlow = (int) (speed * 1000.0 * (rotor.efficiency() * (1.0 - 0.3 * level.getRandom().nextFloat() - 0.1 * obstruction)));
+                    damageRotor(1);
+                }
+                this.kuOutput = (int) Math.abs(waterFlow * WATER_OUTPUT);
+                changed = true;
+            }
+        }
+        this.kineticWorking = this.kuOutput > 0;
+        this.progress = this.kuOutput;
+        this.maxProgress = rotorHealth();
+        return changed;
+    }
+
+    private static boolean isWaterBiome(Level level, BlockPos pos) {
+        net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biome = level.getBiome(pos);
+        return biome.is(net.minecraft.tags.BiomeTags.IS_OCEAN) || biome.is(net.minecraft.tags.BiomeTags.IS_RIVER);
+    }
+
+    /** Gerador cinético elétrico: enche o buffer de KU com energia (125 CW por KU); os motores limitam a entrega. */
+    private boolean tickElectricKinetic() {
+        long ku = Math.max(0, Math.min(KINETIC_BUFFER - this.kineticStore, this.energy / CW_PER_KU));
+        this.energy -= ku * CW_PER_KU;
+        this.kineticStore += ku;
+        this.progress = (int) this.kineticStore;
+        this.maxProgress = maxMotorKu();
+        return ku > 0;
+    }
+
+    /** Gerador cinético: puxa KU da máquina na frente dele e converte em energia (125 CW por KU). */
+    private boolean tickKineticGenerator(Level level) {
+        Direction facing = front();
+        if (!(level.getBlockEntity(this.worldPosition.relative(facing)) instanceof MachineBlockEntity source)
+                || !source.isKineticSource()) {
+            this.progress = 0;
+            this.maxProgress = 0;
+            return false;
+        }
+        Direction side = facing.getOpposite();
+        int available = source.drawKinetic(side, source.kineticBandwidth(side), true);
+        int request = (int) Math.min(available, (this.profile.capacity() - this.energy) / CW_PER_KU);
+        int drawn = request > 0 ? source.drawKinetic(side, request, false) : 0;
+        this.energy += drawn * CW_PER_KU;
+        this.progress = clampToInt(drawn * CW_PER_KU);
+        this.maxProgress = clampToInt(available * CW_PER_KU);
+        return drawn > 0;
     }
 
     // ── calor (IC2: IHeatSource) ──────────────────────────────────────────
@@ -1457,6 +1771,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.transformer != null) return this.transformerMode.ordinal();
         return switch (this.guiType) {
             case METAL_FORMER -> this.metalFormerMode;
+            case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR -> kineticStatus();
             case BLOCK_CUTTER -> this.bladeTooWeak ? 1 : 0;
             default -> this.cannerMode.ordinal();
         };
@@ -1516,6 +1831,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         }
         output.putInt("HeatBuffer", this.heatBuffer);
         output.putLong("HeatStore", this.heatStore);
+        output.putLong("KineticStore", this.kineticStore);
         if (this.guiType == MachineGuiType.METAL_FORMER) {
             output.putInt("MetalFormerMode", this.metalFormerMode);
         }
@@ -1560,6 +1876,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         }
         this.heatBuffer = Math.max(0, input.getIntOr("HeatBuffer", 0));
         this.heatStore = Math.max(0, input.getLongOr("HeatStore", 0));
+        this.kineticStore = Math.max(0, input.getLongOr("KineticStore", 0));
         this.metalFormerMode = Math.floorMod(input.getIntOr("MetalFormerMode", 0), METAL_FORMER_RECIPES.length);
         if (this.guiType == MachineGuiType.GENERATOR) {
             this.maxProgress = this.totalFuel;

@@ -477,5 +477,21 @@
   "item.ic2reborn.scanner.empty": "Scanner out of energy",
   "item.ic2reborn.ashes": "Ashes",
   "gui.ic2reborn.heat_generator.emit": "Emit: %s HU",
-  "gui.ic2reborn.heat_generator.max_emit": "Max: %s HU"
+  "gui.ic2reborn.heat_generator.max_emit": "Max: %s HU",
+  "item.ic2reborn.rotor.wind": "Wind: %s–%s",
+  "item.ic2reborn.rotor.stats": "Diameter %s · efficiency %s%%",
+  "item.ic2reborn.rotor.wind_only": "Wind generator only",
+  "gui.ic2reborn.kinetic.output": "Output: %s KU/t",
+  "gui.ic2reborn.kinetic.rotor_health": "Rotor: %s%%",
+  "gui.ic2reborn.wind_kinetic.rotor_missing": "No rotor",
+  "gui.ic2reborn.wind_kinetic.rotor_space": "No room for the rotor",
+  "gui.ic2reborn.wind_kinetic.wind_weak": "Wind too weak",
+  "gui.ic2reborn.wind_kinetic.wind_weak_hint": "Place it higher/open",
+  "gui.ic2reborn.water_kinetic.wrong_biome": "Not in ocean or river",
+  "gui.ic2reborn.water_kinetic.rotor_missing": "No rotor",
+  "gui.ic2reborn.water_kinetic.rotor_space": "Rotor not under water",
+  "gui.ic2reborn.wind_kinetic.rotor_space_hint": "%s free blocks around",
+  "gui.ic2reborn.water_kinetic.wrong_biome_hint": "Place it in water there",
+  "gui.ic2reborn.water_kinetic.rotor_missing_hint": "Wooden rotor won't fit",
+  "gui.ic2reborn.water_kinetic.rotor_space_hint": "%s blocks of water around"
 }

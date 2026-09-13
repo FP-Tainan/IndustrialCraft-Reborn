@@ -14,10 +14,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -28,8 +31,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * <p>Na rede elétrica ele é o {@link CableType} dele (registrado no lookup em
  * {@code CraftEnergyContent}). Visualmente conecta em outros cabos, em qualquer bloco que
  * seja nó de energia naquela face, e em blocos da tag {@code craftenergy:connects_to_cables}.
+ * Pode ficar dentro d'água (como no IC2): a água não quebra o cabo.
  */
-public class CableBlock extends Block {
+public class CableBlock extends Block implements SimpleWaterloggedBlock {
     /** Blocos que os cabos desenham conexão mesmo sem ainda serem nós de energia. */
     public static final TagKey<Block> CONNECTS_TO_CABLES = TagKey.create(Registries.BLOCK,
             Identifier.fromNamespaceAndPath(CraftEnergyApi.MOD_ID, "connects_to_cables"));
@@ -40,6 +44,7 @@ public class CableBlock extends Block {
     public static final BooleanProperty WEST = BlockStateProperties.WEST;
     public static final BooleanProperty UP = BlockStateProperties.UP;
     public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private final CableType type;
     private final VoxelShape core;
@@ -66,7 +71,8 @@ public class CableBlock extends Block {
                 .setValue(SOUTH, false)
                 .setValue(WEST, false)
                 .setValue(UP, false)
-                .setValue(DOWN, false));
+                .setValue(DOWN, false)
+                .setValue(WATERLOGGED, false));
     }
 
     public CableType type() {
@@ -75,9 +81,10 @@ public class CableBlock extends Block {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockState state = this.defaultBlockState();
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
+        BlockState state = this.defaultBlockState()
+                .setValue(WATERLOGGED, level.getFluidState(pos).getType() == Fluids.WATER);
         for (Direction direction : Direction.values()) {
             BlockPos neighbourPos = pos.relative(direction);
             state = state.setValue(propertyFor(direction),
@@ -90,8 +97,16 @@ public class CableBlock extends Block {
     protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos,
                                      Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState,
                                      RandomSource random) {
+        if (state.getValue(WATERLOGGED)) {
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
         return state.setValue(propertyFor(directionToNeighbour),
                 canConnectTo(level, neighbourPos, neighbourState, directionToNeighbour));
+    }
+
+    @Override
+    protected FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
@@ -120,7 +135,7 @@ public class CableBlock extends Block {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
+        builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN, WATERLOGGED);
     }
 
     private static boolean canConnectTo(LevelReader level, BlockPos neighbourPos, BlockState neighbourState, Direction direction) {

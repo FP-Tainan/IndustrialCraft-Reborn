@@ -477,5 +477,21 @@
   "item.ic2reborn.scanner.empty": "Scanner sem energia",
   "item.ic2reborn.ashes": "Cinzas",
   "gui.ic2reborn.heat_generator.emit": "Emitindo: %s HU",
-  "gui.ic2reborn.heat_generator.max_emit": "Máximo: %s HU"
+  "gui.ic2reborn.heat_generator.max_emit": "Máximo: %s HU",
+  "item.ic2reborn.rotor.wind": "Vento: %s–%s",
+  "item.ic2reborn.rotor.stats": "Diâmetro %s · eficiência %s%%",
+  "item.ic2reborn.rotor.wind_only": "Só no gerador eólico",
+  "gui.ic2reborn.kinetic.output": "Saída: %s KU/t",
+  "gui.ic2reborn.kinetic.rotor_health": "Rotor: %s%%",
+  "gui.ic2reborn.wind_kinetic.rotor_missing": "Sem rotor",
+  "gui.ic2reborn.wind_kinetic.rotor_space": "Sem espaço p/ o rotor",
+  "gui.ic2reborn.wind_kinetic.wind_weak": "Vento fraco demais",
+  "gui.ic2reborn.wind_kinetic.wind_weak_hint": "Mais alto ou mais aberto",
+  "gui.ic2reborn.water_kinetic.wrong_biome": "Fora de oceano ou rio",
+  "gui.ic2reborn.water_kinetic.rotor_missing": "Sem rotor",
+  "gui.ic2reborn.water_kinetic.rotor_space": "Rotor fora da água",
+  "gui.ic2reborn.wind_kinetic.rotor_space_hint": "%s blocos livres em volta",
+  "gui.ic2reborn.water_kinetic.wrong_biome_hint": "Coloque na água de lá",
+  "gui.ic2reborn.water_kinetic.rotor_missing_hint": "O de madeira não serve",
+  "gui.ic2reborn.water_kinetic.rotor_space_hint": "%s blocos de água em volta"
 }

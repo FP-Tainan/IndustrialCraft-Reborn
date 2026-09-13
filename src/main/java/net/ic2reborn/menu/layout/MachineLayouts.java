@@ -152,9 +152,9 @@ public final class MachineLayouts {
                     .progress(82, 45, PROGRESS_WIND)
                     .build();
 
-            case KINETIC_GENERATOR -> MachineLayout.dynamic(176, 166)
-                    .text(menu -> tr("kinetic.bandwidth", "Bandwidth: %s", EnergyUnits.formatPower(0)), 41, 33)
-                    .text(menu -> tr("kinetic.production", "Production: %s", EnergyUnits.formatPower(0)), 41, 45)
+            case KINETIC_GENERATOR, STIRLING_GENERATOR -> MachineLayout.dynamic(176, 166)
+                    .text(menu -> tr("kinetic.bandwidth", "Bandwidth: %s", EnergyUnits.formatPower(menu.getMaxProgress())), 41, 33)
+                    .text(menu -> tr("kinetic.production", "Production: %s", EnergyUnits.formatPower(menu.getProgress())), 41, 45)
                     .build();
 
             case SOLID_HEAT_GENERATOR -> MachineLayout.dynamic(176, 166)
@@ -266,6 +266,9 @@ public final class MachineLayouts {
                     .gridAt(44, 27, 5, 2, false)
                     .slotAt(8, 62)
                     .energy(12, 44)
+                    .text(menu -> Component.literal(menu.getProgress() + " KU · " + menu.getMaxProgress() + " KU/t"),
+                            34, 66, 109, 13, HEAT_TEXT_COLOR)
+
                     .build();
 
             case STEAM_KINETIC_GENERATOR -> MachineLayout.textured("guisteamkineticgenerator.png", 166)
@@ -281,11 +284,42 @@ public final class MachineLayouts {
 
             case WATER_KINETIC_GENERATOR -> MachineLayout.textured("guiwaterkineticgenerator.png", 166)
                     .slotAt(80, 26)
+                    .text(menu -> switch (menu.getMachineMode()) {
+                        case 0 -> tr("water_kinetic.wrong_biome", "Not in ocean or river");
+                        case 1 -> tr("water_kinetic.rotor_missing", "No rotor");
+                        case 2 -> tr("water_kinetic.rotor_space", "Rotor not under water");
+                        default -> tr("kinetic.output", "Output: %s KU/t", menu.getProgress());
+                    }, 17, 48, 143, 13, KINETIC_TEXT_COLOR)
+                    .text(menu -> switch (menu.getMachineMode()) {
+                        case 0 -> tr("water_kinetic.wrong_biome_hint", "Place it in water there");
+                        case 1 -> tr("water_kinetic.rotor_missing_hint", "Wooden rotor won't fit");
+                        case 2 -> tr("water_kinetic.rotor_space_hint", "%s blocks of water around", menu.getMaxHeat());
+                        default -> tr("kinetic.rotor_health", "Rotor: %s%%", menu.getMaxProgress());
+                    }, 17, 66, 143, 13, KINETIC_TEXT_COLOR)
+
+
                     .build();
 
             case WIND_KINETIC_GENERATOR -> MachineLayout.textured("guiwindkineticgenerator.png", 166)
                     .slotAt(80, 26)
+                    .text(menu -> switch (menu.getMachineMode()) {
+                        case 0 -> tr("wind_kinetic.rotor_missing", "No rotor");
+                        case 1 -> tr("wind_kinetic.rotor_space", "No room for the rotor");
+                        case 2 -> tr("wind_kinetic.wind_weak", "Wind too weak");
+                        default -> tr("kinetic.output", "Output: %s KU/t", menu.getProgress());
+                    }, 17, 48, 143, 13, KINETIC_TEXT_COLOR)
+                    .text(menu -> switch (menu.getMachineMode()) {
+                        case 1 -> tr("wind_kinetic.rotor_space_hint", "%s free blocks around", menu.getMaxHeat());
+                        case 2 -> tr("wind_kinetic.wind_weak_hint", "Place it higher/open");
+                        case 3 -> tr("kinetic.rotor_health", "Rotor: %s%%", menu.getMaxProgress());
+                        default -> Component.empty();
+                    }, 17, 66, 143, 13, KINETIC_TEXT_COLOR)
+
+
                     .build();
+
+            // sem GUI: cada clique gira a manivela
+            case MANUAL_KINETIC_GENERATOR -> MachineLayout.dynamic(176, 166).build();
 
             case BATBOX -> energyStorage(4_400);
             case CESU -> energyStorage(20_000);
@@ -339,6 +373,9 @@ public final class MachineLayouts {
                 .text(menu -> Component.literal(EnergyUnits.formatVoltage(highVoltage)), 52, 45, 0, 0, FLOW_TEXT_COLOR)
                 .build();
     }
+
+    /** Cor dos textos das GUIs cinéticas do IC2 (2157374). */
+    private static final int KINETIC_TEXT_COLOR = 0x20EB3E;
 
     private static Component tr(String key, String fallback, Object... args) {
         return Component.translatableWithFallback("gui.ic2reborn." + key, fallback, args);
