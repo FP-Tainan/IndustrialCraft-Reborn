@@ -67,7 +67,7 @@ public class IC2Reborn implements ModInitializer {
 
         // geradores, armazenamentos e máquinas entram na rede do Craft Energy
         net.craftenergy.fabric.CraftEnergyApi.NODE.registerForBlockEntity(
-                (machine, face) -> machine.getEnergyNode(),
+                (machine, face) -> machine.getEnergyNode(face),
                 IC2BlockEntities.MACHINE.get());
 
         net.fabricmc.fabric.api.resource.v1.ResourceLoader.get(net.minecraft.server.packs.PackType.SERVER_DATA)

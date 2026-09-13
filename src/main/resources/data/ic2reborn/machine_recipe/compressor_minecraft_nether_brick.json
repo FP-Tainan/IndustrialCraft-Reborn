@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:nether_brick",
+  "input_count": 4,
+  "result": "minecraft:nether_bricks",
+  "result_count": 1
+}

@@ -192,7 +192,7 @@ public final class EnergyNetwork<P> {
                 wanted = 0;
                 sink.onOvervoltage(networkVoltage);
                 listener.sinkOvervoltage(this.vertices.get(this.sinks[i]).pos(), sink, networkVoltage);
-            } else if (networkVoltage < sink.nominalVoltage() * (1.0 - sink.voltageTolerance())) {
+            } else if (networkVoltage < sink.minimumVoltage()) {
                 wanted = 0;
             }
             demand[i] = wanted;

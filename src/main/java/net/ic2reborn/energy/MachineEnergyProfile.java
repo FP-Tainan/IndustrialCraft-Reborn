@@ -7,35 +7,62 @@ import net.ic2reborn.menu.MachineGuiType;
  * Parâmetros elétricos de cada máquina, em Craft Energy (docs/energia-conversao-ic2.md).
  *
  * @param role           papel na rede
- * @param voltage        tensão nominal/de saída em MV
- * @param power          potência em CW (produção do gerador, carga/descarga da bateria, consumo da máquina)
+ * @param voltage        tensão nominal/de saída em MV (no transformador: o lado de baixa)
+ * @param power          potência em CW (produção do gerador, carga/descarga da bateria,
+ *                       consumo da máquina, potência máxima do transformador)
  * @param capacity       energia interna em CW·tick
  * @param operationTicks duração de uma operação (máquinas de processamento)
+ * @param highVoltage    lado de alta do transformador, em MV
+ * @param efficiency     eficiência do transformador (0 a 1)
  */
-public record MachineEnergyProfile(Role role, int voltage, long power, long capacity, int operationTicks) {
-    public enum Role { NONE, GENERATOR, STORAGE, PROCESSOR }
+public record MachineEnergyProfile(Role role, int voltage, long power, long capacity, int operationTicks,
+                                   int highVoltage, double efficiency) {
+    public enum Role { NONE, GENERATOR, STORAGE, PROCESSOR, TRANSFORMER }
 
-    public static final MachineEnergyProfile NONE = new MachineEnergyProfile(Role.NONE, 0, 0, 0, 0);
+    public static final MachineEnergyProfile NONE = new MachineEnergyProfile(Role.NONE, 0, 0, 0, 0, 0, 0.0);
 
     /** Máquinas ainda não ligadas na rede ficam {@link #NONE}. */
     public static MachineEnergyProfile of(MachineGuiType type) {
         return switch (type) {
-            case GENERATOR -> new MachineEnergyProfile(Role.GENERATOR, 220, 5_000, EnergyUnits.fromCWh(2_000), 0);
-            case BATBOX -> new MachineEnergyProfile(Role.STORAGE, 220, 4_400, EnergyUnits.fromCWh(20_000), 0);
-            case CESU -> new MachineEnergyProfile(Role.STORAGE, 1_000, 20_000, EnergyUnits.fromCWh(150_000), 0);
-            case MFE -> new MachineEnergyProfile(Role.STORAGE, 2_400, 120_000, EnergyUnits.fromCWh(2_000_000), 0);
-            case MFSU -> new MachineEnergyProfile(Role.STORAGE, 13_800, 1_000_000, EnergyUnits.fromCWh(20_000_000), 0);
-            case MACERATOR -> processor(220, 2_000, 300);
+            case GENERATOR -> simple(Role.GENERATOR, 220, 5_000, EnergyUnits.fromCWh(2_000));
+
+            case BATBOX -> simple(Role.STORAGE, 220, 4_400, EnergyUnits.fromCWh(20_000));
+            case CESU -> simple(Role.STORAGE, 1_000, 20_000, EnergyUnits.fromCWh(150_000));
+            case MFE -> simple(Role.STORAGE, 2_400, 120_000, EnergyUnits.fromCWh(2_000_000));
+            case MFSU -> simple(Role.STORAGE, 13_800, 1_000_000, EnergyUnits.fromCWh(20_000_000));
+
+            case MACERATOR, COMPRESSOR, EXTRACTOR -> processor(220, 2_000, 300);
+            case ELECTRIC_FURNACE -> processor(220, 3_000, 100);
+            case RECYCLER -> processor(220, 1_000, 45);
+
+            case LV_TRANSFORMER -> transformer(220, 1_000, 20_000, 0.97);
+            case MV_TRANSFORMER -> transformer(1_000, 2_400, 120_000, 0.975);
+            case HV_TRANSFORMER -> transformer(2_400, 13_800, 1_000_000, 0.98);
+            case EV_TRANSFORMER -> transformer(13_800, 69_000, 5_000_000, 0.985);
+
             default -> NONE;
         };
     }
 
+    private static MachineEnergyProfile simple(Role role, int voltage, long power, long capacity) {
+        return new MachineEnergyProfile(role, voltage, power, capacity, 0, 0, 0.0);
+    }
+
     private static MachineEnergyProfile processor(int voltage, long power, int operationTicks) {
-        return new MachineEnergyProfile(Role.PROCESSOR, voltage, power, power * operationTicks, operationTicks);
+        return new MachineEnergyProfile(Role.PROCESSOR, voltage, power, power * operationTicks, operationTicks, 0, 0.0);
+    }
+
+    private static MachineEnergyProfile transformer(int lowVoltage, int highVoltage, long power, double efficiency) {
+        return new MachineEnergyProfile(Role.TRANSFORMER, lowVoltage, power, 0, 0, highVoltage, efficiency);
     }
 
     /** Quanto uma máquina de processamento puxa da rede por tick: o dobro do consumo, para encher o buffer sem pico de corrente. */
     public long maxIntake() {
         return this.power * 2;
+    }
+
+    /** Se o block entity precisa de tick no servidor (transformadores e máquinas desligadas não precisam). */
+    public boolean ticks() {
+        return this.role != Role.NONE && this.role != Role.TRANSFORMER;
     }
 }

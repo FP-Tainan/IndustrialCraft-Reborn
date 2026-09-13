@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:ice",
+  "input_count": 2,
+  "result": "minecraft:packed_ice",
+  "result_count": 1
+}

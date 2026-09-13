@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:blaze_powder",
+  "input_count": 5,
+  "result": "minecraft:blaze_rod",
+  "result_count": 1
+}

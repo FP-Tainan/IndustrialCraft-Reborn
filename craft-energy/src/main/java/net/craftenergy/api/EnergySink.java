@@ -16,6 +16,14 @@ public interface EnergySink extends EnergyNode {
         return EnergyUnits.DEFAULT_VOLTAGE_TOLERANCE;
     }
 
+    /**
+     * Menor tensão em que o aparelho funciona. Por padrão é a nominal menos a tolerância;
+     * carregadores (entrada de baterias) podem aceitar qualquer tensão menor que a nominal.
+     */
+    default int minimumVoltage() {
+        return (int) Math.ceil(nominalVoltage() * (1.0 - voltageTolerance()));
+    }
+
     /** Potência desejada neste tick, em CW. */
     long powerDemand();
 

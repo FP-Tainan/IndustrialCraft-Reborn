@@ -1,0 +1,7 @@
+{
+  "machine": "extractor",
+  "input": "minecraft:nether_bricks",
+  "input_count": 1,
+  "result": "minecraft:nether_brick",
+  "result_count": 4
+}

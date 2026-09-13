@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "ic2reborn:coal_chunk",
+  "input_count": 1,
+  "result": "minecraft:diamond",
+  "result_count": 1
+}

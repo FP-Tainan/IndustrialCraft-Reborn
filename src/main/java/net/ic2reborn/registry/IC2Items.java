@@ -14,13 +14,13 @@ public class IC2Items {
             DeferredRegister.create(Registries.ITEM, IC2Reborn.MODID);
 
     public static final RegistryObject<BlockItem> LEAD_ORE =
-            ITEMS.register("lead_ore", () -> new BlockItem(IC2Blocks.LEAD_ORE.get(), new Item.Properties().setId(ITEMS.key("lead_ore"))));
+            ITEMS.register("lead_ore", () -> new BlockItem(IC2Blocks.LEAD_ORE.get(), new Item.Properties().setId(ITEMS.key("lead_ore")).useBlockDescriptionPrefix()));
     public static final RegistryObject<BlockItem> DEEPSLATE_LEAD_ORE =
-            ITEMS.register("deepslate_lead_ore", () -> new BlockItem(IC2Blocks.DEEPSLATE_LEAD_ORE.get(), new Item.Properties().setId(ITEMS.key("deepslate_lead_ore"))));
+            ITEMS.register("deepslate_lead_ore", () -> new BlockItem(IC2Blocks.DEEPSLATE_LEAD_ORE.get(), new Item.Properties().setId(ITEMS.key("deepslate_lead_ore")).useBlockDescriptionPrefix()));
     public static final RegistryObject<BlockItem> URANIUM_ORE =
-            ITEMS.register("uranium_ore", () -> new BlockItem(IC2Blocks.URANIUM_ORE.get(), new Item.Properties().setId(ITEMS.key("uranium_ore"))));
+            ITEMS.register("uranium_ore", () -> new BlockItem(IC2Blocks.URANIUM_ORE.get(), new Item.Properties().setId(ITEMS.key("uranium_ore")).useBlockDescriptionPrefix()));
     public static final RegistryObject<BlockItem> DEEPSLATE_URANIUM_ORE =
-            ITEMS.register("deepslate_uranium_ore", () -> new BlockItem(IC2Blocks.DEEPSLATE_URANIUM_ORE.get(), new Item.Properties().setId(ITEMS.key("deepslate_uranium_ore"))));
+            ITEMS.register("deepslate_uranium_ore", () -> new BlockItem(IC2Blocks.DEEPSLATE_URANIUM_ORE.get(), new Item.Properties().setId(ITEMS.key("deepslate_uranium_ore")).useBlockDescriptionPrefix()));
 
     public static final RegistryObject<Item> RAW_LEAD =
             ITEMS.register("raw_lead", () -> new Item(new Item.Properties().setId(ITEMS.key("raw_lead"))));

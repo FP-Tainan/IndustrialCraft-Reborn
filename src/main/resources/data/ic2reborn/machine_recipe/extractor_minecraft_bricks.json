@@ -1,0 +1,7 @@
+{
+  "machine": "extractor",
+  "input": "minecraft:bricks",
+  "input_count": 1,
+  "result": "minecraft:brick",
+  "result_count": 4
+}

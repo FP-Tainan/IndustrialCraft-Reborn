@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:clay_ball",
+  "input_count": 4,
+  "result": "minecraft:clay",
+  "result_count": 1
+}

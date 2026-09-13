@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:brick",
+  "input_count": 4,
+  "result": "minecraft:bricks",
+  "result_count": 1
+}

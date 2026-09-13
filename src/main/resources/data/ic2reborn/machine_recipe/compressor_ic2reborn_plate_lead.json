@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "ic2reborn:plate_lead",
+  "input_count": 9,
+  "result": "ic2reborn:dense_plate_lead",
+  "result_count": 1
+}

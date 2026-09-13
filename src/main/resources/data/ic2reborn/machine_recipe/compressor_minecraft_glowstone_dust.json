@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:glowstone_dust",
+  "input_count": 4,
+  "result": "minecraft:glowstone",
+  "result_count": 1
+}

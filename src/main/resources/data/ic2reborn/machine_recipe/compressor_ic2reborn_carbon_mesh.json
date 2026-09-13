@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "ic2reborn:carbon_mesh",
+  "input_count": 1,
+  "result": "ic2reborn:carbon_plate",
+  "result_count": 1
+}

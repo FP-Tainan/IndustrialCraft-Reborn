@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:snow_block",
+  "input_count": 1,
+  "result": "minecraft:ice",
+  "result_count": 1
+}

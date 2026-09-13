@@ -268,4 +268,23 @@ class EnergyNetworkTest {
         assertEquals(1, overvoltages[0]);
         assertEquals(0, batbox.storedEnergy());
     }
+
+    @Test
+    void chargerAcceptsLowerVoltageDownToItsMinimum() {
+        long[] received = {0};
+        net.craftenergy.api.EnergySink charger = new net.craftenergy.api.EnergySink() {
+            @Override public int nominalVoltage() { return 1000; }
+            @Override public int minimumVoltage() { return 1; }
+            @Override public long powerDemand() { return 4400; }
+            @Override public void receivePower(long power, int voltage) { received[0] = power; }
+        };
+        EnergyNetwork<Pos> network = new TestTopology()
+                .place(0, 0, 0, new Source(220, 5000))
+                .place(1, 0, 0, charger)
+                .build().get(0);
+
+        network.tick(GridListener.none());
+
+        assertEquals(4400, received[0]);
+    }
 }

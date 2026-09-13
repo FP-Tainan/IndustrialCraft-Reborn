@@ -1,0 +1,7 @@
+{
+  "machine": "extractor",
+  "input": "minecraft:clay",
+  "input_count": 1,
+  "result": "minecraft:clay_ball",
+  "result_count": 4
+}

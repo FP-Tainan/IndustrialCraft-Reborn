@@ -1,0 +1,7 @@
+{
+  "machine": "extractor",
+  "input": "minecraft:gunpowder",
+  "input_count": 1,
+  "result": "ic2reborn:dust_sulfur",
+  "result_count": 1
+}

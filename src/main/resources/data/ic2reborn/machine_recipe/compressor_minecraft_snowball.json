@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:snowball",
+  "input_count": 4,
+  "result": "minecraft:snow_block",
+  "result_count": 1
+}

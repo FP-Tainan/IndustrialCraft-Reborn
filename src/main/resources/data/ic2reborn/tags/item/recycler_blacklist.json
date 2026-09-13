@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:glass_pane",
+    "minecraft:stick",
+    "minecraft:snowball",
+    "minecraft:snow",
+    "minecraft:snow_block",
+    "minecraft:scaffolding"
+  ]
+}

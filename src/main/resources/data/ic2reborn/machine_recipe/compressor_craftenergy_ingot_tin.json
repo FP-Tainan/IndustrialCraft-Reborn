@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "craftenergy:ingot_tin",
+  "input_count": 9,
+  "result": "craftenergy:tin_block",
+  "result_count": 1
+}

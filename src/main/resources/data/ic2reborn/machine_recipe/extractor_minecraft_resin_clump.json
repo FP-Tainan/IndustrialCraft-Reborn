@@ -1,0 +1,7 @@
+{
+  "machine": "extractor",
+  "input": "minecraft:resin_clump",
+  "input_count": 1,
+  "result": "craftenergy:rubber",
+  "result_count": 3
+}

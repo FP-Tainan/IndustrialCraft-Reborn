@@ -1,0 +1,7 @@
+{
+  "machine": "extractor",
+  "input": "craftenergy:rubber_log",
+  "input_count": 1,
+  "result": "craftenergy:rubber",
+  "result_count": 1
+}

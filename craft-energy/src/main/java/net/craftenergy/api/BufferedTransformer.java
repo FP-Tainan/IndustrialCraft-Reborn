@@ -83,7 +83,19 @@ public class BufferedTransformer {
     protected void onChanged() {
     }
 
+    /**
+     * Chamado quando a rede do lado de entrada passa da tensão suportada (+10%).
+     * Sobrescreva para aplicar o padrão do pack (explodir).
+     */
+    protected void onOvervoltage(int voltage) {
+    }
+
     private final class Input implements EnergySink {
+        @Override
+        public void onOvervoltage(int voltage) {
+            BufferedTransformer.this.onOvervoltage(voltage);
+        }
+
         private final boolean high;
 
         private Input(boolean high) {

@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "craftenergy:plate_copper",
+  "input_count": 9,
+  "result": "ic2reborn:dense_plate_copper",
+  "result_count": 1
+}

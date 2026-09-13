@@ -1,0 +1,7 @@
+{
+  "machine": "extractor",
+  "input": "minecraft:snow_block",
+  "input_count": 1,
+  "result": "minecraft:snowball",
+  "result_count": 4
+}

@@ -86,7 +86,7 @@ public class MachineBlock extends Block implements EntityBlock {
         String blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath();
         net.ic2reborn.energy.MachineEnergyProfile profile = net.ic2reborn.energy.MachineEnergyProfile.of(
                 net.ic2reborn.menu.MachineGuiType.fromBlockId(blockId));
-        if (profile.role() == net.ic2reborn.energy.MachineEnergyProfile.Role.NONE) return null;
+        if (!profile.ticks()) return null;
 
         @SuppressWarnings("unchecked")
         net.minecraft.world.level.block.entity.BlockEntityTicker<T> ticker =

@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:lapis_lazuli",
+  "input_count": 9,
+  "result": "minecraft:lapis_block",
+  "result_count": 1
+}

@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "ic2reborn:dust_energium",
+  "input_count": 9,
+  "result": "ic2reborn:energy_crystal",
+  "result_count": 1
+}

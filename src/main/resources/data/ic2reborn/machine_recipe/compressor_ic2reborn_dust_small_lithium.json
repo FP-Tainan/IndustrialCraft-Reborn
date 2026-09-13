@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "ic2reborn:dust_small_lithium",
+  "input_count": 9,
+  "result": "ic2reborn:dust_lithium",
+  "result_count": 1
+}

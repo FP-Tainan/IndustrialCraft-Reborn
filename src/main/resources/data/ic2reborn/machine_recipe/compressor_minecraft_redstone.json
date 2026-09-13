@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:redstone",
+  "input_count": 9,
+  "result": "minecraft:redstone_block",
+  "result_count": 1
+}

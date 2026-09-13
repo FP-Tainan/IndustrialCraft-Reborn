@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "minecraft:iron_ingot",
+  "input_count": 9,
+  "result": "minecraft:iron_block",
+  "result_count": 1
+}

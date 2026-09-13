@@ -1,0 +1,7 @@
+{
+  "machine": "compressor",
+  "input": "ic2reborn:dust_lapis",
+  "input_count": 1,
+  "result": "ic2reborn:plate_lapis",
+  "result_count": 1
+}
