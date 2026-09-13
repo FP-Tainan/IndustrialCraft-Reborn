@@ -8,7 +8,8 @@
     "fabric-gametest": [
       "net.ic2reborn.test.EnergyGameTest",
       "net.ic2reborn.test.WrenchGameTest",
-      "net.ic2reborn.test.LootGameTest"
+      "net.ic2reborn.test.LootGameTest",
+      "net.ic2reborn.test.ItemsAndGeneratorsGameTest"
     ]
   },
   "depends": {

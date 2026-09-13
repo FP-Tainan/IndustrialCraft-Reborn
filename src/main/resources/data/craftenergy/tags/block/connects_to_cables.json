@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "ic2reborn:solar_generator",
     "ic2reborn:batbox",
     "ic2reborn:batch_crafter",
     "ic2reborn:blast_furnace",

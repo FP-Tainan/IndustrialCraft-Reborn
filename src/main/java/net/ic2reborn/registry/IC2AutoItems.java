@@ -1,4 +1,5 @@
 package net.ic2reborn.registry;
+import net.craftenergy.api.EnergyUnits;
 import net.craftenergy.registry.DeferredRegister;
 import net.craftenergy.registry.RegistryObject;
 import net.minecraft.core.registries.Registries;
@@ -130,11 +131,11 @@ public class IC2AutoItems {
     public static final RegistryObject<BlockItem> WOOL_SHEET = ITEMS.register("wool_sheet", () -> new BlockItem(IC2AutoBlocks.WOOL_SHEET.get(), new Item.Properties().setId(ITEMS.key("wool_sheet")).useBlockDescriptionPrefix()));
     public static final RegistryObject<Item> ADVANCED_ALLOY = ITEMS.register("advanced_alloy", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_alloy"))));
     public static final RegistryObject<Item> ADVANCED_BATPACK = ITEMS.register("advanced_batpack", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_batpack"))));
-    public static final RegistryObject<Item> ADVANCED_CHARGING_RE_BATTERY = ITEMS.register("advanced_charging_re_battery", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_charging_re_battery"))));
+    public static final RegistryObject<Item> ADVANCED_CHARGING_RE_BATTERY = ITEMS.register("advanced_charging_re_battery", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("advanced_charging_re_battery")), EnergyUnits.fromCWh(200_000), 512_000, 1_000, true));
     public static final RegistryObject<Item> ADVANCED_CIRCUIT = ITEMS.register("advanced_circuit", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_circuit"))));
     public static final RegistryObject<Item> ADVANCED_HEAT_EXCHANGER = ITEMS.register("advanced_heat_exchanger", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_heat_exchanger"))));
     public static final RegistryObject<Item> ADVANCED_HEAT_VENT = ITEMS.register("advanced_heat_vent", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_heat_vent"))));
-    public static final RegistryObject<Item> ADVANCED_RE_BATTERY = ITEMS.register("advanced_re_battery", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_re_battery"))));
+    public static final RegistryObject<Item> ADVANCED_RE_BATTERY = ITEMS.register("advanced_re_battery", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("advanced_re_battery")), EnergyUnits.fromCWh(50_000), 128_000, 1_000, true));
     public static final RegistryObject<Item> ADVANCED_SCANNER = ITEMS.register("advanced_scanner", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_scanner"))));
     public static final RegistryObject<Item> ALLOY_CHESTPLATE = ITEMS.register("alloy_chestplate", () -> new Item(new Item.Properties().setId(ITEMS.key("alloy_chestplate"))));
     public static final RegistryObject<Item> BATPACK = ITEMS.register("batpack", () -> new Item(new Item.Properties().setId(ITEMS.key("batpack"))));
@@ -168,9 +169,9 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> CF_PACK = ITEMS.register("cf_pack", () -> new Item(new Item.Properties().setId(ITEMS.key("cf_pack"))));
     public static final RegistryObject<Item> CF_POWDER = ITEMS.register("cf_powder", () -> new Item(new Item.Properties().setId(ITEMS.key("cf_powder"))));
     public static final RegistryObject<Item> CHAINSAW = ITEMS.register("chainsaw", () -> new Item(new Item.Properties().setId(ITEMS.key("chainsaw"))));
-    public static final RegistryObject<Item> CHARGING_ENERGY_CRYSTAL = ITEMS.register("charging_energy_crystal", () -> new Item(new Item.Properties().setId(ITEMS.key("charging_energy_crystal"))));
-    public static final RegistryObject<Item> CHARGING_LAPOTRON_CRYSTAL = ITEMS.register("charging_lapotron_crystal", () -> new Item(new Item.Properties().setId(ITEMS.key("charging_lapotron_crystal"))));
-    public static final RegistryObject<Item> CHARGING_RE_BATTERY = ITEMS.register("charging_re_battery", () -> new Item(new Item.Properties().setId(ITEMS.key("charging_re_battery"))));
+    public static final RegistryObject<Item> CHARGING_ENERGY_CRYSTAL = ITEMS.register("charging_energy_crystal", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("charging_energy_crystal")), EnergyUnits.fromCWh(2_000_000), 4_096_000, 2_400, true));
+    public static final RegistryObject<Item> CHARGING_LAPOTRON_CRYSTAL = ITEMS.register("charging_lapotron_crystal", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("charging_lapotron_crystal")), EnergyUnits.fromCWh(20_000_000), 16_384_000, 13_800, true));
+    public static final RegistryObject<Item> CHARGING_RE_BATTERY = ITEMS.register("charging_re_battery", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("charging_re_battery")), EnergyUnits.fromCWh(20_000), 64_000, 220, true));
     public static final RegistryObject<Item> CIRCUIT = ITEMS.register("circuit", () -> new Item(new Item.Properties().setId(ITEMS.key("circuit"))));
     public static final RegistryObject<Item> COAL_BALL = ITEMS.register("coal_ball", () -> new Item(new Item.Properties().setId(ITEMS.key("coal_ball"))));
     public static final RegistryObject<Item> COAL_BLOCK = ITEMS.register("coal_block", () -> new Item(new Item.Properties().setId(ITEMS.key("coal_block"))));
@@ -236,7 +237,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> ELECTRIC_MOTOR = ITEMS.register("electric_motor", () -> new Item(new Item.Properties().setId(ITEMS.key("electric_motor"))));
     public static final RegistryObject<Item> ELECTRIC_TREETAP = ITEMS.register("electric_treetap", () -> new Item(new Item.Properties().setId(ITEMS.key("electric_treetap"))));
     public static final RegistryObject<Item> ELECTRIC_WRENCH = ITEMS.register("electric_wrench", () -> new Item(new Item.Properties().setId(ITEMS.key("electric_wrench"))));
-    public static final RegistryObject<Item> ENERGY_CRYSTAL = ITEMS.register("energy_crystal", () -> new Item(new Item.Properties().setId(ITEMS.key("energy_crystal"))));
+    public static final RegistryObject<Item> ENERGY_CRYSTAL = ITEMS.register("energy_crystal", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("energy_crystal")), EnergyUnits.fromCWh(500_000), 1_024_000, 2_400, true));
     public static final RegistryObject<Item> ENERGY_PACK = ITEMS.register("energy_pack", () -> new Item(new Item.Properties().setId(ITEMS.key("energy_pack"))));
     public static final RegistryObject<Item> FERTILIZER = ITEMS.register("fertilizer", () -> new Item(new Item.Properties().setId(ITEMS.key("fertilizer"))));
     public static final RegistryObject<Item> FLUID_CELL = ITEMS.register("fluid_cell", () -> new Item(new Item.Properties().setId(ITEMS.key("fluid_cell"))));
@@ -269,7 +270,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> JETPACK = ITEMS.register("jetpack", () -> new Item(new Item.Properties().setId(ITEMS.key("jetpack"))));
     public static final RegistryObject<Item> JETPACK_ATTACHMENT_PLATE = ITEMS.register("jetpack_attachment_plate", () -> new Item(new Item.Properties().setId(ITEMS.key("jetpack_attachment_plate"))));
     public static final RegistryObject<Item> JETPACK_ELECTRIC = ITEMS.register("jetpack_electric", () -> new Item(new Item.Properties().setId(ITEMS.key("jetpack_electric"))));
-    public static final RegistryObject<Item> LAPOTRON_CRYSTAL = ITEMS.register("lapotron_crystal", () -> new Item(new Item.Properties().setId(ITEMS.key("lapotron_crystal"))));
+    public static final RegistryObject<Item> LAPOTRON_CRYSTAL = ITEMS.register("lapotron_crystal", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("lapotron_crystal")), EnergyUnits.fromCWh(5_000_000), 4_046_000, 13_800, true));
     public static final RegistryObject<Item> LAVA_CELL = ITEMS.register("lava_cell", () -> new Item(new Item.Properties().setId(ITEMS.key("lava_cell"))));
     public static final RegistryObject<Item> LZH_CONDENSATOR = ITEMS.register("lzh_condensator", () -> new Item(new Item.Properties().setId(ITEMS.key("lzh_condensator"))));
     public static final RegistryObject<Item> METER = ITEMS.register("meter", () -> new Item(new Item.Properties().setId(ITEMS.key("meter"))));
@@ -330,7 +331,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> QUANTUM_HELMET = ITEMS.register("quantum_helmet", () -> new Item(new Item.Properties().setId(ITEMS.key("quantum_helmet"))));
     public static final RegistryObject<Item> QUANTUM_LEGGINGS = ITEMS.register("quantum_leggings", () -> new Item(new Item.Properties().setId(ITEMS.key("quantum_leggings"))));
     public static final RegistryObject<Item> RAW_CRYSTAL_MEMORY = ITEMS.register("raw_crystal_memory", () -> new Item(new Item.Properties().setId(ITEMS.key("raw_crystal_memory"))));
-    public static final RegistryObject<Item> RE_BATTERY = ITEMS.register("re_battery", () -> new Item(new Item.Properties().setId(ITEMS.key("re_battery"))));
+    public static final RegistryObject<Item> RE_BATTERY = ITEMS.register("re_battery", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("re_battery")), EnergyUnits.fromCWh(5_000), 50_000, 220, true));
     public static final RegistryObject<Item> REACTOR_HEAT_EXCHANGER = ITEMS.register("reactor_heat_exchanger", () -> new Item(new Item.Properties().setId(ITEMS.key("reactor_heat_exchanger"))));
     public static final RegistryObject<Item> REACTOR_HEAT_VENT = ITEMS.register("reactor_heat_vent", () -> new Item(new Item.Properties().setId(ITEMS.key("reactor_heat_vent"))));
     public static final RegistryObject<Item> REINFORCED_DOOR = ITEMS.register("reinforced_door", () -> new Item(new Item.Properties().setId(ITEMS.key("reinforced_door"))));
@@ -346,7 +347,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> RUBBER_BOOTS = ITEMS.register("rubber_boots", () -> new Item(new Item.Properties().setId(ITEMS.key("rubber_boots"))));
     public static final RegistryObject<Item> SCRAP = ITEMS.register("scrap", () -> new Item(new Item.Properties().setId(ITEMS.key("scrap"))));
     public static final RegistryObject<Item> SCRAP_BOX = ITEMS.register("scrap_box", () -> new Item(new Item.Properties().setId(ITEMS.key("scrap_box"))));
-    public static final RegistryObject<Item> SINGLE_USE_BATTERY = ITEMS.register("single_use_battery", () -> new Item(new Item.Properties().setId(ITEMS.key("single_use_battery"))));
+    public static final RegistryObject<Item> SINGLE_USE_BATTERY = ITEMS.register("single_use_battery", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("single_use_battery")), EnergyUnits.fromCWh(600), 50_000, 220, false));
     public static final RegistryObject<Item> SMALL_PLUTONIUM = ITEMS.register("small_plutonium", () -> new Item(new Item.Properties().setId(ITEMS.key("small_plutonium"))));
     public static final RegistryObject<Item> SMALL_POWER_UNIT = ITEMS.register("small_power_unit", () -> new Item(new Item.Properties().setId(ITEMS.key("small_power_unit"))));
     public static final RegistryObject<Item> SMALL_URANIUM_235 = ITEMS.register("small_uranium_235", () -> new Item(new Item.Properties().setId(ITEMS.key("small_uranium_235"))));

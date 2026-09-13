@@ -145,6 +145,20 @@ public class MachineMenu extends AbstractContainerMenu {
         return max <= 0 ? 0.0 : Math.max(0.0, Math.min(1.0, (double) value / max));
     }
 
+    /** Modo configurado do transformador: 0 = redstone, 1 = abaixa, 2 = eleva. */
+    public int getTransformerMode() {
+        return value(MachineBlockEntity.DATA_MODE);
+    }
+
+    /** Botões da GUI (modo do transformador) chegam aqui no servidor. */
+    @Override
+    public boolean clickMenuButton(Player player, int id) {
+        if (this.blockEntity != null && this.blockEntity.setTransformerMode(id)) {
+            return true;
+        }
+        return super.clickMenuButton(player, id);
+    }
+
     @Override
     public boolean stillValid(Player player) {
         if (this.blockEntity == null || this.blockEntity.getLevel() == null) {

@@ -183,9 +183,39 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     }
 
     // ── Labels ─────────────────────────────────────────────────────────────
+    /** Transformadores: os três botões de modo do IC2 (redstone, abaixa fixo, eleva fixo). */
+    private static final String[] TRANSFORMER_MODES = {"redstone", "step_down", "step_up"};
+    private static final String[] TRANSFORMER_MODE_FALLBACKS = {"Redstone = step-up", "Fixed step-down", "Fixed step-up"};
+
+    private boolean isTransformer() {
+        return this.menu.getGuiType().name().endsWith("_TRANSFORMER");
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        if (!isTransformer()) return;
+
+        for (int mode = 0; mode < TRANSFORMER_MODES.length; mode++) {
+            int buttonId = mode;
+            this.addRenderableWidget(net.minecraft.client.gui.components.Button.builder(
+                            Component.translatableWithFallback("gui.ic2reborn.transformer.mode." + TRANSFORMER_MODES[mode],
+                                    TRANSFORMER_MODE_FALLBACKS[mode]),
+                            button -> this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, buttonId))
+                    .bounds(this.leftPos + 7, this.topPos + 65 + mode * 20, 144, 20)
+                    .build());
+        }
+    }
+
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         int textColor = 0xFF000000 | MachineLayout.TEXT_COLOR;
+
+        if (isTransformer()) {
+            // a chave inglesa ao lado do botão marca o modo atual, como no IC2
+            graphics.item(new net.minecraft.world.item.ItemStack(net.ic2reborn.registry.IC2AutoItems.WRENCH.get()),
+                    152, 67 + this.menu.getTransformerMode() * 20);
+        }
 
         // GuiIC2: título centralizado em y = 6
         graphics.text(this.font, this.title, (this.imageWidth - this.font.width(this.title)) / 2, 6, textColor, false);

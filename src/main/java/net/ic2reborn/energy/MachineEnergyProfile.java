@@ -8,7 +8,7 @@ import net.ic2reborn.menu.MachineGuiType;
  *
  * @param role           papel na rede
  * @param voltage        tensão nominal/de saída em MV (no transformador: o lado de baixa)
- * @param power          potência em CW (produção do gerador, carga/descarga da bateria,
+ * @param power          potência em CW (produção máxima do gerador, carga/descarga da bateria,
  *                       consumo da máquina, potência máxima do transformador)
  * @param capacity       energia interna em CW·tick
  * @param operationTicks duração de uma operação (máquinas de processamento)
@@ -25,6 +25,10 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
     public static MachineEnergyProfile of(MachineGuiType type) {
         return switch (type) {
             case GENERATOR -> simple(Role.GENERATOR, 220, 5_000, EnergyUnits.fromCWh(2_000));
+            // geradores sem combustível guardam só um segundo de produção
+            case SOLAR_GENERATOR -> simple(Role.GENERATOR, 220, 500, 500L * 20);
+            case WATER_GENERATOR -> simple(Role.GENERATOR, 220, 1_000, 1_000L * 20);
+            case WIND_GENERATOR -> simple(Role.GENERATOR, 220, 5_000, 5_000L * 20);
 
             case BATBOX -> simple(Role.STORAGE, 220, 4_400, EnergyUnits.fromCWh(20_000));
             case CESU -> simple(Role.STORAGE, 1_000, 20_000, EnergyUnits.fromCWh(150_000));
@@ -61,8 +65,8 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
         return this.power * 2;
     }
 
-    /** Se o block entity precisa de tick no servidor (transformadores e máquinas desligadas não precisam). */
+    /** Se o block entity precisa de tick no servidor. */
     public boolean ticks() {
-        return this.role != Role.NONE && this.role != Role.TRANSFORMER;
+        return this.role != Role.NONE;
     }
 }

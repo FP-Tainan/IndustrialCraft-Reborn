@@ -47,7 +47,13 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.RAW_URANIUM.get());
                         output.accept(IC2Items.INGOT_LEAD.get());
                         output.accept(IC2Items.INGOT_URANIUM.get());
-                        IC2AutoItems.ITEMS.getEntries().forEach(entry -> output.accept(entry.get()));
+                        IC2AutoItems.ITEMS.getEntries().forEach(entry -> {
+                            output.accept(entry.get());
+                            // baterias recarregáveis aparecem vazias e carregadas, como no IC2
+                            if (entry.get() instanceof net.craftenergy.content.item.BatteryItem battery && battery.isRechargeable()) {
+                                output.accept(battery.charged());
+                            }
+                        });
                     })
                     .build());
 

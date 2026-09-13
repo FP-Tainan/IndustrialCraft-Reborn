@@ -37,6 +37,7 @@ public final class CraftEnergyContent {
     private CraftEnergyContent() {}
 
     public static void init() {
+        CEComponents.COMPONENTS.register();
         CEBlocks.BLOCKS.register();
         CEItems.ITEMS.register();
         TABS.register();

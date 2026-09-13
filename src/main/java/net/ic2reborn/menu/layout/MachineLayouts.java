@@ -140,12 +140,12 @@ public final class MachineLayouts {
 
             case WATER_GENERATOR -> MachineLayout.dynamic(176, 166)
                     .slot(80, 53).slot(80, 17)
-                    .gauge(82, 36, BUCKET, NONE)
+                    .progress(82, 36, BUCKET)
                     .build();
 
             case WIND_GENERATOR -> MachineLayout.dynamic(176, 166)
                     .slot(80, 26)
-                    .gauge(82, 45, PROGRESS_WIND, NONE)
+                    .progress(82, 45, PROGRESS_WIND)
                     .build();
 
             case KINETIC_GENERATOR -> MachineLayout.dynamic(176, 166)

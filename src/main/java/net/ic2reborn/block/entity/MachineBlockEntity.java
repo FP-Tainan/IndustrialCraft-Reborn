@@ -5,11 +5,13 @@ import net.craftenergy.api.EnergyNode;
 import net.craftenergy.api.EnergySink;
 import net.craftenergy.api.EnergySource;
 import net.craftenergy.api.EnergyUnits;
+import net.craftenergy.content.item.EnergyItems;
 import net.craftenergy.fabric.CraftEnergyApi;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.ic2reborn.IC2Reborn;
 import net.ic2reborn.block.MachineBlock;
 import net.ic2reborn.energy.MachineEnergyProfile;
+import net.ic2reborn.energy.WindSim;
 import net.ic2reborn.menu.MachineGuiType;
 import net.ic2reborn.menu.MachineMenu;
 import net.ic2reborn.menu.layout.MachineLayout;
@@ -24,8 +26,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -39,6 +43,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -54,24 +59,30 @@ import java.util.function.Function;
  *
  * <p>O inventário vem do layout da GUI; a parte elétrica vem do {@link MachineEnergyProfile}:
  * <ul>
- *   <li>geradores são {@link EnergySource};</li>
+ *   <li>geradores são {@link EnergySource} (combustão, solar, água, vento);</li>
  *   <li>armazenamentos (BatBox, CESU, MFE, MFSU) têm entrada nas faces laterais — um carregador
  *   que aceita qualquer tensão até a sua, com corrente limitada à nominal — e saída na face da
  *   frente, na tensão do bloco (como no IC2);</li>
  *   <li>máquinas de processamento são {@link EnergySink} com um buffer interno;</li>
- *   <li>transformadores expõem um {@link BufferedTransformer} (alta na frente, baixa nas outras faces).</li>
+ *   <li>transformadores expõem um {@link BufferedTransformer} (alta na frente, baixa nas outras
+ *   faces), com os modos do IC2: redstone, abaixa fixo, eleva fixo.</li>
  * </ul>
- * Os nós são expostos ao Craft Energy pelo lookup registrado em {@code IC2Reborn}.
+ * Slots de carga e descarga movem energia de/para itens do Craft Energy (baterias), respeitando
+ * o nível de tensão. Os nós são expostos ao Craft Energy pelo lookup registrado em {@code IC2Reborn}.
  */
 public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvider<MachineGuiType> {
     /** Campos lógicos sincronizados com a GUI; cada um viaja como dois valores de 16 bits. */
     public static final int DATA_ENERGY = 0;        // CWh guardados
     public static final int DATA_CAPACITY = 1;      // CWh de capacidade
-    public static final int DATA_PROGRESS = 2;      // progresso (ou combustível restante no gerador)
+    public static final int DATA_PROGRESS = 2;      // progresso, combustível ou produção
     public static final int DATA_MAX_PROGRESS = 3;
     public static final int DATA_POWER = 4;         // CW que passaram pelo bloco no último tick
     public static final int DATA_VOLTAGE = 5;       // MV
-    public static final int DATA_COUNT = 6;
+    public static final int DATA_MODE = 6;          // modo do transformador
+    public static final int DATA_COUNT = 7;
+
+    /** Modos do transformador do IC2. */
+    public enum TransformerMode { REDSTONE, STEP_DOWN, STEP_UP }
 
     /** Itens que o reciclador consome sem nunca dar sucata. */
     public static final TagKey<Item> RECYCLER_BLACKLIST = TagKey.create(Registries.ITEM,
@@ -80,12 +91,16 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private static final int RECYCLE_CHANCE = 8;
     /** Pó de redstone no slot de descarga, como no IC2 (800 EU → 400 CWh). */
     public static final long REDSTONE_ENERGY = EnergyUnits.fromCWh(400);
+    /** Gerador de água do IC2: um balde/célula rende 500 ticks; no máximo 2.000 ticks guardados. */
+    public static final int WATER_FUEL_PER_ITEM = 500;
+    private static final int MAX_WATER_FUEL = 2_000;
+    /** Vento do IC2: 0,1 EU/t por unidade de vento → 50 CW. */
+    private static final double WIND_CW_PER_UNIT = 50.0;
 
     private static final int GENERATOR_FUEL_SLOT = 1;
-    private static final int STORAGE_DISCHARGE_SLOT = 1;
+    private static final int WATER_FUEL_SLOT = 0;
     private static final int PROCESSOR_INPUT_SLOT = 0;
     private static final int PROCESSOR_OUTPUT_SLOT = 1;
-    private static final int PROCESSOR_DISCHARGE_SLOT = 2;
 
     private final MachineGuiType guiType;
     private final MachineEnergyProfile profile;
@@ -100,10 +115,18 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private int maxProgress;
     private int fuel;
     private int totalFuel;
+    private long fuelPower;
     private int lastInputVoltage;
     private long flowThisTick;
     private long lastFlow;
+    private TransformerMode transformerMode = TransformerMode.REDSTONE;
     private @Nullable RecipeHolder<SmeltingRecipe> lastSmelting;
+    // geradores sem combustível
+    private double sunlight;
+    private int waterBlocks = -1;
+    private int waterMicro;
+    private int windObstructions = -1;
+    private long windPower = -1;
 
     private final ContainerData data = new ContainerData() {
         @Override
@@ -189,6 +212,18 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         setChanged();
     }
 
+    public TransformerMode getTransformerMode() {
+        return this.transformerMode;
+    }
+
+    /** Botão da GUI: 0 = redstone, 1 = abaixa fixo, 2 = eleva fixo. Só vale para transformadores. */
+    public boolean setTransformerMode(int mode) {
+        if (this.transformer == null || mode < 0 || mode >= TransformerMode.values().length) return false;
+        this.transformerMode = TransformerMode.values()[mode];
+        setChanged();
+        return true;
+    }
+
     /** Nó principal (armazenamentos: a entrada). Para nós por face, use {@link #getEnergyNode(Direction)}. */
     public @Nullable EnergyNode getEnergyNode() {
         return this.energyNode;
@@ -223,33 +258,83 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.lastFlow = this.flowThisTick;
         this.flowThisTick = 0;
 
-        boolean changed = absorbRedstone();
+        boolean changed = handleEnergyItems();
         changed |= switch (this.profile.role()) {
-            case GENERATOR -> tickGenerator(level);
+            case GENERATOR -> switch (this.guiType) {
+                case SOLAR_GENERATOR -> tickSolar(level);
+                case WATER_GENERATOR -> tickWater(level);
+                case WIND_GENERATOR -> tickWind(level);
+                default -> tickGenerator(level);
+            };
             case PROCESSOR -> tickProcessor(level);
-            case STORAGE, TRANSFORMER, NONE -> false;
+            case TRANSFORMER -> tickTransformer(level);
+            case STORAGE, NONE -> false;
         };
         if (changed) setChanged();
     }
 
-    /** Pó de redstone no slot de descarga vira energia (armazenamentos e máquinas). */
-    private boolean absorbRedstone() {
-        int slot = switch (this.profile.role()) {
-            case STORAGE -> STORAGE_DISCHARGE_SLOT;
-            case PROCESSOR -> PROCESSOR_DISCHARGE_SLOT;
+    // ── slots de carga e descarga ─────────────────────────────────────────
+    private int chargeSlot() {
+        return switch (this.guiType) {
+            case GENERATOR, SOLAR_GENERATOR, WIND_GENERATOR, BATBOX, CESU, MFE, MFSU -> 0;
+            case WATER_GENERATOR -> 1;
             default -> -1;
         };
-        if (slot < 0 || slot >= this.inventory.getContainerSize()) return false;
+    }
 
-        ItemStack stack = this.inventory.getItem(slot);
-        if (stack.isEmpty() || stack.getItem() != Items.REDSTONE) return false;
-        // máquinas com buffer menor que uma redstone ainda aceitam quando estão vazias
-        boolean fits = this.profile.capacity() - this.energy >= REDSTONE_ENERGY || this.energy == 0;
-        if (!fits) return false;
+    private int dischargeSlot() {
+        return switch (this.profile.role()) {
+            case STORAGE -> 1;
+            case PROCESSOR -> 2;
+            default -> -1;
+        };
+    }
 
-        stack.shrink(1);
-        this.inventory.setItem(slot, stack);
-        this.energy = Math.min(this.profile.capacity(), this.energy + REDSTONE_ENERGY);
+    /** Carrega a bateria do slot de carga e puxa energia do slot de descarga (bateria ou redstone). */
+    private boolean handleEnergyItems() {
+        boolean changed = false;
+
+        int chargeSlot = chargeSlot();
+        if (chargeSlot >= 0 && chargeSlot < this.inventory.getContainerSize() && this.energy > 0) {
+            ItemStack stack = this.inventory.getItem(chargeSlot);
+            long moved = EnergyItems.charge(stack, this.energy, this.profile.voltage(), false);
+            if (moved > 0) {
+                this.energy -= moved;
+                this.inventory.setItem(chargeSlot, stack);
+                changed = true;
+            }
+        }
+
+        int dischargeSlot = dischargeSlot();
+        if (dischargeSlot >= 0 && dischargeSlot < this.inventory.getContainerSize()) {
+            ItemStack stack = this.inventory.getItem(dischargeSlot);
+            long room = this.profile.capacity() - this.energy;
+            if (stack.getItem() == Items.REDSTONE) {
+                // máquinas com buffer menor que uma redstone ainda aceitam quando estão vazias
+                if (room >= REDSTONE_ENERGY || this.energy == 0) {
+                    stack.shrink(1);
+                    this.inventory.setItem(dischargeSlot, stack);
+                    this.energy = Math.min(this.profile.capacity(), this.energy + REDSTONE_ENERGY);
+                    changed = true;
+                }
+            } else if (room > 0) {
+                long moved = EnergyItems.discharge(stack, room, this.profile.voltage(), false);
+                if (moved > 0) {
+                    this.energy += moved;
+                    this.inventory.setItem(dischargeSlot, stack);
+                    changed = true;
+                }
+            }
+        }
+        return changed;
+    }
+
+    // ── geradores ─────────────────────────────────────────────────────────
+    /** Soma produção ao buffer, sem passar da capacidade. */
+    private boolean produce(long power) {
+        long added = Math.min(power, this.profile.capacity() - this.energy);
+        if (added <= 0) return false;
+        this.energy += added;
         return true;
     }
 
@@ -286,6 +371,129 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return changed;
     }
 
+    /** Solar do IC2: luz do céu ÷ 15, só de dia, reduzida pela chuva e pela tempestade. */
+    private boolean tickSolar(Level level) {
+        if (level.getGameTime() % 20 == 0) {
+            this.sunlight = sunlight(level, this.worldPosition);
+        }
+        long production = Math.round(this.profile.power() * this.sunlight);
+        this.progress = (int) production;
+        this.maxProgress = (int) this.profile.power();
+        return produce(production);
+    }
+
+    public static double sunlight(Level level, BlockPos pos) {
+        if (!level.isBrightOutside()) return 0.0;
+        double sky = level.getBrightness(LightLayer.SKY, pos.above()) / 15.0;
+        double weather = (1.0 - level.getRainLevel(1.0F) * 5.0 / 16.0) * (1.0 - level.getThunderLevel(1.0F) * 5.0 / 16.0);
+        return Math.max(0.0, Math.min(1.0, sky * weather));
+    }
+
+    /**
+     * Gerador de água do IC2: balde de água rende 500 CW e célula de água 1.000 CW, por 500 ticks.
+     * Sem combustível, cada bloco de água no cubo 3×3×3 em volta soma 5 CW.
+     */
+    private boolean tickWater(Level level) {
+        boolean changed = false;
+
+        if (this.fuel + WATER_FUEL_PER_ITEM <= MAX_WATER_FUEL) {
+            ItemStack stack = this.inventory.getItem(WATER_FUEL_SLOT);
+            ItemStack container = ItemStack.EMPTY;
+            long power = 0;
+            if (stack.getItem() == Items.WATER_BUCKET) {
+                container = new ItemStack(Items.BUCKET);
+                power = 500;
+            } else if (stack.getItem() == IC2AutoItems.WATER_CELL.get()) {
+                container = new ItemStack(IC2AutoItems.FLUID_CELL.get());
+                power = 1_000;
+            }
+            if (power > 0) {
+                if (stack.getCount() == 1) {
+                    this.inventory.setItem(WATER_FUEL_SLOT, container);
+                } else {
+                    stack.shrink(1);
+                    this.inventory.setItem(WATER_FUEL_SLOT, stack);
+                    Containers.dropItemStack(level, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.0,
+                            this.worldPosition.getZ() + 0.5, container);
+                }
+                this.fuel += WATER_FUEL_PER_ITEM;
+                this.fuelPower = power;
+                changed = true;
+            }
+        }
+
+        if (this.fuel > 0) {
+            if (produce(this.fuelPower)) {
+                this.fuel--;
+                changed = true;
+            }
+        } else {
+            if (this.waterBlocks < 0 || level.getGameTime() % 128 == 0) {
+                this.waterBlocks = countWater(level);
+            }
+            this.waterMicro += this.waterBlocks;
+            long power = (this.waterMicro / 100) * 500L;
+            this.waterMicro %= 100;
+            if (power > 0) changed |= produce(power);
+        }
+
+        this.progress = this.fuel;
+        this.maxProgress = MAX_WATER_FUEL;
+        return changed;
+    }
+
+    private int countWater(Level level) {
+        int count = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(this.worldPosition.offset(-1, -1, -1), this.worldPosition.offset(1, 1, 1))) {
+            if (level.getFluidState(pos).is(FluidTags.WATER)) count++;
+        }
+        return count;
+    }
+
+    /** Eólico do IC2: vento da dimensão na altura do bloco, menos os blocos em volta (9×7×9). */
+    private boolean tickWind(Level level) {
+        if (!(level instanceof ServerLevel serverLevel)) return false;
+        long time = level.getGameTime();
+        if (this.windObstructions < 0 || time % 1024 == 0) {
+            this.windObstructions = countObstructions(level);
+        }
+        if (this.windPower < 0 || time % 128 == 0) {
+            double wind = WindSim.get(serverLevel).windAt(serverLevel, this.worldPosition.getY())
+                    * (1.0 - this.windObstructions / 567.0);
+            this.windPower = Math.max(0, Math.min(this.profile.power(), Math.round(wind * WIND_CW_PER_UNIT)));
+        }
+        this.progress = (int) this.windPower;
+        this.maxProgress = (int) this.profile.power();
+        return produce(this.windPower);
+    }
+
+    private int countObstructions(Level level) {
+        int count = -1; // o próprio gerador não conta
+        for (BlockPos pos : BlockPos.betweenClosed(this.worldPosition.offset(-4, -2, -4), this.worldPosition.offset(4, 4, 4))) {
+            if (!level.getBlockState(pos).isAir()) count++;
+        }
+        return Math.max(0, count);
+    }
+
+    // ── transformador ─────────────────────────────────────────────────────
+    /** Modo redstone: eleva a tensão com sinal de redstone, abaixa sem sinal. */
+    private boolean tickTransformer(Level level) {
+        if (this.transformer == null) return false;
+        BufferedTransformer.Mode wanted = switch (this.transformerMode) {
+            case STEP_UP -> BufferedTransformer.Mode.STEP_UP;
+            case STEP_DOWN -> BufferedTransformer.Mode.STEP_DOWN;
+            case REDSTONE -> level.hasNeighborSignal(this.worldPosition)
+                    ? BufferedTransformer.Mode.STEP_UP : BufferedTransformer.Mode.STEP_DOWN;
+        };
+        if (this.transformer.mode() == wanted) return false;
+
+        this.transformer.setMode(wanted);
+        // os nós de alta e baixa trocaram de papel (entrada/saída)
+        CraftEnergyApi.markChanged(level, this.worldPosition);
+        return true;
+    }
+
+    // ── máquinas de processamento ─────────────────────────────────────────
     /** Máquina padrão do IC2: gasta a potência por tick e completa a operação no fim da duração. */
     private boolean tickProcessor(Level level) {
         ItemStack input = this.inventory.getItem(PROCESSOR_INPUT_SLOT);
@@ -488,6 +696,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case DATA_MAX_PROGRESS -> this.maxProgress;
             case DATA_POWER -> clampToInt(this.lastFlow);
             case DATA_VOLTAGE -> this.profile.voltage();
+            case DATA_MODE -> this.transformerMode.ordinal();
             default -> 0;
         };
     }
@@ -501,7 +710,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);
         if (this.level != null) {
-            net.minecraft.world.Containers.dropContents(this.level, pos, this.inventory);
+            Containers.dropContents(this.level, pos, this.inventory);
         }
     }
 
@@ -539,8 +748,10 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         output.putInt("Progress", this.progress);
         output.putInt("Fuel", this.fuel);
         output.putInt("TotalFuel", this.totalFuel);
+        output.putLong("FuelPower", this.fuelPower);
         if (this.transformer != null) {
             output.putLong("TransformerBuffer", this.transformer.bufferedPower());
+            output.putInt("TransformerMode", this.transformerMode.ordinal());
         }
     }
 
@@ -564,11 +775,14 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.progress = input.getIntOr("Progress", 0);
         this.fuel = input.getIntOr("Fuel", 0);
         this.totalFuel = input.getIntOr("TotalFuel", 0);
-        if (this.profile.role() == MachineEnergyProfile.Role.GENERATOR) {
+        this.fuelPower = input.getLongOr("FuelPower", 0);
+        if (this.profile.role() == MachineEnergyProfile.Role.GENERATOR && this.guiType == MachineGuiType.GENERATOR) {
             this.maxProgress = this.totalFuel;
         }
         if (this.transformer != null) {
             this.transformer.setBufferedPower(input.getLongOr("TransformerBuffer", 0));
+            int mode = input.getIntOr("TransformerMode", TransformerMode.REDSTONE.ordinal());
+            this.transformerMode = TransformerMode.values()[Math.max(0, Math.min(TransformerMode.values().length - 1, mode))];
         }
     }
 }
