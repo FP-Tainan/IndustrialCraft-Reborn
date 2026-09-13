@@ -1,17 +1,15 @@
 package net.ic2reborn.registry;
 
+import net.minecraft.core.registries.Registries;
 import net.ic2reborn.IC2Reborn;
 import net.ic2reborn.item.TreetapItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 public class IC2Items {
 
     public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, IC2Reborn.MODID);
+            DeferredRegister.create(Registries.ITEM, IC2Reborn.MODID);
 
     public static final RegistryObject<BlockItem> RUBBER_LOG =
             ITEMS.register("rubber_log", () -> new BlockItem(IC2Blocks.RUBBER_LOG.get(), new Item.Properties().setId(ITEMS.key("rubber_log"))));

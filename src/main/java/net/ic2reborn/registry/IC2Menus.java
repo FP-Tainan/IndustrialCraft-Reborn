@@ -1,0 +1,19 @@
+package net.ic2reborn.registry;
+
+import net.minecraft.core.registries.Registries;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
+import net.ic2reborn.IC2Reborn;
+import net.ic2reborn.menu.MachineGuiType;
+import net.ic2reborn.menu.MachineMenu;
+import net.minecraft.world.inventory.MenuType;
+
+/** Menu registrations for IC2 Reborn GUIs. */
+public class IC2Menus {
+    public static final DeferredRegister<MenuType<?>> MENUS =
+            DeferredRegister.create(Registries.MENU, IC2Reborn.MODID);
+
+    /** Um único menu para todas as máquinas; o layout vem do MachineGuiType enviado ao cliente. */
+    public static final RegistryObject<ExtendedMenuType<MachineMenu, MachineGuiType>> MACHINE =
+            MENUS.register("machine", () -> new ExtendedMenuType<MachineMenu, MachineGuiType>(
+                    MachineMenu::new, MachineGuiType.STREAM_CODEC));
+}

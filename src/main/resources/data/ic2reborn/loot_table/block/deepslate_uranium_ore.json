@@ -4,7 +4,7 @@
     "rolls": 1,
     "entries": [{
       "type": "minecraft:item",
-      "id": "ic2reborn:raw_uranium"
+      "name": "ic2reborn:raw_uranium"
     }],
     "conditions": [{ "condition": "minecraft:survives_explosion" }]
   }]

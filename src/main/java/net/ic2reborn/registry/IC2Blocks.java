@@ -1,18 +1,16 @@
 package net.ic2reborn.registry;
 
+import net.minecraft.core.registries.Registries;
 import net.ic2reborn.IC2Reborn;
 import net.ic2reborn.block.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 public class IC2Blocks {
 
     public static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, IC2Reborn.MODID);
+            DeferredRegister.create(Registries.BLOCK, IC2Reborn.MODID);
 
     public static final RegistryObject<RubberLogDropBlock> RUBBER_LOG =
             BLOCKS.register("rubber_log", () -> new RubberLogDropBlock(

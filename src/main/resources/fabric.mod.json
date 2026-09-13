@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "ic2reborn",
+  "version": "${version}",
+  "name": "IndustrialCraft 2 Reborn",
+  "description": "Port não-oficial do IndustrialCraft 2 para versões modernas do Minecraft.\nMódulo 1: Natureza — Árvore de borracha, resina, minérios IC2.\nFeito com autorização do dev original.",
+  "authors": [
+    "Tainan Fermino Peres"
+  ],
+  "license": "Fan Port - Fiel ao IC2 original",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.ic2reborn.IC2Reborn"
+    ],
+    "client": [
+      "net.ic2reborn.client.IC2ClientSetup"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

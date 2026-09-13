@@ -2,6 +2,6 @@
   "type": "minecraft:block",
   "pools": [{
     "rolls": 1,
-    "entries": [{ "type": "minecraft:item", "id": "ic2reborn:rubber_log" }]
+    "entries": [{ "type": "minecraft:item", "name": "ic2reborn:rubber_log" }]
   }]
 }

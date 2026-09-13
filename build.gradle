@@ -1,52 +1,47 @@
 plugins {
-    id 'java'
-    id 'idea'
-    id 'eclipse'
-    id 'net.minecraftforge.gradle' version '[7.0.17,8)'
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
 }
 
-version = '0.1.0-m1'
-group = 'net.ic2reborn'
+version = project.mod_version
+group = project.maven_group
 
-// Minecraft 26.1 ships Java 25
-java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+base {
+    archivesName = project.archives_base_name
+}
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-minecraft {
-    runs {
-        configureEach {
-            workingDir = layout.projectDirectory.dir('run')
-            systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
-        }
-
-        register('client')
-
-        register('server') {
-            args '--nogui'
-        }
-
-        register('data') {
-            workingDir = layout.projectDirectory.dir('run-data')
-            args '--mod', 'ic2reborn', '--all',
-                 '--output', layout.projectDirectory.dir('src/generated/resources'),
-                 '--existing', layout.projectDirectory.dir('src/main/resources')
+loom {
+    mods {
+        "ic2reborn" {
+            sourceSet sourceSets.main
         }
     }
 }
 
-repositories {
-    minecraft.mavenizer(it)
-    maven fg.forgeMaven
-    maven fg.minecraftLibsMaven
-    mavenCentral()
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
 
-dependencies {
-    implementation minecraft.dependency('net.minecraftforge:forge:26.1.2-64.0.9')
-    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0.1'
+processResources {
+    def version = project.version
+    inputs.property "version", version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+    it.options.encoding = 'UTF-8'
+    it.options.release = 25
+    it.options.compilerArgs << '-Xlint:deprecation'
+}
+
+java {
+    // Minecraft 26.x ships Java 25
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }

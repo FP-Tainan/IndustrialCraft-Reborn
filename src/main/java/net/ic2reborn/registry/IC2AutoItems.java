@@ -1,15 +1,13 @@
 package net.ic2reborn.registry;
+import net.minecraft.core.registries.Registries;
 import net.ic2reborn.IC2Reborn;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.ic2reborn.item.DamageableCraftingToolItem;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 /** Auto-generated simple items and block-items used by the converted IC2 recipe set. */
 public class IC2AutoItems {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, IC2Reborn.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, IC2Reborn.MODID);
 
     public static final RegistryObject<BlockItem> ADVANCED_MACHINE_BLOCK = ITEMS.register("advanced_machine_block", () -> new BlockItem(IC2AutoBlocks.ADVANCED_MACHINE_BLOCK.get(), new Item.Properties().setId(ITEMS.key("advanced_machine_block"))));
     public static final RegistryObject<BlockItem> ADVANCED_MINER = ITEMS.register("advanced_miner", () -> new BlockItem(IC2AutoBlocks.ADVANCED_MINER.get(), new Item.Properties().setId(ITEMS.key("advanced_miner"))));
@@ -99,6 +97,7 @@ public class IC2AutoItems {
     public static final RegistryObject<BlockItem> RT_GENERATOR = ITEMS.register("rt_generator", () -> new BlockItem(IC2AutoBlocks.RT_GENERATOR.get(), new Item.Properties().setId(ITEMS.key("rt_generator"))));
     public static final RegistryObject<BlockItem> RT_HEAT_GENERATOR = ITEMS.register("rt_heat_generator", () -> new BlockItem(IC2AutoBlocks.RT_HEAT_GENERATOR.get(), new Item.Properties().setId(ITEMS.key("rt_heat_generator"))));
     public static final RegistryObject<BlockItem> RUBBER_SHEET = ITEMS.register("rubber_sheet", () -> new BlockItem(IC2AutoBlocks.RUBBER_SHEET.get(), new Item.Properties().setId(ITEMS.key("rubber_sheet"))));
+    public static final RegistryObject<BlockItem> RUBBER_WOOD_PLANKS = ITEMS.register("rubber_wood_planks", () -> new BlockItem(IC2AutoBlocks.RUBBER_WOOD_PLANKS.get(), new Item.Properties().setId(ITEMS.key("rubber_wood_planks"))));
     public static final RegistryObject<BlockItem> SCANNER = ITEMS.register("scanner", () -> new BlockItem(IC2AutoBlocks.SCANNER.get(), new Item.Properties().setId(ITEMS.key("scanner"))));
     public static final RegistryObject<BlockItem> SEMIFLUID_GENERATOR = ITEMS.register("semifluid_generator", () -> new BlockItem(IC2AutoBlocks.SEMIFLUID_GENERATOR.get(), new Item.Properties().setId(ITEMS.key("semifluid_generator"))));
     public static final RegistryObject<BlockItem> SILVER_BLOCK = ITEMS.register("silver_block", () -> new BlockItem(IC2AutoBlocks.SILVER_BLOCK.get(), new Item.Properties().setId(ITEMS.key("silver_block"))));
