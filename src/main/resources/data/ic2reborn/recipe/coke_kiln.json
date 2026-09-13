@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "ic2reborn:refractory_bricks",
-    "ic2reborn:plate_iron"
+    "craftenergy:plate_iron"
   ],
   "result": {
     "count": 1,

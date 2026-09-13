@@ -8,7 +8,7 @@
   ],
   "key": {
     "B": "ic2reborn:advanced_re_battery",
-    "c": "ic2reborn:cable_copper_insulated",
+    "c": "craftenergy:cable_copper_insulated",
     "G": "minecraft:glowstone_dust",
     "C": "ic2reborn:circuit",
     "P": "ic2reborn:casing_gold"

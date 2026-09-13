@@ -7,8 +7,8 @@
     "RCR"
   ],
   "key": {
-    "R": "ic2reborn:rubber",
-    "C": "ic2reborn:plate_copper"
+    "R": "craftenergy:rubber",
+    "C": "craftenergy:plate_copper"
   },
   "result": {
     "count": 1,

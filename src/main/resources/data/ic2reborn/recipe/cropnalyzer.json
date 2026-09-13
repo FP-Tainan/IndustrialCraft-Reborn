@@ -8,7 +8,7 @@
   ],
   "key": {
     "G": "minecraft:glass",
-    "c": "ic2reborn:cable_copper_insulated",
+    "c": "craftenergy:cable_copper_insulated",
     "R": "minecraft:redstone",
     "C": "ic2reborn:circuit"
   },

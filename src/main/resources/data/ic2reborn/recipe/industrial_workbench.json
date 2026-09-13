@@ -6,9 +6,9 @@
     "HMC"
   ],
   "key": {
-    "H": "ic2reborn:hammer",
+    "H": "craftenergy:hammer",
     "M": "ic2reborn:machine_block",
-    "C": "ic2reborn:cutter",
+    "C": "craftenergy:cutter",
     "T": "minecraft:crafting_table"
   },
   "result": {

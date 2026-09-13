@@ -8,8 +8,8 @@
   ],
   "key": {
     "E": "ic2reborn:electric_motor",
-    "T": "ic2reborn:plate_tin",
-    "X": "ic2reborn:treetap"
+    "T": "craftenergy:plate_tin",
+    "X": "craftenergy:treetap"
   },
   "result": {
     "count": 1,

@@ -8,7 +8,7 @@
   ],
   "key": {
     "P": "ic2reborn:plate_bronze",
-    "C": "ic2reborn:cable_copper_insulated",
+    "C": "craftenergy:cable_copper_insulated",
     "B": "ic2reborn:advanced_re_battery"
   },
   "result": {

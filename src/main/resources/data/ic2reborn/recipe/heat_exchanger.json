@@ -8,8 +8,8 @@
   ],
   "key": {
     "c": "ic2reborn:circuit",
-    "T": "ic2reborn:plate_tin",
-    "C": "ic2reborn:plate_copper"
+    "T": "craftenergy:plate_tin",
+    "C": "craftenergy:plate_copper"
   },
   "result": {
     "count": 1,

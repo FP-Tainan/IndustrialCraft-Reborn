@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "ic2reborn:plate_bronze",
-    "ic2reborn:hammer"
+    "craftenergy:hammer"
   ],
   "result": {
     "count": 2,

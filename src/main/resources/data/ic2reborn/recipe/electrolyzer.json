@@ -8,7 +8,7 @@
   ],
   "key": {
     "E": "ic2reborn:fluid_cell",
-    "c": "ic2reborn:cable_copper_insulated",
+    "c": "craftenergy:cable_copper_insulated",
     "M": "ic2reborn:machine_block",
     "C": "ic2reborn:circuit"
   },

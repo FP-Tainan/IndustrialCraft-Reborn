@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "craftenergy:deepslate_tin_ore",
+    "craftenergy:tin_ore",
+    "craftenergy:cable_copper",
+    "craftenergy:cable_copper_insulated",
+    "craftenergy:cable_detector",
+    "craftenergy:cable_gold",
+    "craftenergy:cable_gold_double_insulated",
+    "craftenergy:cable_gold_insulated",
+    "craftenergy:cable_iron",
+    "craftenergy:cable_iron_double_insulated",
+    "craftenergy:cable_iron_insulated",
+    "craftenergy:cable_iron_triple_insulated",
+    "craftenergy:cable_splitter",
+    "craftenergy:cable_tin",
+    "craftenergy:cable_tin_insulated",
+    "craftenergy:glass_fibre_cable"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "craftenergy:plate_gold",
+    "craftenergy:cutter"
+  ],
+  "result": {
+    "count": 4,
+    "id": "craftenergy:cable_gold"
+  }
+}

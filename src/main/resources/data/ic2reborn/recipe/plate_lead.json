@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "ic2reborn:ingot_lead",
-    "ic2reborn:hammer"
+    "craftenergy:hammer"
   ],
   "result": {
     "count": 1,

@@ -6,7 +6,7 @@
   ],
   "key": {
     "U": "ic2reborn:uranium_fuel_rod",
-    "I": "ic2reborn:plate_iron"
+    "I": "craftenergy:plate_iron"
   },
   "result": {
     "count": 1,

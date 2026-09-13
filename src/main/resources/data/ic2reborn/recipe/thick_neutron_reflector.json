@@ -7,7 +7,7 @@
     "CRC"
   ],
   "key": {
-    "C": "ic2reborn:plate_copper",
+    "C": "craftenergy:plate_copper",
     "R": "ic2reborn:neutron_reflector"
   },
   "result": {

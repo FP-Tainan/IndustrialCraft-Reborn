@@ -8,7 +8,7 @@
   ],
   "key": {
     "X": "minecraft:iron_ingot",
-    "C": "ic2reborn:cable_copper"
+    "C": "craftenergy:cable_copper"
   },
   "result": {
     "count": 1,

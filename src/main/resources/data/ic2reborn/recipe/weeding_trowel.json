@@ -8,7 +8,7 @@
   ],
   "key": {
     "I": "minecraft:iron_ingot",
-    "R": "ic2reborn:rubber"
+    "R": "craftenergy:rubber"
   },
   "result": {
     "count": 1,

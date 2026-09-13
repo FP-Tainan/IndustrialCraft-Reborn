@@ -11,7 +11,7 @@
     "B": "ic2reborn:re_battery",
     "I": "ic2reborn:circuit",
     "M": "ic2reborn:electric_motor",
-    "A": "ic2reborn:cable_copper"
+    "A": "craftenergy:cable_copper"
   },
   "result": {
     "count": 1,

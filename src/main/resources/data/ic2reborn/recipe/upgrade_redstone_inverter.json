@@ -8,7 +8,7 @@
   ],
   "key": {
     "L": "minecraft:lever",
-    "T": "ic2reborn:plate_tin"
+    "T": "craftenergy:plate_tin"
   },
   "result": {
     "count": 1,

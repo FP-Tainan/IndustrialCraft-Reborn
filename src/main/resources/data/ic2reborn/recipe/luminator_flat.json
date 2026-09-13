@@ -9,8 +9,8 @@
   "key": {
     "G": "minecraft:glass",
     "I": "ic2reborn:casing_iron",
-    "T": "ic2reborn:cable_tin",
-    "C": "ic2reborn:cable_copper_insulated"
+    "T": "craftenergy:cable_tin",
+    "C": "craftenergy:cable_copper_insulated"
   },
   "result": {
     "count": 8,

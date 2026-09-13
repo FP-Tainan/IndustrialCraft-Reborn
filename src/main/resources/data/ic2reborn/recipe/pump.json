@@ -8,7 +8,7 @@
   ],
   "key": {
     "c": "ic2reborn:fluid_cell",
-    "T": "ic2reborn:treetap",
+    "T": "craftenergy:treetap",
     "P": "ic2reborn:mining_pipe",
     "M": "ic2reborn:machine_block",
     "C": "ic2reborn:circuit"

@@ -8,7 +8,7 @@
   ],
   "key": {
     "S": "ic2reborn:heat_exchanger",
-    "G": "ic2reborn:plate_gold"
+    "G": "craftenergy:plate_gold"
   },
   "result": {
     "count": 1,

@@ -8,7 +8,7 @@
   ],
   "key": {
     "E": "ic2reborn:hv_transformer",
-    "c": "ic2reborn:cable_iron_triple_insulated",
+    "c": "craftenergy:cable_iron_triple_insulated",
     "D": "ic2reborn:lapotron_crystal",
     "C": "ic2reborn:advanced_circuit"
   },

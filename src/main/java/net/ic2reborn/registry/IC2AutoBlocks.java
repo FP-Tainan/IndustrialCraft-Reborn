@@ -1,8 +1,9 @@
 package net.ic2reborn.registry;
+import net.craftenergy.registry.DeferredRegister;
+import net.craftenergy.registry.RegistryObject;
 import net.minecraft.core.registries.Registries;
 import net.ic2reborn.IC2Reborn;
 import net.ic2reborn.block.MachineBlock;
-import net.ic2reborn.block.CableBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -22,19 +23,6 @@ public class IC2AutoBlocks {
     public static final RegistryObject<Block> BRONZE_BLOCK = BLOCKS.register("bronze_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("bronze_block")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> BRONZE_STORAGE_BOX = BLOCKS.register("bronze_storage_box", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("bronze_storage_box")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> BRONZE_TANK = BLOCKS.register("bronze_tank", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("bronze_tank")).strength(3.5f, 6.0f)));
-    public static final RegistryObject<Block> CABLE_COPPER = BLOCKS.register("cable_copper", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).setId(BLOCKS.key("cable_copper")).strength(0.2f, 1.0f).noOcclusion(), 6.0D, 10.0D));
-    public static final RegistryObject<Block> CABLE_COPPER_INSULATED = BLOCKS.register("cable_copper_insulated", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).setId(BLOCKS.key("cable_copper_insulated")).strength(0.2f, 1.0f).noOcclusion()));
-    public static final RegistryObject<Block> CABLE_DETECTOR = BLOCKS.register("cable_detector", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).setId(BLOCKS.key("cable_detector")).strength(0.2f, 1.0f).noOcclusion()));
-    public static final RegistryObject<Block> CABLE_GOLD = BLOCKS.register("cable_gold", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).setId(BLOCKS.key("cable_gold")).strength(0.2f, 1.0f).noOcclusion(), 6.0D, 10.0D));
-    public static final RegistryObject<Block> CABLE_GOLD_DOUBLE_INSULATED = BLOCKS.register("cable_gold_double_insulated", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).setId(BLOCKS.key("cable_gold_double_insulated")).strength(0.2f, 1.0f).noOcclusion()));
-    public static final RegistryObject<Block> CABLE_GOLD_INSULATED = BLOCKS.register("cable_gold_insulated", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).setId(BLOCKS.key("cable_gold_insulated")).strength(0.2f, 1.0f).noOcclusion()));
-    public static final RegistryObject<Block> CABLE_IRON = BLOCKS.register("cable_iron", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).setId(BLOCKS.key("cable_iron")).strength(0.2f, 1.0f).noOcclusion(), 6.0D, 10.0D));
-    public static final RegistryObject<Block> CABLE_IRON_DOUBLE_INSULATED = BLOCKS.register("cable_iron_double_insulated", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).setId(BLOCKS.key("cable_iron_double_insulated")).strength(0.2f, 1.0f).noOcclusion()));
-    public static final RegistryObject<Block> CABLE_IRON_INSULATED = BLOCKS.register("cable_iron_insulated", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).setId(BLOCKS.key("cable_iron_insulated")).strength(0.2f, 1.0f).noOcclusion()));
-    public static final RegistryObject<Block> CABLE_IRON_TRIPLE_INSULATED = BLOCKS.register("cable_iron_triple_insulated", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).setId(BLOCKS.key("cable_iron_triple_insulated")).strength(0.2f, 1.0f).noOcclusion()));
-    public static final RegistryObject<Block> CABLE_SPLITTER = BLOCKS.register("cable_splitter", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).setId(BLOCKS.key("cable_splitter")).strength(0.2f, 1.0f).noOcclusion()));
-    public static final RegistryObject<Block> CABLE_TIN = BLOCKS.register("cable_tin", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).setId(BLOCKS.key("cable_tin")).strength(0.2f, 1.0f).noOcclusion(), 6.0D, 10.0D));
-    public static final RegistryObject<Block> CABLE_TIN_INSULATED = BLOCKS.register("cable_tin_insulated", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).setId(BLOCKS.key("cable_tin_insulated")).strength(0.2f, 1.0f).noOcclusion()));
     public static final RegistryObject<Block> CANNER = BLOCKS.register("canner", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("canner")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> CENTRIFUGE = BLOCKS.register("centrifuge", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("centrifuge")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> CESU = BLOCKS.register("cesu", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("cesu")).strength(3.5f, 6.0f)));
@@ -62,7 +50,6 @@ public class IC2AutoBlocks {
     public static final RegistryObject<Block> FLUID_DISTRIBUTOR = BLOCKS.register("fluid_distributor", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("fluid_distributor")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> FLUID_HEAT_GENERATOR = BLOCKS.register("fluid_heat_generator", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("fluid_heat_generator")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> FLUID_REGULATOR = BLOCKS.register("fluid_regulator", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("fluid_regulator")).strength(3.5f, 6.0f)));
-    public static final RegistryObject<Block> GLASS_FIBRE_CABLE = BLOCKS.register("glass_fibre_cable", () -> new CableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).setId(BLOCKS.key("glass_fibre_cable")).strength(0.2f, 1.0f).noOcclusion(), 6.5D, 9.5D));
     public static final RegistryObject<Block> GENERATOR = BLOCKS.register("generator", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("generator")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> GEO_GENERATOR = BLOCKS.register("geo_generator", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("geo_generator")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> HV_TRANSFORMER = BLOCKS.register("hv_transformer", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("hv_transformer")).strength(3.5f, 6.0f)));
@@ -114,7 +101,6 @@ public class IC2AutoBlocks {
     public static final RegistryObject<Block> RT_GENERATOR = BLOCKS.register("rt_generator", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("rt_generator")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> RT_HEAT_GENERATOR = BLOCKS.register("rt_heat_generator", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("rt_heat_generator")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> RUBBER_SHEET = BLOCKS.register("rubber_sheet", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("rubber_sheet")).strength(3.5f, 6.0f)));
-    public static final RegistryObject<Block> RUBBER_WOOD_PLANKS = BLOCKS.register("rubber_wood_planks", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).setId(BLOCKS.key("rubber_wood_planks")).strength(2.0f, 3.0f)));
     public static final RegistryObject<Block> SCANNER = BLOCKS.register("scanner", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("scanner")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> SEMIFLUID_GENERATOR = BLOCKS.register("semifluid_generator", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("semifluid_generator")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> SILVER_BLOCK = BLOCKS.register("silver_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("silver_block")).strength(3.5f, 6.0f)));
@@ -135,7 +121,6 @@ public class IC2AutoBlocks {
     public static final RegistryObject<Block> TELEPORTER = BLOCKS.register("teleporter", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("teleporter")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> TERRAFORMER = BLOCKS.register("terraformer", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("terraformer")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> TESLA_COIL = BLOCKS.register("tesla_coil", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("tesla_coil")).strength(3.5f, 6.0f)));
-    public static final RegistryObject<Block> TIN_BLOCK = BLOCKS.register("tin_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("tin_block")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> TRADE_O_MAT = BLOCKS.register("trade_o_mat", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("trade_o_mat")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> URANIUM_BLOCK = BLOCKS.register("uranium_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("uranium_block")).strength(3.5f, 6.0f)));
     public static final RegistryObject<Block> WATER_GENERATOR = BLOCKS.register("water_generator", () -> new MachineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).setId(BLOCKS.key("water_generator")).strength(3.5f, 6.0f)));

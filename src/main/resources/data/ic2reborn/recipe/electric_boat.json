@@ -7,8 +7,8 @@
     "XrX"
   ],
   "key": {
-    "X": "ic2reborn:plate_iron",
-    "C": "ic2reborn:cable_copper_insulated",
+    "X": "craftenergy:plate_iron",
+    "C": "craftenergy:cable_copper_insulated",
     "m": "ic2reborn:electric_motor",
     "r": "ic2reborn:rotor_iron"
   },

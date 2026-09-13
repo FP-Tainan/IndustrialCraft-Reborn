@@ -8,7 +8,7 @@
   ],
   "key": {
     "M": "ic2reborn:electric_motor",
-    "I": "ic2reborn:plate_iron",
+    "I": "craftenergy:plate_iron",
     "#": "minecraft:iron_bars"
   },
   "result": {

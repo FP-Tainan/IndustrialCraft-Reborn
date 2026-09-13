@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "ic2reborn:iodine",
-    "ic2reborn:plate_tin"
+    "craftenergy:plate_tin"
   ],
   "result": {
     "count": 1,

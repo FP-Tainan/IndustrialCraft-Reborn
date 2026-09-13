@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "craftenergy:rubber",
+    "craftenergy:cable_gold"
+  ],
+  "result": {
+    "count": 1,
+    "id": "craftenergy:cable_gold_insulated"
+  }
+}

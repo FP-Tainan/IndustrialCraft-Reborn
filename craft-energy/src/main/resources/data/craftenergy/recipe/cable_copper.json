@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "craftenergy:plate_copper",
+    "craftenergy:cutter"
+  ],
+  "result": {
+    "count": 2,
+    "id": "craftenergy:cable_copper"
+  }
+}

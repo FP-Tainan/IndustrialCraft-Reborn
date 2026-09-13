@@ -7,8 +7,8 @@
     "ITI"
   ],
   "key": {
-    "I": "ic2reborn:plate_iron",
-    "T": "ic2reborn:treetap"
+    "I": "craftenergy:plate_iron",
+    "T": "craftenergy:treetap"
   },
   "result": {
     "count": 16,

@@ -8,8 +8,8 @@
   ],
   "key": {
     "C": "ic2reborn:tri_heat_storage",
-    "T": "ic2reborn:plate_tin",
-    "c": "ic2reborn:plate_iron"
+    "T": "craftenergy:plate_tin",
+    "c": "craftenergy:plate_iron"
   },
   "result": {
     "count": 1,

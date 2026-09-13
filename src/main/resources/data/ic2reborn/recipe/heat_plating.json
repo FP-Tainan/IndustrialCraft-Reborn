@@ -8,7 +8,7 @@
   ],
   "key": {
     "c": "ic2reborn:plating",
-    "C": "ic2reborn:plate_copper"
+    "C": "craftenergy:plate_copper"
   },
   "result": {
     "count": 1,

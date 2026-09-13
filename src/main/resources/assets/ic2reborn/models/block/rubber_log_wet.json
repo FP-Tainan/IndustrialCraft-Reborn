@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end":   "ic2reborn:block/rubber_wood_wet_bottomtop",
-    "side":  "ic2reborn:block/rubber_wood_wet_leftrightback",
-    "north": "ic2reborn:block/rubber_wood_wet_front"
-  }
-}

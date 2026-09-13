@@ -11,7 +11,7 @@
     "b": "ic2reborn:advanced_re_battery",
     "L": "ic2reborn:luminator_flat",
     "G": "ic2reborn:reinforced_glass",
-    "R": "ic2reborn:rubber",
+    "R": "craftenergy:rubber",
     "C": "ic2reborn:advanced_circuit"
   },
   "result": {

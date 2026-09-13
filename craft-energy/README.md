@@ -56,6 +56,13 @@ Por isso redes de tensão mais alta transportam a mesma potência com menos corr
   testado com JUnit em `src/test`).
 - `net.craftenergy.fabric`: integração com o jogo (lookup de blocos, redes por dimensão, tick,
   aquecimento e queima de cabos).
+- `net.craftenergy.content`: conteúdo compartilhado pelos mods do pack — cabos (`CableType`:
+  material define corrente/resistência, isolamento define tensão), seringueira e borracha,
+  minério/lingote/bloco de estanho, placas de cobre/estanho/ouro/ferro, torneira, alicate e martelo.
+- `net.craftenergy.registry`: `DeferredRegister`/`RegistryObject`, usados também pelos outros mods.
+
+Blocos de outros mods que devem desenhar conexão com os cabos antes de virarem nós de energia
+entram na tag `craftenergy:connects_to_cables`.
 
 Rodar os testes:
 

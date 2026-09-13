@@ -8,7 +8,7 @@
   ],
   "key": {
     "P": "#minecraft:planks",
-    "W": "ic2reborn:rubber_wood"
+    "W": "craftenergy:rubber_wood"
   },
   "result": {
     "count": 1,

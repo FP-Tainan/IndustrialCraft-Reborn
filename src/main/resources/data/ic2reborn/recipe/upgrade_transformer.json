@@ -8,7 +8,7 @@
   ],
   "key": {
     "G": "minecraft:glass",
-    "W": "ic2reborn:cable_gold_double_insulated",
+    "W": "craftenergy:cable_gold_double_insulated",
     "T": "ic2reborn:mv_transformer",
     "E": "ic2reborn:circuit"
   },

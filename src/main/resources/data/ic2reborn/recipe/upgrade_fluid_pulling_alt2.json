@@ -9,7 +9,7 @@
   "key": {
     "E": "ic2reborn:electric_motor",
     "T": "ic2reborn:dense_plate_tin",
-    "X": "ic2reborn:treetap"
+    "X": "craftenergy:treetap"
   },
   "result": {
     "count": 9,

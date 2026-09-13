@@ -7,9 +7,9 @@
     "TTT"
   ],
   "key": {
-    "I": "ic2reborn:plate_iron",
+    "I": "craftenergy:plate_iron",
     "B": "ic2reborn:plate_bronze",
-    "T": "ic2reborn:plate_tin"
+    "T": "craftenergy:plate_tin"
   },
   "result": {
     "count": 2,

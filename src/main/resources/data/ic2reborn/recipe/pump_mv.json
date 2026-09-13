@@ -4,7 +4,7 @@
   "ingredients": [
     "ic2reborn:pipe",
     "minecraft:piston",
-    "ic2reborn:cable_gold_insulated"
+    "craftenergy:cable_gold_insulated"
   ],
   "result": {
     "count": 1,

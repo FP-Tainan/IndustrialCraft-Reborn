@@ -9,7 +9,7 @@
   "key": {
     "V": "ic2reborn:heat_vent",
     "#": "minecraft:iron_bars",
-    "T": "ic2reborn:plate_tin"
+    "T": "craftenergy:plate_tin"
   },
   "result": {
     "count": 1,

@@ -7,7 +7,7 @@
   ],
   "key": {
     "C": "ic2reborn:heat_storage",
-    "W": "ic2reborn:cable_copper_insulated",
+    "W": "craftenergy:cable_copper_insulated",
     "E": "ic2reborn:circuit"
   },
   "result": {

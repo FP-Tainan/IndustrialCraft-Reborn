@@ -9,7 +9,7 @@
   "key": {
     "r": "minecraft:redstone",
     "E": "ic2reborn:advanced_re_battery",
-    "C": "ic2reborn:cable_gold_double_insulated",
+    "C": "craftenergy:cable_gold_double_insulated",
     "A": "ic2reborn:advanced_circuit"
   },
   "result": {

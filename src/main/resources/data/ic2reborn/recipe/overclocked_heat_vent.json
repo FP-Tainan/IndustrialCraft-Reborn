@@ -8,7 +8,7 @@
   ],
   "key": {
     "V": "ic2reborn:reactor_heat_vent",
-    "G": "ic2reborn:plate_gold"
+    "G": "craftenergy:plate_gold"
   },
   "result": {
     "count": 1,

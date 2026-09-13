@@ -11,7 +11,7 @@
     "E": "ic2reborn:electric_motor",
     "B": "minecraft:bucket",
     "W": "ic2reborn:circuit",
-    "I": "ic2reborn:plate_iron"
+    "I": "craftenergy:plate_iron"
   },
   "result": {
     "count": 1,

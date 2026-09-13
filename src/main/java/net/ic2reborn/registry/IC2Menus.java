@@ -1,4 +1,6 @@
 package net.ic2reborn.registry;
+import net.craftenergy.registry.DeferredRegister;
+import net.craftenergy.registry.RegistryObject;
 
 import net.minecraft.core.registries.Registries;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;

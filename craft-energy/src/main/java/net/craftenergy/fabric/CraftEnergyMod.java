@@ -1,5 +1,6 @@
 package net.craftenergy.fabric;
 
+import net.craftenergy.content.CraftEnergyContent;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
@@ -14,6 +15,8 @@ public final class CraftEnergyMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        CraftEnergyContent.init();
+
         ServerTickEvents.END_LEVEL_TICK.register(EnergyNetworkManager::tickLevel);
         ServerChunkEvents.CHUNK_UNLOAD.register((level, chunk) -> EnergyNetworkManager.onChunkUnload(level, chunk.getPos()));
         ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register((blockEntity, level) -> EnergyNetworkManager.onBlockEntityLoad(level, blockEntity));

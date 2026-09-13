@@ -7,7 +7,7 @@
   ],
   "key": {
     "R": "minecraft:redstone",
-    "C": "ic2reborn:cable_copper_insulated",
+    "C": "craftenergy:cable_copper_insulated",
     "M": "ic2reborn:machine_block",
     "B": "ic2reborn:re_battery"
   },

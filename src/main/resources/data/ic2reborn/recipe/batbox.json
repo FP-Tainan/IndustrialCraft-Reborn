@@ -8,7 +8,7 @@
   ],
   "key": {
     "P": "#minecraft:planks",
-    "C": "ic2reborn:cable_tin_insulated",
+    "C": "craftenergy:cable_tin_insulated",
     "B": "ic2reborn:re_battery"
   },
   "result": {

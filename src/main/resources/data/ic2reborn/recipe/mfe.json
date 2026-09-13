@@ -8,7 +8,7 @@
   ],
   "key": {
     "M": "ic2reborn:machine_block",
-    "c": "ic2reborn:cable_gold_double_insulated",
+    "c": "craftenergy:cable_gold_double_insulated",
     "C": "ic2reborn:energy_crystal"
   },
   "result": {

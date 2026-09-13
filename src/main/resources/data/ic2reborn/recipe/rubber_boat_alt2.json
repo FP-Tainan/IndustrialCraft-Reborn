@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "ic2reborn:broken_rubber_boat",
-    "ic2reborn:rubber"
+    "craftenergy:rubber"
   ],
   "result": {
     "count": 1,

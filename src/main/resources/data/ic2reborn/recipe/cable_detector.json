@@ -8,11 +8,11 @@
   ],
   "key": {
     "R": "minecraft:redstone",
-    "I": "ic2reborn:cable_iron_triple_insulated",
+    "I": "craftenergy:cable_iron_triple_insulated",
     "C": "ic2reborn:circuit"
   },
   "result": {
     "count": 1,
-    "id": "ic2reborn:cable_detector"
+    "id": "craftenergy:cable_detector"
   }
 }

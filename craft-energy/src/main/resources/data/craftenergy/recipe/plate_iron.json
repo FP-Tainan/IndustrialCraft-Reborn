@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:iron_ingot",
+    "craftenergy:hammer"
+  ],
+  "result": {
+    "count": 1,
+    "id": "craftenergy:plate_iron"
+  }
+}

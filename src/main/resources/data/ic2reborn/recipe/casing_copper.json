@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "ic2reborn:plate_copper",
-    "ic2reborn:hammer"
+    "craftenergy:plate_copper",
+    "craftenergy:hammer"
   ],
   "result": {
     "count": 2,

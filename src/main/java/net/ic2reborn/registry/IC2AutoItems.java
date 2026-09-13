@@ -1,9 +1,10 @@
 package net.ic2reborn.registry;
+import net.craftenergy.registry.DeferredRegister;
+import net.craftenergy.registry.RegistryObject;
 import net.minecraft.core.registries.Registries;
 import net.ic2reborn.IC2Reborn;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.ic2reborn.item.DamageableCraftingToolItem;
 
 /** Auto-generated simple items and block-items used by the converted IC2 recipe set. */
 public class IC2AutoItems {
@@ -97,7 +98,6 @@ public class IC2AutoItems {
     public static final RegistryObject<BlockItem> RT_GENERATOR = ITEMS.register("rt_generator", () -> new BlockItem(IC2AutoBlocks.RT_GENERATOR.get(), new Item.Properties().setId(ITEMS.key("rt_generator"))));
     public static final RegistryObject<BlockItem> RT_HEAT_GENERATOR = ITEMS.register("rt_heat_generator", () -> new BlockItem(IC2AutoBlocks.RT_HEAT_GENERATOR.get(), new Item.Properties().setId(ITEMS.key("rt_heat_generator"))));
     public static final RegistryObject<BlockItem> RUBBER_SHEET = ITEMS.register("rubber_sheet", () -> new BlockItem(IC2AutoBlocks.RUBBER_SHEET.get(), new Item.Properties().setId(ITEMS.key("rubber_sheet"))));
-    public static final RegistryObject<BlockItem> RUBBER_WOOD_PLANKS = ITEMS.register("rubber_wood_planks", () -> new BlockItem(IC2AutoBlocks.RUBBER_WOOD_PLANKS.get(), new Item.Properties().setId(ITEMS.key("rubber_wood_planks"))));
     public static final RegistryObject<BlockItem> SCANNER = ITEMS.register("scanner", () -> new BlockItem(IC2AutoBlocks.SCANNER.get(), new Item.Properties().setId(ITEMS.key("scanner"))));
     public static final RegistryObject<BlockItem> SEMIFLUID_GENERATOR = ITEMS.register("semifluid_generator", () -> new BlockItem(IC2AutoBlocks.SEMIFLUID_GENERATOR.get(), new Item.Properties().setId(ITEMS.key("semifluid_generator"))));
     public static final RegistryObject<BlockItem> SILVER_BLOCK = ITEMS.register("silver_block", () -> new BlockItem(IC2AutoBlocks.SILVER_BLOCK.get(), new Item.Properties().setId(ITEMS.key("silver_block"))));
@@ -118,7 +118,6 @@ public class IC2AutoItems {
     public static final RegistryObject<BlockItem> TELEPORTER = ITEMS.register("teleporter", () -> new BlockItem(IC2AutoBlocks.TELEPORTER.get(), new Item.Properties().setId(ITEMS.key("teleporter"))));
     public static final RegistryObject<BlockItem> TERRAFORMER = ITEMS.register("terraformer", () -> new BlockItem(IC2AutoBlocks.TERRAFORMER.get(), new Item.Properties().setId(ITEMS.key("terraformer"))));
     public static final RegistryObject<BlockItem> TESLA_COIL = ITEMS.register("tesla_coil", () -> new BlockItem(IC2AutoBlocks.TESLA_COIL.get(), new Item.Properties().setId(ITEMS.key("tesla_coil"))));
-    public static final RegistryObject<BlockItem> TIN_BLOCK = ITEMS.register("tin_block", () -> new BlockItem(IC2AutoBlocks.TIN_BLOCK.get(), new Item.Properties().setId(ITEMS.key("tin_block"))));
     public static final RegistryObject<BlockItem> TRADE_O_MAT = ITEMS.register("trade_o_mat", () -> new BlockItem(IC2AutoBlocks.TRADE_O_MAT.get(), new Item.Properties().setId(ITEMS.key("trade_o_mat"))));
     public static final RegistryObject<BlockItem> URANIUM_BLOCK = ITEMS.register("uranium_block", () -> new BlockItem(IC2AutoBlocks.URANIUM_BLOCK.get(), new Item.Properties().setId(ITEMS.key("uranium_block"))));
     public static final RegistryObject<BlockItem> WATER_GENERATOR = ITEMS.register("water_generator", () -> new BlockItem(IC2AutoBlocks.WATER_GENERATOR.get(), new Item.Properties().setId(ITEMS.key("water_generator"))));
@@ -154,19 +153,6 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> BRONZE_SHAFT = ITEMS.register("bronze_shaft", () -> new Item(new Item.Properties().setId(ITEMS.key("bronze_shaft"))));
     public static final RegistryObject<Item> BRONZE_SHOVEL = ITEMS.register("bronze_shovel", () -> new Item(new Item.Properties().setId(ITEMS.key("bronze_shovel"))));
     public static final RegistryObject<Item> BRONZE_SWORD = ITEMS.register("bronze_sword", () -> new Item(new Item.Properties().setId(ITEMS.key("bronze_sword"))));
-    public static final RegistryObject<Item> CABLE_COPPER = ITEMS.register("cable_copper", () -> new BlockItem(IC2AutoBlocks.CABLE_COPPER.get(), new Item.Properties().setId(ITEMS.key("cable_copper"))));
-    public static final RegistryObject<Item> CABLE_COPPER_INSULATED = ITEMS.register("cable_copper_insulated", () -> new BlockItem(IC2AutoBlocks.CABLE_COPPER_INSULATED.get(), new Item.Properties().setId(ITEMS.key("cable_copper_insulated"))));
-    public static final RegistryObject<Item> CABLE_DETECTOR = ITEMS.register("cable_detector", () -> new BlockItem(IC2AutoBlocks.CABLE_DETECTOR.get(), new Item.Properties().setId(ITEMS.key("cable_detector"))));
-    public static final RegistryObject<Item> CABLE_GOLD = ITEMS.register("cable_gold", () -> new BlockItem(IC2AutoBlocks.CABLE_GOLD.get(), new Item.Properties().setId(ITEMS.key("cable_gold"))));
-    public static final RegistryObject<Item> CABLE_GOLD_DOUBLE_INSULATED = ITEMS.register("cable_gold_double_insulated", () -> new BlockItem(IC2AutoBlocks.CABLE_GOLD_DOUBLE_INSULATED.get(), new Item.Properties().setId(ITEMS.key("cable_gold_double_insulated"))));
-    public static final RegistryObject<Item> CABLE_GOLD_INSULATED = ITEMS.register("cable_gold_insulated", () -> new BlockItem(IC2AutoBlocks.CABLE_GOLD_INSULATED.get(), new Item.Properties().setId(ITEMS.key("cable_gold_insulated"))));
-    public static final RegistryObject<Item> CABLE_IRON = ITEMS.register("cable_iron", () -> new BlockItem(IC2AutoBlocks.CABLE_IRON.get(), new Item.Properties().setId(ITEMS.key("cable_iron"))));
-    public static final RegistryObject<Item> CABLE_IRON_DOUBLE_INSULATED = ITEMS.register("cable_iron_double_insulated", () -> new BlockItem(IC2AutoBlocks.CABLE_IRON_DOUBLE_INSULATED.get(), new Item.Properties().setId(ITEMS.key("cable_iron_double_insulated"))));
-    public static final RegistryObject<Item> CABLE_IRON_INSULATED = ITEMS.register("cable_iron_insulated", () -> new BlockItem(IC2AutoBlocks.CABLE_IRON_INSULATED.get(), new Item.Properties().setId(ITEMS.key("cable_iron_insulated"))));
-    public static final RegistryObject<Item> CABLE_IRON_TRIPLE_INSULATED = ITEMS.register("cable_iron_triple_insulated", () -> new BlockItem(IC2AutoBlocks.CABLE_IRON_TRIPLE_INSULATED.get(), new Item.Properties().setId(ITEMS.key("cable_iron_triple_insulated"))));
-    public static final RegistryObject<Item> CABLE_SPLITTER = ITEMS.register("cable_splitter", () -> new BlockItem(IC2AutoBlocks.CABLE_SPLITTER.get(), new Item.Properties().setId(ITEMS.key("cable_splitter"))));
-    public static final RegistryObject<Item> CABLE_TIN = ITEMS.register("cable_tin", () -> new BlockItem(IC2AutoBlocks.CABLE_TIN.get(), new Item.Properties().setId(ITEMS.key("cable_tin"))));
-    public static final RegistryObject<Item> CABLE_TIN_INSULATED = ITEMS.register("cable_tin_insulated", () -> new BlockItem(IC2AutoBlocks.CABLE_TIN_INSULATED.get(), new Item.Properties().setId(ITEMS.key("cable_tin_insulated"))));
     public static final RegistryObject<Item> CARBON_BOAT = ITEMS.register("carbon_boat", () -> new Item(new Item.Properties().setId(ITEMS.key("carbon_boat"))));
     public static final RegistryObject<Item> CARBON_FIBRE = ITEMS.register("carbon_fibre", () -> new Item(new Item.Properties().setId(ITEMS.key("carbon_fibre"))));
     public static final RegistryObject<Item> CARBON_MESH = ITEMS.register("carbon_mesh", () -> new Item(new Item.Properties().setId(ITEMS.key("carbon_mesh"))));
@@ -207,7 +193,6 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> CRUSHED_SILVER = ITEMS.register("crushed_silver", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_silver"))));
     public static final RegistryObject<Item> CRUSHED_TIN = ITEMS.register("crushed_tin", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_tin"))));
     public static final RegistryObject<Item> CRYSTAL_MEMORY = ITEMS.register("crystal_memory", () -> new Item(new Item.Properties().setId(ITEMS.key("crystal_memory"))));
-    public static final RegistryObject<Item> CUTTER = ITEMS.register("cutter", () -> new DamageableCraftingToolItem(new Item.Properties().setId(ITEMS.key("cutter")).durability(50)));
     public static final RegistryObject<Item> DENSE_PLATE_COPPER = ITEMS.register("dense_plate_copper", () -> new Item(new Item.Properties().setId(ITEMS.key("dense_plate_copper"))));
     public static final RegistryObject<Item> DENSE_PLATE_IRON = ITEMS.register("dense_plate_iron", () -> new Item(new Item.Properties().setId(ITEMS.key("dense_plate_iron"))));
     public static final RegistryObject<Item> DENSE_PLATE_LEAD = ITEMS.register("dense_plate_lead", () -> new Item(new Item.Properties().setId(ITEMS.key("dense_plate_lead"))));
@@ -257,9 +242,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> FLUID_CELL = ITEMS.register("fluid_cell", () -> new Item(new Item.Properties().setId(ITEMS.key("fluid_cell"))));
     public static final RegistryObject<Item> FOAM_SPRAYER = ITEMS.register("foam_sprayer", () -> new Item(new Item.Properties().setId(ITEMS.key("foam_sprayer"))));
     public static final RegistryObject<Item> FREQUENCY_TRANSMITTER = ITEMS.register("frequency_transmitter", () -> new Item(new Item.Properties().setId(ITEMS.key("frequency_transmitter"))));
-    public static final RegistryObject<Item> GLASS_FIBRE_CABLE = ITEMS.register("glass_fibre_cable", () -> new BlockItem(IC2AutoBlocks.GLASS_FIBRE_CABLE.get(), new Item.Properties().setId(ITEMS.key("glass_fibre_cable"))));
     public static final RegistryObject<Item> GRIN_POWDER = ITEMS.register("grin_powder", () -> new Item(new Item.Properties().setId(ITEMS.key("grin_powder"))));
-    public static final RegistryObject<Item> HAMMER = ITEMS.register("hammer", () -> new DamageableCraftingToolItem(new Item.Properties().setId(ITEMS.key("hammer")).durability(100)));
     public static final RegistryObject<Item> HAZMAT_CHESTPLATE = ITEMS.register("hazmat_chestplate", () -> new Item(new Item.Properties().setId(ITEMS.key("hazmat_chestplate"))));
     public static final RegistryObject<Item> HAZMAT_HELMET = ITEMS.register("hazmat_helmet", () -> new Item(new Item.Properties().setId(ITEMS.key("hazmat_helmet"))));
     public static final RegistryObject<Item> HAZMAT_LEGGINGS = ITEMS.register("hazmat_leggings", () -> new Item(new Item.Properties().setId(ITEMS.key("hazmat_leggings"))));
@@ -326,13 +309,9 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> PIPE = ITEMS.register("pipe", () -> new Item(new Item.Properties().setId(ITEMS.key("pipe"))));
     public static final RegistryObject<Item> PLANT_BALL = ITEMS.register("plant_ball", () -> new Item(new Item.Properties().setId(ITEMS.key("plant_ball"))));
     public static final RegistryObject<Item> PLATE_BRONZE = ITEMS.register("plate_bronze", () -> new Item(new Item.Properties().setId(ITEMS.key("plate_bronze"))));
-    public static final RegistryObject<Item> PLATE_COPPER = ITEMS.register("plate_copper", () -> new Item(new Item.Properties().setId(ITEMS.key("plate_copper"))));
-    public static final RegistryObject<Item> PLATE_GOLD = ITEMS.register("plate_gold", () -> new Item(new Item.Properties().setId(ITEMS.key("plate_gold"))));
-    public static final RegistryObject<Item> PLATE_IRON = ITEMS.register("plate_iron", () -> new Item(new Item.Properties().setId(ITEMS.key("plate_iron"))));
     public static final RegistryObject<Item> PLATE_LAPIS = ITEMS.register("plate_lapis", () -> new Item(new Item.Properties().setId(ITEMS.key("plate_lapis"))));
     public static final RegistryObject<Item> PLATE_LEAD = ITEMS.register("plate_lead", () -> new Item(new Item.Properties().setId(ITEMS.key("plate_lead"))));
     public static final RegistryObject<Item> PLATE_STEEL = ITEMS.register("plate_steel", () -> new Item(new Item.Properties().setId(ITEMS.key("plate_steel"))));
-    public static final RegistryObject<Item> PLATE_TIN = ITEMS.register("plate_tin", () -> new Item(new Item.Properties().setId(ITEMS.key("plate_tin"))));
     public static final RegistryObject<Item> PLATING = ITEMS.register("plating", () -> new Item(new Item.Properties().setId(ITEMS.key("plating"))));
     public static final RegistryObject<Item> PLUTONIUM = ITEMS.register("plutonium", () -> new Item(new Item.Properties().setId(ITEMS.key("plutonium"))));
     public static final RegistryObject<Item> POWER_UNIT = ITEMS.register("power_unit", () -> new Item(new Item.Properties().setId(ITEMS.key("power_unit"))));
@@ -365,7 +344,6 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> RTG_PELLET = ITEMS.register("rtg_pellet", () -> new Item(new Item.Properties().setId(ITEMS.key("rtg_pellet"))));
     public static final RegistryObject<Item> RUBBER_BOAT = ITEMS.register("rubber_boat", () -> new Item(new Item.Properties().setId(ITEMS.key("rubber_boat"))));
     public static final RegistryObject<Item> RUBBER_BOOTS = ITEMS.register("rubber_boots", () -> new Item(new Item.Properties().setId(ITEMS.key("rubber_boots"))));
-    public static final RegistryObject<Item> RUBBER_WOOD = ITEMS.register("rubber_wood", () -> new Item(new Item.Properties().setId(ITEMS.key("rubber_wood"))));
     public static final RegistryObject<Item> SCRAP = ITEMS.register("scrap", () -> new Item(new Item.Properties().setId(ITEMS.key("scrap"))));
     public static final RegistryObject<Item> SCRAP_BOX = ITEMS.register("scrap_box", () -> new Item(new Item.Properties().setId(ITEMS.key("scrap_box"))));
     public static final RegistryObject<Item> SINGLE_USE_BATTERY = ITEMS.register("single_use_battery", () -> new Item(new Item.Properties().setId(ITEMS.key("single_use_battery"))));

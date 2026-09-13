@@ -8,7 +8,7 @@
   ],
   "key": {
     "U": "ic2reborn:fluid_cell",
-    "P": "ic2reborn:plate_iron"
+    "P": "craftenergy:plate_iron"
   },
   "result": {
     "count": 1,

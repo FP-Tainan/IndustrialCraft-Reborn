@@ -9,7 +9,7 @@
   "key": {
     "T": "ic2reborn:casing_tin",
     "R": "minecraft:redstone",
-    "C": "ic2reborn:cable_tin_insulated"
+    "C": "craftenergy:cable_tin_insulated"
   },
   "result": {
     "count": 1,

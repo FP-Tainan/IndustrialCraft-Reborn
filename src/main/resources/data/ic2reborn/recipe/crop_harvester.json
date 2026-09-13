@@ -8,7 +8,7 @@
   ],
   "key": {
     "M": "ic2reborn:machine_block",
-    "P": "ic2reborn:plate_iron",
+    "P": "craftenergy:plate_iron",
     "c": "ic2reborn:circuit",
     "B": "minecraft:chest",
     "U": "minecraft:shears",

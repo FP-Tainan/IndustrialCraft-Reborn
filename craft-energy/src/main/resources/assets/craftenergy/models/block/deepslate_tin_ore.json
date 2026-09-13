@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "craftenergy:block/deepslate_tin_ore",
+    "particle": "craftenergy:block/deepslate_tin_ore"
+  }
+}
