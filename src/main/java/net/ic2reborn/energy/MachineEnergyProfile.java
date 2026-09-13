@@ -17,7 +17,7 @@ import net.ic2reborn.menu.MachineGuiType;
  */
 public record MachineEnergyProfile(Role role, int voltage, long power, long capacity, int operationTicks,
                                    int highVoltage, double efficiency) {
-    public enum Role { NONE, GENERATOR, STORAGE, PROCESSOR, TRANSFORMER }
+    public enum Role { NONE, GENERATOR, STORAGE, PROCESSOR, TRANSFORMER, HEAT }
 
     public static final MachineEnergyProfile NONE = new MachineEnergyProfile(Role.NONE, 0, 0, 0, 0, 0, 0.0);
 
@@ -50,6 +50,10 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
             case CENTRIFUGE -> processor(1_000, 48_000, 500);
             // IC2: 1.000 EU guardados; o consumo depende da broca (3.000 CW com a perfuradora)
             case MINER -> new MachineEnergyProfile(Role.PROCESSOR, 220, 3_000, EnergyUnits.fromCWh(500), 0, 0, 0.0);
+            // calor (HU) sem eletricidade: fermentador e geradores de calor sólido, fluido e RT
+            case FERMENTER, SOLID_HEAT_GENERATOR, FLUID_HEAT_GENERATOR, RT_HEAT_GENERATOR -> new MachineEnergyProfile(Role.HEAT, 0, 0, 0, 0, 0, 0.0);
+            // IC2: 10 HU/t por bobina, 1 HU = 1 EU → 500 CW; 10.000 EU guardados
+            case ELECTRIC_HEAT_GENERATOR -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 50_000, EnergyUnits.fromCWh(5_000), 0, 0, 0.0);
             // IC2: aquece com 1 EU/t, processa com mais 15 EU/t; a operação termina em 4.000 pontos de progresso
             case INDUCTION_FURNACE -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 16_000, EnergyUnits.fromCWh(5_000), 4_000, 0, 0.0);
 

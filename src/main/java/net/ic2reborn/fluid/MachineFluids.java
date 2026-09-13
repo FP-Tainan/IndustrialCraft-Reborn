@@ -86,11 +86,21 @@ public final class MachineFluids {
      * couber, nada acontece.
      */
     public static boolean drainIntoTank(Container inventory, int inputSlot, int outputSlot, Storage<FluidVariant> tank) {
+        return moveWithContainer(inventory, inputSlot, outputSlot, tank, false);
+    }
+
+    /** O contrário: enche o recipiente do slot {@code inputSlot} com o tanque (células de biogás do fermentador). */
+    public static boolean fillFromTank(Container inventory, int inputSlot, int outputSlot, Storage<FluidVariant> tank) {
+        return moveWithContainer(inventory, inputSlot, outputSlot, tank, true);
+    }
+
+    private static boolean moveWithContainer(Container inventory, int inputSlot, int outputSlot,
+                                             Storage<FluidVariant> tank, boolean intoItem) {
         ItemStack stack = inventory.getItem(inputSlot);
-        Transfer preview = transfer(stack, tank, false, false);
+        Transfer preview = transfer(stack, tank, intoItem, false);
         if (preview == null || !fits(inventory.getItem(outputSlot), preview.leftover())) return false;
 
-        Transfer done = transfer(stack, tank, false, true);
+        Transfer done = transfer(stack, tank, intoItem, true);
         if (done == null) return false;
         stack.shrink(1);
         inventory.setItem(inputSlot, stack);

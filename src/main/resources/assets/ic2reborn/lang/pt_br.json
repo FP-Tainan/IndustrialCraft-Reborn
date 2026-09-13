@@ -474,5 +474,8 @@
   "item.ic2reborn.od_scanner": "Scanner OD",
   "item.ic2reborn.scanner.result": "Minérios num raio de %s blocos:",
   "item.ic2reborn.scanner.none": "Nenhum minério encontrado",
-  "item.ic2reborn.scanner.empty": "Scanner sem energia"
+  "item.ic2reborn.scanner.empty": "Scanner sem energia",
+  "item.ic2reborn.ashes": "Cinzas",
+  "gui.ic2reborn.heat_generator.emit": "Emitindo: %s HU",
+  "gui.ic2reborn.heat_generator.max_emit": "Máximo: %s HU"
 }

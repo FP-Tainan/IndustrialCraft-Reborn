@@ -42,6 +42,8 @@ public class IC2Items {
     public static final RegistryObject<Item> DUST_CLAY = simple("dust_clay");
     public static final RegistryObject<Item> CRUSHED_URANIUM = simple("crushed_uranium");
     public static final RegistryObject<Item> PURIFIED_URANIUM = simple("purified_uranium");
+    /** Cinzas do gerador de calor sólido. */
+    public static final RegistryObject<Item> ASHES = simple("ashes");
 
     /** Scanner OD do IC2 ("scanner" já é o bloco scanner de matéria UU). */
     public static final RegistryObject<Item> OD_SCANNER = ITEMS.register("od_scanner",

@@ -181,6 +181,12 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case CANNER -> new Slots(0, 7, new int[]{1}, 2, -1, -1, -1);
                 // descarga 0, scanner 1, tubos 2, broca 3, upgrade 4, buffer 5–19 (usados pelo MinerLogic)
                 case MINER -> new Slots(-1, -1, NO_OUTPUTS, 0, -1, -1, -1);
+                // fermentador: célula de biomassa 0→1, célula de biogás 2→3, fertilizante 4
+                case FERMENTER -> new Slots(-1, -1, new int[]{4}, -1, -1, 0, 1);
+                case SOLID_HEAT_GENERATOR -> new Slots(0, -1, new int[]{1}, -1, -1, -1, -1);
+                case FLUID_HEAT_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, -1, -1, 0, 1);
+                // 10 bobinas e a descarga
+                case ELECTRIC_HEAT_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, 10, -1, -1, -1);
                 // duas entradas (A, B) e duas saídas
                 case INDUCTION_FURNACE -> new Slots(0, 1, new int[]{2, 3}, 4, -1, -1, -1);
                 case CENTRIFUGE -> new Slots(0, -1, new int[]{2, 3, 4}, 1, -1, -1, -1);
@@ -209,6 +215,12 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     /** Minerador: tubos, broca e scanner (IC2: TileEntityMiner). */
     private final @Nullable MinerLogic miner;
+
+    // calor (fermentador e geradores de calor)
+    private int heatBuffer;
+    private int transmitHeat;
+    private long heatStore;
+    private boolean heatWorking;
 
     private long energy;
     private int progress;
@@ -292,6 +304,16 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 mainTank = new MachineTank(10 * FluidConstants.BUCKET);
                 input = exposed = insertOnly(mainTank, fluid -> semifluidFuel(fluid) != null);
             }
+            case FERMENTER -> {
+                mainTank = new MachineTank(10 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(2 * FluidConstants.BUCKET);
+                input = insertOnly(mainTank, fluid -> fluid == IC2Fluids.BIOMASS.fluid());
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            case FLUID_HEAT_GENERATOR -> {
+                mainTank = new MachineTank(10 * FluidConstants.BUCKET);
+                input = exposed = insertOnly(mainTank, fluid -> heatFuel(fluid) != null);
+            }
             case CANNER -> {
                 mainTank = new MachineTank(TANK_CAPACITY);
                 secondTank = new MachineTank(TANK_CAPACITY);
@@ -312,7 +334,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case GENERATOR -> new GeneratorNode();
             case STORAGE -> new StorageInput();
             case PROCESSOR -> new ProcessorNode();
-            case TRANSFORMER, NONE -> null;
+            case TRANSFORMER, HEAT, NONE -> null;
         };
         this.storageOutput = this.profile.role() == MachineEnergyProfile.Role.STORAGE ? new StorageOutput() : null;
 
@@ -499,11 +521,13 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 default -> tickGenerator(level);
             };
             case PROCESSOR -> switch (this.guiType) {
+                case ELECTRIC_HEAT_GENERATOR -> tickElectricHeat();
                 case MINER -> this.miner != null && this.miner.tick(level);
                 case INDUCTION_FURNACE -> tickInduction(level);
                 case CENTRIFUGE -> tickCentrifugeHeat(level) | tickProcessor(level);
                 default -> tickProcessor(level);
             };
+            case HEAT -> tickHeatMachine(level);
             case TRANSFORMER -> tickTransformer(level);
             case STORAGE, NONE -> false;
         };
@@ -512,6 +536,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         boolean working = switch (this.profile.role()) {
             case GENERATOR -> this.energy > energyBefore;
             case PROCESSOR -> this.energy < energyBefore;
+            case HEAT -> this.heatWorking;
             case TRANSFORMER -> this.transformer != null && this.transformer.mode() == BufferedTransformer.Mode.STEP_UP;
             case STORAGE, NONE -> false;
         };
@@ -859,6 +884,200 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         }
         this.maxHeat = this.workHeat;
         return this.heat != before;
+    }
+
+    // ── calor (IC2: IHeatSource) ──────────────────────────────────────────
+    /** Fermentador (general.ini do IC2): 4.000 HU por ciclo, 20 mB de biomassa → 400 mB de biogás, 500 mB de biomassa por fertilizante. */
+    private static final int FERMENTER_HEAT_PER_RUN = 4_000;
+    private static final long FERMENTER_BIOMASS_PER_RUN = FluidConstants.BUCKET * 20 / 1_000;
+    private static final long FERMENTER_BIOGAS_PER_RUN = FluidConstants.BUCKET * 400 / 1_000;
+    private static final int FERMENTER_BIOMASS_PER_FERTILIZER = 500;
+    /** O fermentador puxa até 100 HU por tick da fonte de calor na frente dele. */
+    private static final int FERMENTER_HEAT_DRAW = 100;
+    private static final int FERMENTER_CELL_IN = 2;
+    private static final int FERMENTER_CELL_OUT = 3;
+    /** Geradores de calor: sólido 20 HU/t; elétrico 10 HU/t por bobina, 1 HU = 500 CW; RT 2^(n−1) × 2 HU/t. */
+    private static final int SOLID_HEAT_PER_TICK = 20;
+    private static final int COIL_HEAT = 10;
+    private static final int COIL_SLOTS = 10;
+    private static final long ENERGY_PER_HU = 500;
+    private static final int RT_HEAT_BASE = 2;
+    private static final int RT_SLOTS = 6;
+
+    /** Combustível do gerador de calor fluido (IC2: FluidHeatManager). */
+    private record HeatFuel(long dropletsPerTick, int heat) {}
+
+    private static @Nullable HeatFuel heatFuel(Fluid fluid) {
+        // biomassa: 20 mB a cada 20 ticks → 16 HU/t; biogás: 10 mB a cada 20 ticks → 32 HU/t
+        if (fluid == IC2Fluids.BIOMASS.fluid()) return new HeatFuel(FluidConstants.BUCKET / 1_000, 16);
+        if (fluid == IC2Fluids.BIOGAS.fluid()) return new HeatFuel(FluidConstants.BUCKET / 2_000, 32);
+        return null;
+    }
+
+    public boolean isHeatSource() {
+        return switch (this.guiType) {
+            case SOLID_HEAT_GENERATOR, FLUID_HEAT_GENERATOR, ELECTRIC_HEAT_GENERATOR, RT_HEAT_GENERATOR -> true;
+            default -> false;
+        };
+    }
+
+    /** HU por tick que o gerador entrega no máximo agora. */
+    public int maxHeatEmitted() {
+        return switch (this.guiType) {
+            case SOLID_HEAT_GENERATOR -> SOLID_HEAT_PER_TICK;
+            case FLUID_HEAT_GENERATOR -> {
+                HeatFuel fuel = this.tank == null || this.tank.isResourceBlank() ? null : heatFuel(this.tank.variant.getFluid());
+                yield fuel == null ? 0 : fuel.heat();
+            }
+            case ELECTRIC_HEAT_GENERATOR -> countItems(COIL_SLOTS, IC2AutoItems.COIL.get()) * COIL_HEAT;
+            case RT_HEAT_GENERATOR -> {
+                int pellets = countItems(RT_SLOTS, IC2AutoItems.RTG_PELLET.get());
+                yield pellets == 0 ? 0 : (1 << (pellets - 1)) * RT_HEAT_BASE;
+            }
+            default -> 0;
+        };
+    }
+
+    private int countItems(int slots, Item item) {
+        int count = 0;
+        for (int slot = 0; slot < slots && slot < this.inventory.getContainerSize(); slot++) {
+            if (this.inventory.getItem(slot).getItem() == item) count++;
+        }
+        return count;
+    }
+
+    /**
+     * Entrega calor a quem está na frente do gerador; {@code side} é a face do gerador pedida,
+     * que precisa ser a frente dele (gerador e consumidor frente a frente, como no IC2).
+     */
+    public int drawHeat(Direction side, int request, boolean simulate) {
+        if (!isHeatSource() || side != front()) return 0;
+        int drawn = Math.min(request, this.heatBuffer);
+        if (!simulate) {
+            this.heatBuffer -= drawn;
+            this.transmitHeat = drawn;
+            setChanged();
+        }
+        return drawn;
+    }
+
+    private boolean tickHeatMachine(Level level) {
+        return this.guiType == MachineGuiType.FERMENTER ? tickFermenter(level) : tickHeatSource(level);
+    }
+
+    /** Geradores de calor sem eletricidade: completam o buffer até o máximo por tick. */
+    private boolean tickHeatSource(Level level) {
+        boolean changed = false;
+        boolean solid = this.guiType == MachineGuiType.SOLID_HEAT_GENERATOR;
+        if (solid && this.fuel <= 0 && this.heatBuffer == 0) {
+            changed = gainSolidFuel(level);
+        }
+
+        int wanted = maxHeatEmitted() - this.heatBuffer;
+        int produced = wanted > 0 ? fillHeatBuffer(wanted) : 0;
+        this.heatBuffer += produced;
+
+        if (solid && this.fuel > 0) {
+            this.heatStore += SOLID_HEAT_PER_TICK;
+            this.fuel--;
+            if (this.fuel == 0 && level.getRandom().nextBoolean()) {
+                insertResults(List.of(new ItemStack(net.ic2reborn.registry.IC2Items.ASHES.get())), false);
+            }
+            changed = true;
+        }
+        this.heatWorking = produced > 0 || (solid && this.fuel > 0);
+        if (solid) {
+            this.progress = this.fuel;
+            this.maxProgress = this.totalFuel;
+        }
+        return changed || produced > 0;
+    }
+
+    /** Gerador de calor elétrico: transforma energia em calor, 500 CW por HU. */
+    private boolean tickElectricHeat() {
+        int wanted = maxHeatEmitted() - this.heatBuffer;
+        int produced = wanted > 0 ? fillHeatBuffer(wanted) : 0;
+        this.heatBuffer += produced;
+        return produced > 0;
+    }
+
+    private int fillHeatBuffer(int max) {
+        return switch (this.guiType) {
+            case SOLID_HEAT_GENERATOR -> {
+                int taken = (int) Math.min(max, this.heatStore);
+                this.heatStore -= taken;
+                yield taken;
+            }
+            case FLUID_HEAT_GENERATOR -> {
+                if (this.tank == null || this.tank.isResourceBlank()) yield 0;
+                HeatFuel fuel = heatFuel(this.tank.variant.getFluid());
+                if (fuel == null || this.tank.amount < fuel.dropletsPerTick()) yield 0;
+                this.tank.consume(fuel.dropletsPerTick());
+                yield fuel.heat();
+            }
+            case RT_HEAT_GENERATOR -> Math.min(max, maxHeatEmitted());
+            case ELECTRIC_HEAT_GENERATOR -> {
+                int amount = (int) Math.min(max, this.energy / ENERGY_PER_HU);
+                this.energy -= amount * ENERGY_PER_HU;
+                yield amount;
+            }
+            default -> 0;
+        };
+    }
+
+    /** Gerador de calor sólido: queima como o gerador (tempo de queima ÷ 4), se houver lugar para as cinzas. */
+    private boolean gainSolidFuel(Level level) {
+        ItemStack stack = this.inventory.getItem(0);
+        if (stack.isEmpty()) return false;
+        if (!insertResults(List.of(new ItemStack(net.ic2reborn.registry.IC2Items.ASHES.get())), true)) return false;
+        int value = level.fuelValues().burnDuration(stack) / 4;
+        if (value <= 0) return false;
+        if (stack.getItem() == Items.LAVA_BUCKET) {
+            this.inventory.setItem(0, new ItemStack(Items.BUCKET));
+        } else {
+            stack.shrink(1);
+            this.inventory.setItem(0, stack);
+        }
+        this.fuel += value;
+        this.totalFuel = value;
+        return true;
+    }
+
+    /**
+     * Fermentador do IC2: com biomassa e uma fonte de calor na frente (frente a frente), junta calor
+     * até 4.000 HU e transforma 20 mB de biomassa em 400 mB de biogás. Enche células vazias com biogás.
+     */
+    private boolean tickFermenter(Level level) {
+        boolean changed = false;
+        if (this.outputTank != null) {
+            changed = MachineFluids.fillFromTank(this.inventory, FERMENTER_CELL_IN, FERMENTER_CELL_OUT, this.outputTank);
+        }
+        this.maxProgress = FERMENTER_BIOMASS_PER_FERTILIZER;
+        if (this.progress >= FERMENTER_BIOMASS_PER_FERTILIZER
+                && insertResults(List.of(new ItemStack(IC2AutoItems.FERTILIZER.get())), false)) {
+            this.progress = 0;
+            changed = true;
+        }
+
+        this.heatWorking = false;
+        if (this.tank == null || this.outputTank == null || this.tank.isResourceBlank()) return changed;
+        Direction facing = front();
+        if (!(level.getBlockEntity(this.worldPosition.relative(facing)) instanceof MachineBlockEntity source)
+                || !source.isHeatSource()) return changed;
+
+        FluidVariant biogas = FluidVariant.of(IC2Fluids.BIOGAS.fluid());
+        if (this.tank.variant.getFluid() != IC2Fluids.BIOMASS.fluid() || this.tank.amount < FERMENTER_BIOMASS_PER_RUN
+                || !this.outputTank.canFill(biogas, FERMENTER_BIOGAS_PER_RUN)) return changed;
+
+        this.heatBuffer += source.drawHeat(facing.getOpposite(), FERMENTER_HEAT_DRAW, false);
+        if (this.heatBuffer >= FERMENTER_HEAT_PER_RUN) {
+            this.heatBuffer -= FERMENTER_HEAT_PER_RUN;
+            this.tank.consume(FERMENTER_BIOMASS_PER_RUN);
+            this.outputTank.fill(biogas, FERMENTER_BIOGAS_PER_RUN);
+            this.progress += 20;
+        }
+        this.heatWorking = true;
+        return true;
     }
 
     // ── máquinas de processamento ─────────────────────────────────────────
@@ -1228,8 +1447,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case DATA_POWER -> clampToInt(this.lastFlow);
             case DATA_VOLTAGE -> this.profile.voltage();
             case DATA_MODE -> machineMode();
-            case DATA_HEAT -> this.heat;
-            case DATA_MAX_HEAT -> this.maxHeat;
+            case DATA_HEAT -> isHeatSource() ? this.transmitHeat : this.guiType == MachineGuiType.FERMENTER ? this.heatBuffer : this.heat;
+            case DATA_MAX_HEAT -> isHeatSource() ? maxHeatEmitted() : this.guiType == MachineGuiType.FERMENTER ? FERMENTER_HEAT_PER_RUN : this.maxHeat;
             default -> 0;
         };
     }
@@ -1295,6 +1514,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.miner != null) {
             this.miner.write(output);
         }
+        output.putInt("HeatBuffer", this.heatBuffer);
+        output.putLong("HeatStore", this.heatStore);
         if (this.guiType == MachineGuiType.METAL_FORMER) {
             output.putInt("MetalFormerMode", this.metalFormerMode);
         }
@@ -1337,6 +1558,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.miner != null) {
             this.miner.read(input);
         }
+        this.heatBuffer = Math.max(0, input.getIntOr("HeatBuffer", 0));
+        this.heatStore = Math.max(0, input.getLongOr("HeatStore", 0));
         this.metalFormerMode = Math.floorMod(input.getIntOr("MetalFormerMode", 0), METAL_FORMER_RECIPES.length);
         if (this.guiType == MachineGuiType.GENERATOR) {
             this.maxProgress = this.totalFuel;

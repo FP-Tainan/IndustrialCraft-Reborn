@@ -474,5 +474,8 @@
   "item.ic2reborn.od_scanner": "OD Scanner",
   "item.ic2reborn.scanner.result": "Ores within %s blocks:",
   "item.ic2reborn.scanner.none": "No ores found",
-  "item.ic2reborn.scanner.empty": "Scanner out of energy"
+  "item.ic2reborn.scanner.empty": "Scanner out of energy",
+  "item.ic2reborn.ashes": "Ashes",
+  "gui.ic2reborn.heat_generator.emit": "Emit: %s HU",
+  "gui.ic2reborn.heat_generator.max_emit": "Max: %s HU"
 }

@@ -160,8 +160,8 @@ public final class MachineLayouts {
             case SOLID_HEAT_GENERATOR -> MachineLayout.dynamic(176, 166)
                     .image("guisolidheatgenerator.png", 48, 45, 47, 44, 81, 36, 256, 256)
                     .slot(80, 45).output(113, 45)
-                    .gauge(81, 29, FUEL, NONE)
-                    .text(menu -> Component.literal("0"), 48, 66, 79, 13, HEAT_TEXT_COLOR)
+                    .progress(81, 29, FUEL)
+                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " HU"), 48, 66, 79, 13, HEAT_TEXT_COLOR)
                     .noInventoryTitle()
                     .build();
 
@@ -187,10 +187,10 @@ public final class MachineLayouts {
             case FERMENTER -> MachineLayout.textured("guifermenter.png", 184)
                     .slotAt(14, 46).outputAt(14, 64)
                     .slotAt(148, 43).outputAt(148, 61)
-                    .slotAt(86, 83)
+                    .outputAt(86, 83)
                     .gridAt(125, 83, 2, 1, false)
                     .plainTank(38, 49, 48, 30).tank(125, 22)
-                    .gauge(42, 41, HEAT_FERMENTER, NONE)
+                    .gauge(42, 41, HEAT_FERMENTER, MachineLayout.GaugeSource.HEAT)
                     .progress(38, 88, PROGRESS_FERMENTER)
                     .build();
 
@@ -246,17 +246,20 @@ public final class MachineLayouts {
             case FLUID_HEAT_GENERATOR -> MachineLayout.textured("guifluidheatgenerator.png", 166)
                     .slotAt(27, 21).outputAt(27, 54)
                     .tank(70, 20)
+                    .text(menu -> Component.translatableWithFallback("gui.ic2reborn.heat_generator.emit", "Emit: %s HU", menu.getHeat()), 96, 33, 0, 0, HEAT_TEXT_COLOR)
+                    .text(menu -> Component.translatableWithFallback("gui.ic2reborn.heat_generator.max_emit", "Max: %s HU", menu.getMaxHeat()), 96, 52, 0, 0, HEAT_TEXT_COLOR)
                     .build();
 
             case ELECTRIC_HEAT_GENERATOR -> MachineLayout.textured("guielectricheatgenerator.png", 166)
                     .gridAt(44, 27, 5, 2, false)
                     .slotAt(8, 62)
                     .energy(12, 44)
+                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " HU"), 34, 66, 109, 13, HEAT_TEXT_COLOR)
                     .build();
 
             case RT_HEAT_GENERATOR -> MachineLayout.textured("guirtheatgenerator.png", 166)
                     .gridAt(62, 27, 3, 2, false)
-                    .text(menu -> Component.literal("0"), 49, 66, 79, 13, HEAT_TEXT_COLOR)
+                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " HU"), 49, 66, 79, 13, HEAT_TEXT_COLOR)
                     .build();
 
             case ELECTRIC_KINETIC_GENERATOR -> MachineLayout.textured("guielectrickineticgenerator.png", 166)

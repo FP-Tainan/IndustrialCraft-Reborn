@@ -49,6 +49,7 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.INGOT_URANIUM.get());
                         output.accept(IC2Items.FILLED_TIN_CAN.get());
                         output.accept(IC2Items.BIO_CHAFF.get());
+                        output.accept(IC2Items.ASHES.get());
                         output.accept(IC2Items.OD_SCANNER.get());
                         output.accept(((net.craftenergy.content.item.ElectricItem) IC2Items.OD_SCANNER.get()).charged());
                         for (var item : java.util.List.of(IC2Items.PLATE_OBSIDIAN, IC2Items.COIN, IC2Items.FUEL_ROD, IC2Items.SLAG,
