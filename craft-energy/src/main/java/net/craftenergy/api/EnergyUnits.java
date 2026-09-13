@@ -62,8 +62,9 @@ public final class EnergyUnits {
         return format(cw, "CW");
     }
 
+    /** Tensão sem prefixo (220 MV, 13800 MV), para não virar "kMV". */
     public static String formatVoltage(double mv) {
-        return format(mv, "MV");
+        return String.format(Locale.ROOT, "%.0f MV", mv);
     }
 
     public static String formatCurrent(double ra) {

@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:gravel",
+  "result": "minecraft:flint",
+  "result_count": 1
+}

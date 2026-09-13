@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#c:ores/iron",
+  "result": "ic2reborn:crushed_iron",
+  "result_count": 2
+}

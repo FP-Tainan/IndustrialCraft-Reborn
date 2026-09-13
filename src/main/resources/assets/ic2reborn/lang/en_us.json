@@ -393,11 +393,11 @@
   "gui.ic2reborn.heat": "Heat:",
   "gui.ic2reborn.storage.armor": "Armor",
   "gui.ic2reborn.storage.level": "Power Level:",
-  "gui.ic2reborn.storage.output": "Out: %s EU/t",
+  "gui.ic2reborn.storage.output": "Out: %s",
   "gui.ic2reborn.transformer.output": "Output:",
   "gui.ic2reborn.transformer.input": "Input:",
-  "gui.ic2reborn.kinetic.bandwidth": "Bandwidth: %s EU/t",
-  "gui.ic2reborn.kinetic.production": "Production: %s EU/t",
+  "gui.ic2reborn.kinetic.bandwidth": "Bandwidth: %s",
+  "gui.ic2reborn.kinetic.production": "Production: %s",
   "gui.ic2reborn.mass_fabricator.energy": "Energy: %s%%",
   "gui.ic2reborn.mass_fabricator.scrap": "Scrap: %s%%"
 }

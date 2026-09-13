@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:obsidian",
+  "result": "ic2reborn:dust_obsidian",
+  "result_count": 1
+}

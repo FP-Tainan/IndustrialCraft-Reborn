@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:crushed_tin",
+  "result": "ic2reborn:dust_tin",
+  "result_count": 1
+}

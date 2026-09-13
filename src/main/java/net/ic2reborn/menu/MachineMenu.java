@@ -36,7 +36,7 @@ public class MachineMenu extends AbstractContainerMenu {
     /** Client constructor, created from the data sent by the ExtendedMenuType. */
     public MachineMenu(int containerId, Inventory playerInventory, MachineGuiType guiType) {
         this(containerId, playerInventory, new SimpleContainer(guiType.layout().slotCount()),
-                new SimpleContainerData(MachineBlockEntity.DATA_COUNT), null, guiType);
+                new SimpleContainerData(MachineBlockEntity.DATA_COUNT * 2), null, guiType);
     }
 
     /** Server constructor. */
@@ -54,7 +54,7 @@ public class MachineMenu extends AbstractContainerMenu {
         if (machineInventory.getContainerSize() < this.layout.slotCount()) {
             throw new IllegalArgumentException("Machine inventory must have at least " + this.layout.slotCount() + " slots");
         }
-        checkContainerDataCount(data, MachineBlockEntity.DATA_COUNT);
+        checkContainerDataCount(data, MachineBlockEntity.DATA_COUNT * 2);
 
         this.blockEntity = blockEntity;
         this.data = data;
@@ -100,24 +100,41 @@ public class MachineMenu extends AbstractContainerMenu {
         return this.layout;
     }
 
-    public int getEnergy() {
-        return this.data.get(MachineBlockEntity.DATA_ENERGY);
+    /** Junta as duas metades de 16 bits de um campo sincronizado. */
+    private int value(int field) {
+        return (this.data.get(field * 2) & 0xFFFF) | ((this.data.get(field * 2 + 1) & 0xFFFF) << 16);
     }
 
-    public int getMaxEnergy() {
-        return this.data.get(MachineBlockEntity.DATA_MAX_ENERGY);
+    /** Energia guardada, em CWh. */
+    public int getEnergyCWh() {
+        return value(MachineBlockEntity.DATA_ENERGY);
+    }
+
+    /** Capacidade, em CWh. */
+    public int getCapacityCWh() {
+        return value(MachineBlockEntity.DATA_CAPACITY);
     }
 
     public int getProgress() {
-        return this.data.get(MachineBlockEntity.DATA_PROGRESS);
+        return value(MachineBlockEntity.DATA_PROGRESS);
     }
 
     public int getMaxProgress() {
-        return this.data.get(MachineBlockEntity.DATA_MAX_PROGRESS);
+        return value(MachineBlockEntity.DATA_MAX_PROGRESS);
+    }
+
+    /** CW que passaram pela máquina no último tick (negativo quando uma bateria descarrega). */
+    public int getPower() {
+        return value(MachineBlockEntity.DATA_POWER);
+    }
+
+    /** Tensão da máquina, em MV. */
+    public int getVoltage() {
+        return value(MachineBlockEntity.DATA_VOLTAGE);
     }
 
     public double getEnergyRatio() {
-        return ratio(getEnergy(), getMaxEnergy());
+        return ratio(getEnergyCWh(), getCapacityCWh());
     }
 
     public double getProgressRatio() {

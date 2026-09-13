@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "craftenergy:plate_gold",
+  "result": "ic2reborn:dust_gold",
+  "result_count": 1
+}

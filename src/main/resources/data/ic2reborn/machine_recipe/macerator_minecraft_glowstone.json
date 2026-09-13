@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:glowstone",
+  "result": "minecraft:glowstone_dust",
+  "result_count": 4
+}

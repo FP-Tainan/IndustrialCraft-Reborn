@@ -80,15 +80,45 @@ public final class EnergyNetwork<P> {
         this.conductors = toArray(conductorList);
         this.conductorCurrent = new double[this.conductors.length];
 
-        // Dijkstra a partir de todos os geradores e baterias; entrar num cabo custa a resistência dele
+        // Máquinas: caminho de menor resistência até o gerador ou bateria mais próximo.
+        // Baterias carregando: até o gerador mais próximo (a própria bateria não conta, senão o
+        // caminho sairia vazio e a corrente de carga não passaria pelos cabos).
+        ShortestPaths fromSuppliers = shortestPaths(concat(this.sources, this.buffers), vertices, adjacency, conductorIndex);
+        ShortestPaths fromSources = shortestPaths(this.sources, vertices, adjacency, conductorIndex);
+
+        this.sinkPaths = new int[this.sinks.length][];
+        this.sinkResistance = new double[this.sinks.length];
+        for (int i = 0; i < this.sinks.length; i++) {
+            this.sinkPaths[i] = path(this.sinks[i], fromSuppliers.previous(), conductorIndex);
+            this.sinkResistance[i] = fromSuppliers.resistance(this.sinks[i]);
+        }
+        this.bufferPaths = new int[this.buffers.length][];
+        this.bufferResistance = new double[this.buffers.length];
+        for (int i = 0; i < this.buffers.length; i++) {
+            this.bufferPaths[i] = path(this.buffers[i], fromSources.previous(), conductorIndex);
+            this.bufferResistance[i] = fromSources.resistance(this.buffers[i]);
+        }
+    }
+
+    private record ShortestPaths(double[] distance, int[] previous) {
+        double resistance(int vertex) {
+            return Double.isInfinite(this.distance[vertex]) ? 0.0 : this.distance[vertex];
+        }
+    }
+
+    /** Dijkstra a partir de {@code starts}; entrar num cabo custa a resistência dele. */
+    private static <P> ShortestPaths shortestPaths(int[] starts, List<GridVertex<P>> vertices, int[][] adjacency,
+                                                   int[] conductorIndex) {
+        int count = vertices.size();
         double[] distance = new double[count];
         int[] previous = new int[count];
         Arrays.fill(distance, Double.POSITIVE_INFINITY);
         Arrays.fill(previous, -1);
+
         PriorityQueue<double[]> queue = new PriorityQueue<>(Comparator.comparingDouble(entry -> entry[0]));
-        for (int supplier : concat(this.sources, this.buffers)) {
-            distance[supplier] = 0.0;
-            queue.add(new double[]{0.0, supplier});
+        for (int start : starts) {
+            distance[start] = 0.0;
+            queue.add(new double[]{0.0, start});
         }
         while (!queue.isEmpty()) {
             double[] entry = queue.poll();
@@ -106,19 +136,7 @@ public final class EnergyNetwork<P> {
                 }
             }
         }
-
-        this.sinkPaths = new int[this.sinks.length][];
-        this.sinkResistance = new double[this.sinks.length];
-        for (int i = 0; i < this.sinks.length; i++) {
-            this.sinkPaths[i] = path(this.sinks[i], previous, conductorIndex);
-            this.sinkResistance[i] = Double.isInfinite(distance[this.sinks[i]]) ? 0.0 : distance[this.sinks[i]];
-        }
-        this.bufferPaths = new int[this.buffers.length][];
-        this.bufferResistance = new double[this.buffers.length];
-        for (int i = 0; i < this.buffers.length; i++) {
-            this.bufferPaths[i] = path(this.buffers[i], previous, conductorIndex);
-            this.bufferResistance[i] = 0.0;
-        }
+        return new ShortestPaths(distance, previous);
     }
 
     /** Executa um tick da rede e devolve o resumo. */
@@ -147,6 +165,11 @@ public final class EnergyNetwork<P> {
         long totalDischarge = 0;
         for (int i = 0; i < this.buffers.length; i++) {
             EnergyBuffer buffer = buffer(this.buffers[i]);
+            if (networkVoltage > buffer.voltage() * (1.0 + tolerance)) {
+                buffer.onOvervoltage(networkVoltage);
+                listener.bufferOvervoltage(this.vertices.get(this.buffers[i]).pos(), buffer, networkVoltage);
+                continue;
+            }
             if (networkVoltage > 0 && EnergyUnits.withinTolerance(buffer.voltage(), networkVoltage, tolerance)) {
                 long stored = Math.max(0, buffer.storedEnergy());
                 dischargeCap[i] = Math.max(0, Math.min(buffer.maxDischargePower(), stored));

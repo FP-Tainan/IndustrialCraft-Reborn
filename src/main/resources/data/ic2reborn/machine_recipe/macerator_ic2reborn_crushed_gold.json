@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:crushed_gold",
+  "result": "ic2reborn:dust_gold",
+  "result_count": 1
+}

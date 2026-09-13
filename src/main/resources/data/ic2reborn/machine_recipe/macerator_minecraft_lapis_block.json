@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:lapis_block",
+  "result": "ic2reborn:dust_lapis",
+  "result_count": 9
+}

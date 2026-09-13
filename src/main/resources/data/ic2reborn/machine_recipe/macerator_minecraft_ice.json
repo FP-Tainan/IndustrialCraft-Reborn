@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:ice",
+  "result": "minecraft:snowball",
+  "result_count": 1
+}

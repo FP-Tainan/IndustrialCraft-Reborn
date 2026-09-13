@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "craftenergy:plate_iron",
+  "result": "ic2reborn:dust_iron",
+  "result_count": 1
+}

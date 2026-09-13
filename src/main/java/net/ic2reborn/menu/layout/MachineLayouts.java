@@ -1,5 +1,6 @@
 package net.ic2reborn.menu.layout;
 
+import net.craftenergy.api.EnergyUnits;
 import net.ic2reborn.menu.MachineGuiType;
 import net.minecraft.network.chat.Component;
 
@@ -122,7 +123,7 @@ public final class MachineLayouts {
             case GENERATOR -> MachineLayout.dynamic(176, 166)
                     .slot(56, 16).slot(56, 52)
                     .energyBar(100, 39)
-                    .gauge(57, 36, FUEL, NONE)
+                    .progress(57, 36, FUEL)
                     .build();
 
             case GEO_GENERATOR -> MachineLayout.dynamic(176, 166)
@@ -148,8 +149,8 @@ public final class MachineLayouts {
                     .build();
 
             case KINETIC_GENERATOR -> MachineLayout.dynamic(176, 166)
-                    .text(menu -> tr("kinetic.bandwidth", "Bandwidth: %s EU/t", 0), 41, 33)
-                    .text(menu -> tr("kinetic.production", "Production: %s EU/t", 0), 41, 45)
+                    .text(menu -> tr("kinetic.bandwidth", "Bandwidth: %s", EnergyUnits.formatPower(0)), 41, 33)
+                    .text(menu -> tr("kinetic.production", "Production: %s", EnergyUnits.formatPower(0)), 41, 45)
                     .build();
 
             case SOLID_HEAT_GENERATOR -> MachineLayout.dynamic(176, 166)
@@ -269,23 +270,23 @@ public final class MachineLayouts {
                     .slotAt(80, 26)
                     .build();
 
-            case BATBOX -> energyStorage(32);
-            case CESU -> energyStorage(128);
-            case MFE -> energyStorage(512);
-            case MFSU -> energyStorage(2048);
+            case BATBOX -> energyStorage(4_400);
+            case CESU -> energyStorage(20_000);
+            case MFE -> energyStorage(120_000);
+            case MFSU -> energyStorage(1_000_000);
 
             case CHARGEPAD -> MachineLayout.textured("guichargepadblock.png", 161)
                     .slotAt(56, 17).slotAt(56, 53)
                     .energyBar(79, 38)
                     .text(tr("storage.level", "Power Level:"), 79, 25)
-                    .text(menu -> Component.literal(" " + menu.getEnergy()), 110, 35)
-                    .text(menu -> Component.literal("/" + menu.getMaxEnergy()), 110, 45)
+                    .text(menu -> Component.literal(" " + EnergyUnits.format(menu.getEnergyCWh(), "CWh")), 110, 35)
+                    .text(menu -> Component.literal("/" + EnergyUnits.format(menu.getCapacityCWh(), "CWh")), 110, 45)
                     .build();
 
-            case LV_TRANSFORMER -> transformer(32, 128);
-            case MV_TRANSFORMER -> transformer(128, 512);
-            case HV_TRANSFORMER -> transformer(512, 2048);
-            case EV_TRANSFORMER -> transformer(2048, 8192);
+            case LV_TRANSFORMER -> transformer(220, 1_000, 20_000);
+            case MV_TRANSFORMER -> transformer(1_000, 2_400, 120_000);
+            case HV_TRANSFORMER -> transformer(2_400, 13_800, 1_000_000);
+            case EV_TRANSFORMER -> transformer(13_800, 69_000, 5_000_000);
         };
     }
 
@@ -300,25 +301,25 @@ public final class MachineLayouts {
     }
 
     /** GuiElectricBlock + ContainerElectricBlock (BatBox, CESU, MFE, MFSU). */
-    private static MachineLayout energyStorage(int output) {
+    private static MachineLayout energyStorage(long power) {
         return MachineLayout.textured("guielectricblock.png", 196)
                 .slotAt(56, 17).slotAt(56, 53)
                 .energyBar(79, 38)
                 .text(tr("storage.armor", "Armor"), 8, 196 - 126 + 3)
                 .text(tr("storage.level", "Power Level:"), 79, 25)
-                .text(menu -> Component.literal(" " + menu.getEnergy()), 110, 35)
-                .text(menu -> Component.literal("/" + menu.getMaxEnergy()), 110, 45)
-                .text(tr("storage.output", "Out: %s EU/t", output), 85, 60)
+                .text(menu -> Component.literal(" " + EnergyUnits.format(menu.getEnergyCWh(), "CWh")), 110, 35)
+                .text(menu -> Component.literal("/" + EnergyUnits.format(menu.getCapacityCWh(), "CWh")), 110, 45)
+                .text(tr("storage.output", "Out: %s", EnergyUnits.formatPower(power)), 85, 60)
                 .build();
     }
 
     /** GuiTransformer (no slots; mode buttons not implemented yet). */
-    private static MachineLayout transformer(int output, int input) {
+    private static MachineLayout transformer(int lowVoltage, int highVoltage, long power) {
         return MachineLayout.textured("guitransfomer.png", 219)
                 .text(tr("transformer.output", "Output:"), 6, 30)
                 .text(tr("transformer.input", "Input:"), 6, 43)
-                .text(menu -> Component.literal(output + " EU/t"), 52, 30, 0, 0, FLOW_TEXT_COLOR)
-                .text(menu -> Component.literal(input + " EU/t"), 52, 45, 0, 0, FLOW_TEXT_COLOR)
+                .text(menu -> Component.literal(EnergyUnits.formatVoltage(lowVoltage) + " · " + EnergyUnits.formatPower(power)), 52, 30, 0, 0, FLOW_TEXT_COLOR)
+                .text(menu -> Component.literal(EnergyUnits.formatVoltage(highVoltage)), 52, 45, 0, 0, FLOW_TEXT_COLOR)
                 .build();
     }
 

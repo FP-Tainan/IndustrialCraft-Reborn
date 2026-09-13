@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:ingot_bronze",
+  "result": "ic2reborn:dust_bronze",
+  "result_count": 1
+}

@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:crushed_copper",
+  "result": "ic2reborn:dust_copper",
+  "result_count": 1
+}

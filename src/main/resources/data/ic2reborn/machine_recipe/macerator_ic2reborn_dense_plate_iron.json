@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:dense_plate_iron",
+  "result": "ic2reborn:dust_iron",
+  "result_count": 9
+}

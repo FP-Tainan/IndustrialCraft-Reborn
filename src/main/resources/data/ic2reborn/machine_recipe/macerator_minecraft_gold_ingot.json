@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:gold_ingot",
+  "result": "ic2reborn:dust_gold",
+  "result_count": 1
+}

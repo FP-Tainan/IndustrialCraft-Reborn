@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "craftenergy:ingot_tin",
+  "result": "ic2reborn:dust_tin",
+  "result_count": 1
+}

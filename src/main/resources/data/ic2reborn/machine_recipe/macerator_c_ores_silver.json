@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#c:ores/silver",
+  "result": "ic2reborn:crushed_silver",
+  "result_count": 2
+}

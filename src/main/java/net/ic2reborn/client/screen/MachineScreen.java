@@ -63,8 +63,15 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 
             if (gauge.source() == MachineLayout.GaugeSource.ENERGY
                     && this.isHovering(gauge.x(), gauge.y(), gauge.style().width, gauge.style().height, mouseX, mouseY)) {
-                graphics.setTooltipForNextFrame(this.font,
-                        Component.literal(this.menu.getEnergy() + " / " + this.menu.getMaxEnergy() + " EU"), mouseX, mouseY);
+                int power = Math.abs(this.menu.getPower());
+                int voltage = this.menu.getVoltage();
+                graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(
+                        Component.literal(net.craftenergy.api.EnergyUnits.format(this.menu.getEnergyCWh(), "CWh")
+                                + " / " + net.craftenergy.api.EnergyUnits.format(this.menu.getCapacityCWh(), "CWh")),
+                        Component.literal(net.craftenergy.api.EnergyUnits.formatPower(power)
+                                + " · " + net.craftenergy.api.EnergyUnits.formatVoltage(voltage)
+                                + " · " + net.craftenergy.api.EnergyUnits.formatCurrent(net.craftenergy.api.EnergyUnits.current(power, voltage)))),
+                        mouseX, mouseY);
             }
         }
     }

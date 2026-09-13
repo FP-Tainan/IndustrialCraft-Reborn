@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#c:ores/lead",
+  "result": "ic2reborn:crushed_lead",
+  "result_count": 2
+}

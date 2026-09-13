@@ -41,6 +41,29 @@ public final class CraftEnergyApi {
         }
     }
 
+    /**
+     * Padrão do pack para sobretensão: o aparelho em {@code pos} é destruído e explode.
+     * Acontece depois do tick das redes, com força pela tensão nominal (TNT = 4).
+     */
+    public static void explodeFromOvervoltage(Level level, BlockPos pos, int nominalVoltage) {
+        if (!(level instanceof ServerLevel serverLevel)) return;
+        BlockPos target = pos.immutable();
+        EnergyNetworkManager.get(serverLevel).runAfterTick(target, () -> {
+            if (!serverLevel.isLoaded(target) || serverLevel.getBlockState(target).isAir()) return;
+            serverLevel.removeBlock(target, false);
+            serverLevel.explode(null, target.getX() + 0.5, target.getY() + 0.5, target.getZ() + 0.5,
+                    overvoltageExplosionPower(nominalVoltage), Level.ExplosionInteraction.BLOCK);
+        });
+    }
+
+    /** Força da explosão por sobretensão: BT 2, MT 3, AT 4, EAT/UAT 5. */
+    public static float overvoltageExplosionPower(int nominalVoltage) {
+        if (nominalVoltage <= 220) return 2.0F;
+        if (nominalVoltage <= 1_000) return 3.0F;
+        if (nominalVoltage <= 2_400) return 4.0F;
+        return 5.0F;
+    }
+
     public static Side side(Direction direction) {
         return SIDES[direction.ordinal()];
     }

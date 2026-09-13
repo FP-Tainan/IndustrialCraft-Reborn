@@ -224,4 +224,48 @@ class EnergyNetworkTest {
 
         assertThrows(IllegalArgumentException.class, topology::build);
     }
+
+    @Test
+    void batteryChargingCurrentFlowsThroughCables() {
+        // gerador → 2 cabos (10 RA, 0,1 cada) → bateria carregando 4.400 CW a 220 MV = 20 RA
+        Cable thinResistive = new Cable(220, 10.0, 0.1);
+        SimpleEnergyBuffer batbox = new SimpleEnergyBuffer(220, EnergyUnits.fromCWh(20), 4400, 4400);
+        EnergyNetwork<Pos> network = new TestTopology()
+                .place(0, 0, 0, new Source(220, 10_000))
+                .place(1, 0, 0, thinResistive)
+                .place(2, 0, 0, thinResistive)
+                .place(3, 0, 0, batbox)
+                .build().get(0);
+        RecordingListener listener = new RecordingListener();
+
+        NetworkTickReport report = network.tick(listener);
+
+        assertEquals(4400, batbox.storedEnergy());
+        // a corrente no cabo leva também a perda: (4.400 + 80) CW / 220 MV
+        assertEquals((4400.0 + 80.0) / 220.0, network.conductorCurrent(new Pos(1, 0, 0)), 1e-6);
+        assertEquals(2, listener.overcurrent.size());
+        // perda = 20² × 0,2 = 80 CW
+        assertEquals(80, report.losses());
+    }
+
+    @Test
+    void batteryOnHigherVoltageIsNotifiedAndDoesNotCharge() {
+        int[] overvoltages = {0};
+        SimpleEnergyBuffer batbox = new SimpleEnergyBuffer(220, EnergyUnits.fromCWh(20), 4400, 4400) {
+            @Override
+            public void onOvervoltage(int voltage) {
+                overvoltages[0]++;
+            }
+        };
+        RecordingListener listener = new RecordingListener();
+        EnergyNetwork<Pos> network = new TestTopology()
+                .place(0, 0, 0, new Source(1000, 5000))
+                .place(1, 0, 0, batbox)
+                .build().get(0);
+
+        network.tick(listener);
+
+        assertEquals(1, overvoltages[0]);
+        assertEquals(0, batbox.storedEnergy());
+    }
 }

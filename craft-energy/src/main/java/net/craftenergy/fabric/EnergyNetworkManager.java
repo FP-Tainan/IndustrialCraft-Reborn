@@ -152,15 +152,30 @@ public final class EnergyNetworkManager {
     }
 
     // ── tick ──────────────────────────────────────────────────────────────
+    /** Ações que mexem no mundo (explosões) e precisam esperar o tick das redes terminar; uma por posição. */
+    private final Long2ObjectOpenHashMap<Runnable> afterTick = new Long2ObjectOpenHashMap<>();
+
+    /** Agenda uma ação para depois do tick das redes desta dimensão. */
+    public void runAfterTick(BlockPos pos, Runnable action) {
+        this.afterTick.putIfAbsent(pos.asLong(), action);
+    }
+
     private void tick() {
         if (!this.dirty.isEmpty()) rebuild();
-        if (this.networks.isEmpty() && this.heat.isEmpty()) return;
 
-        this.heatedThisTick.clear();
-        for (EnergyNetwork<Long> network : this.networks) {
-            network.tick(this.listener);
+        if (!this.networks.isEmpty() || !this.heat.isEmpty()) {
+            this.heatedThisTick.clear();
+            for (EnergyNetwork<Long> network : this.networks) {
+                network.tick(this.listener);
+            }
+            updateHeat();
         }
-        updateHeat();
+
+        if (!this.afterTick.isEmpty()) {
+            List<Runnable> actions = new ArrayList<>(this.afterTick.values());
+            this.afterTick.clear();
+            actions.forEach(Runnable::run);
+        }
     }
 
     private void addHeat(long pos, double amount) {

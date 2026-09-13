@@ -25,4 +25,11 @@ public interface EnergyBuffer extends EnergyNode {
 
     /** Remove energia (potência deste tick × 1 tick). */
     void discharge(long power);
+
+    /**
+     * Chamado quando a rede está acima da tensão suportada (+10%). A bateria decide o que
+     * acontece (no padrão do pack: explode). Nesse tick ela não carrega nem descarrega.
+     */
+    default void onOvervoltage(int voltage) {
+    }
 }

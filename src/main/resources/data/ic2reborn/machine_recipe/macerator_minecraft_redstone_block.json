@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:redstone_block",
+  "result": "minecraft:redstone",
+  "result_count": 9
+}

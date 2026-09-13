@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:stone",
+  "result": "minecraft:cobblestone",
+  "result_count": 1
+}

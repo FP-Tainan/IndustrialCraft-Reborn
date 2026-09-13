@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:raw_lead",
+  "result": "ic2reborn:crushed_lead",
+  "result_count": 2
+}

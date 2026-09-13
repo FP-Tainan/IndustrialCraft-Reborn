@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "craftenergy:raw_tin",
+  "result": "ic2reborn:crushed_tin",
+  "result_count": 2
+}

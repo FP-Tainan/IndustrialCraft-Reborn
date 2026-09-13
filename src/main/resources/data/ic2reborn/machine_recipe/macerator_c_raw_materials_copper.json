@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#c:raw_materials/copper",
+  "result": "ic2reborn:crushed_copper",
+  "result_count": 2
+}

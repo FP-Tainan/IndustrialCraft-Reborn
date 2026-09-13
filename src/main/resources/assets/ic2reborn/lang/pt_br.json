@@ -393,11 +393,11 @@
   "gui.ic2reborn.heat": "Calor:",
   "gui.ic2reborn.storage.armor": "Armadura",
   "gui.ic2reborn.storage.level": "Quantidade:",
-  "gui.ic2reborn.storage.output": "Saída: %s EU/t",
+  "gui.ic2reborn.storage.output": "Saída: %s",
   "gui.ic2reborn.transformer.output": "Saída:",
   "gui.ic2reborn.transformer.input": "Entrada:",
-  "gui.ic2reborn.kinetic.bandwidth": "Capacidade: %s EU/t",
-  "gui.ic2reborn.kinetic.production": "Produção: %s EU/t",
+  "gui.ic2reborn.kinetic.bandwidth": "Capacidade: %s",
+  "gui.ic2reborn.kinetic.production": "Produção: %s",
   "gui.ic2reborn.mass_fabricator.energy": "Energia: %s%%",
   "gui.ic2reborn.mass_fabricator.scrap": "Sucata: %s%%"
 }

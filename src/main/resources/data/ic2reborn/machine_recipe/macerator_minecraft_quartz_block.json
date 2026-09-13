@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:quartz_block",
+  "result": "minecraft:quartz",
+  "result_count": 4
+}

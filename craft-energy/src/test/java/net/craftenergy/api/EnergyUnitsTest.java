@@ -36,7 +36,8 @@ class EnergyUnitsTest {
         assertEquals("220 MV", EnergyUnits.formatVoltage(220));
         assertEquals("22.7 RA", EnergyUnits.formatCurrent(22.7272));
         assertEquals("9.09 RA", EnergyUnits.formatCurrent(9.0909));
-        assertEquals("2.4 kMV", EnergyUnits.formatVoltage(2400));
+        assertEquals("2400 MV", EnergyUnits.formatVoltage(2400));
+        assertEquals("13800 MV", EnergyUnits.formatVoltage(13_800));
         assertEquals("1.5 CWh", EnergyUnits.formatEnergy(1500));
     }
 }

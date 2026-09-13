@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#c:raw_materials/gold",
+  "result": "ic2reborn:crushed_gold",
+  "result_count": 2
+}

@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:ingot_lead",
+  "result": "ic2reborn:dust_lead",
+  "result_count": 1
+}

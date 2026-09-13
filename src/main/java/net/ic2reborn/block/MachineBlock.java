@@ -77,6 +77,24 @@ public class MachineBlock extends Block implements EntityBlock {
         return InteractionResult.SUCCESS;
     }
 
+    /** Só máquinas que já participam da rede elétrica precisam de tick no servidor. */
+    @Override
+    public <T extends BlockEntity> net.minecraft.world.level.block.entity.BlockEntityTicker<T> getTicker(
+            Level level, BlockState state, net.minecraft.world.level.block.entity.BlockEntityType<T> type) {
+        if (level.isClientSide() || type != net.ic2reborn.registry.IC2BlockEntities.MACHINE.get()) return null;
+
+        String blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath();
+        net.ic2reborn.energy.MachineEnergyProfile profile = net.ic2reborn.energy.MachineEnergyProfile.of(
+                net.ic2reborn.menu.MachineGuiType.fromBlockId(blockId));
+        if (profile.role() == net.ic2reborn.energy.MachineEnergyProfile.Role.NONE) return null;
+
+        @SuppressWarnings("unchecked")
+        net.minecraft.world.level.block.entity.BlockEntityTicker<T> ticker =
+                (net.minecraft.world.level.block.entity.BlockEntityTicker<T>)
+                        (net.minecraft.world.level.block.entity.BlockEntityTicker<MachineBlockEntity>) MachineBlockEntity::serverTick;
+        return ticker;
+    }
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);

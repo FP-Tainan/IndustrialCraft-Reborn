@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:blaze_rod",
+  "result": "minecraft:blaze_powder",
+  "result_count": 5
+}

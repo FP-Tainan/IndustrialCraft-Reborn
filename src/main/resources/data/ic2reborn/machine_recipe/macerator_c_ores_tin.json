@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#c:ores/tin",
+  "result": "ic2reborn:crushed_tin",
+  "result_count": 2
+}

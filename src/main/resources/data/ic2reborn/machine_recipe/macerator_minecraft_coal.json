@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:coal",
+  "result": "ic2reborn:dust_coal",
+  "result_count": 1
+}

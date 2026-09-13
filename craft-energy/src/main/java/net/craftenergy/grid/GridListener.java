@@ -23,4 +23,8 @@ public interface GridListener<P> {
     /** Tensão da rede acima do que a máquina suporta. */
     default void sinkOvervoltage(P pos, EnergySink sink, int voltage) {
     }
+
+    /** Tensão da rede acima do que a bateria suporta. */
+    default void bufferOvervoltage(P pos, net.craftenergy.api.EnergyBuffer buffer, int voltage) {
+    }
 }

@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:bone",
+  "result": "minecraft:bone_meal",
+  "result_count": 4
+}
