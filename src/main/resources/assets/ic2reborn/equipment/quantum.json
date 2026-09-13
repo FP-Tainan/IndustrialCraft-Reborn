@@ -1,0 +1,20 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "ic2reborn:quantum"
+      },
+      {
+        "texture": "ic2reborn:quantum_overlay"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "ic2reborn:quantum"
+      },
+      {
+        "texture": "ic2reborn:quantum_overlay"
+      }
+    ]
+  }
+}

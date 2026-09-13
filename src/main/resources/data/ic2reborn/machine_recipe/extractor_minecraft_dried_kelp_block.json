@@ -1,0 +1,7 @@
+{
+  "machine": "extractor",
+  "input": "minecraft:dried_kelp_block",
+  "input_count": 1,
+  "result": "ic2reborn:iodine",
+  "result_count": 1
+}

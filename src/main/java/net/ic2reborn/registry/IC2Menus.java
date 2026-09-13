@@ -28,4 +28,9 @@ public class IC2Menus {
     public static final RegistryObject<ExtendedMenuType<net.ic2reborn.menu.MeterMenu, net.minecraft.core.BlockPos>> METER =
             MENUS.register("meter", () -> new ExtendedMenuType<net.ic2reborn.menu.MeterMenu, net.minecraft.core.BlockPos>(
                     net.ic2reborn.menu.MeterMenu::new, net.minecraft.core.BlockPos.STREAM_CODEC));
+
+    /** Caixa de ferramentas e caixa de contenção. */
+    public static final RegistryObject<ExtendedMenuType<net.ic2reborn.menu.BoxMenu, net.ic2reborn.menu.BoxMenu.OpenData>> BOX =
+            MENUS.register("box", () -> new ExtendedMenuType<net.ic2reborn.menu.BoxMenu, net.ic2reborn.menu.BoxMenu.OpenData>(
+                    net.ic2reborn.menu.BoxMenu::new, net.ic2reborn.menu.BoxMenu.OpenData.STREAM_CODEC));
 }

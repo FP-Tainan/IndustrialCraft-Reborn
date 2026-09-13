@@ -11,6 +11,8 @@ public class IC2ClientSetup implements ClientModInitializer {
         MenuScreens.register(IC2Menus.MACHINE.get(), MachineScreen::new);
         MenuScreens.register(IC2Menus.CROPNALYZER.get(), net.ic2reborn.client.screen.CropnalyzerScreen::new);
         MenuScreens.register(IC2Menus.METER.get(), net.ic2reborn.client.screen.MeterScreen::new);
+        MenuScreens.register(IC2Menus.BOX.get(), net.ic2reborn.client.screen.BoxScreen::new);
+        ArmorClient.init();
 
         // armazenamentos desmontados mostram a energia guardada no item
         net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {

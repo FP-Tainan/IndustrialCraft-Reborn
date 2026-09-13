@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:mug_empty",
+    "ic2reborn:coffee_powder",
+    "minecraft:water_bucket"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:mug_cold_coffee"
+  }
+}

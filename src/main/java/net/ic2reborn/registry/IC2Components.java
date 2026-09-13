@@ -33,5 +33,34 @@ public final class IC2Components {
                     .networkSynchronized(net.minecraft.network.codec.StreamCodec.unit(net.minecraft.util.Unit.INSTANCE))
                     .build());
 
+    /** Biogás (mB) no jetpack a combustível. */
+    public static final RegistryObject<DataComponentType<Integer>> FUEL = COMPONENTS.register("fuel",
+            () -> DataComponentType.<Integer>builder()
+                    .persistent(com.mojang.serialization.Codec.INT)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT)
+                    .build());
+
+
+    /** Modo do laser de mineração. */
+    public static final RegistryObject<DataComponentType<Integer>> LASER_MODE = COMPONENTS.register("laser_mode",
+            () -> DataComponentType.<Integer>builder()
+                    .persistent(com.mojang.serialization.Codec.INT)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT)
+                    .build());
+
+    /** Dinamites vinculadas ao controle remoto. */
+    public static final RegistryObject<DataComponentType<java.util.List<net.minecraft.core.BlockPos>>> REMOTE_LINKS = COMPONENTS.register("remote_links",
+            () -> DataComponentType.<java.util.List<net.minecraft.core.BlockPos>>builder()
+                    .persistent(net.minecraft.core.BlockPos.CODEC.listOf())
+                    .networkSynchronized(net.minecraft.core.BlockPos.STREAM_CODEC.apply(net.minecraft.network.codec.ByteBufCodecs.list()))
+                    .build());
+
+    /** Teletransportador guardado no transmissor de frequência. */
+    public static final RegistryObject<DataComponentType<net.minecraft.core.BlockPos>> TELEPORT_TARGET = COMPONENTS.register("teleport_target",
+            () -> DataComponentType.<net.minecraft.core.BlockPos>builder()
+                    .persistent(net.minecraft.core.BlockPos.CODEC)
+                    .networkSynchronized(net.minecraft.core.BlockPos.STREAM_CODEC)
+                    .build());
+
     private IC2Components() {}
 }

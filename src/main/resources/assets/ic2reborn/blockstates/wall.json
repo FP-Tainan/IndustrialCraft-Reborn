@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "color=black": { "model": "ic2reborn:block/wall_black" },
+    "color=blue": { "model": "ic2reborn:block/wall_blue" },
+    "color=brown": { "model": "ic2reborn:block/wall_brown" },
+    "color=cyan": { "model": "ic2reborn:block/wall_cyan" },
+    "color=gray": { "model": "ic2reborn:block/wall_gray" },
+    "color=green": { "model": "ic2reborn:block/wall_green" },
+    "color=light_blue": { "model": "ic2reborn:block/wall_light_blue" },
+    "color=light_gray": { "model": "ic2reborn:block/wall_light_gray" },
+    "color=lime": { "model": "ic2reborn:block/wall_lime" },
+    "color=magenta": { "model": "ic2reborn:block/wall_magenta" },
+    "color=orange": { "model": "ic2reborn:block/wall_orange" },
+    "color=pink": { "model": "ic2reborn:block/wall_pink" },
+    "color=purple": { "model": "ic2reborn:block/wall_purple" },
+    "color=red": { "model": "ic2reborn:block/wall_red" },
+    "color=white": { "model": "ic2reborn:block/wall_white" },
+    "color=yellow": { "model": "ic2reborn:block/wall_yellow" }
+  }
+}

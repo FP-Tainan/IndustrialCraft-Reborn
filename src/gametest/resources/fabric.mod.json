@@ -20,7 +20,11 @@
       "net.ic2reborn.test.StorageAndToolsGameTest",
       "net.ic2reborn.test.CropGameTest",
       "net.ic2reborn.test.CropMachinesGameTest",
-      "net.ic2reborn.test.ToolsGameTest"
+      "net.ic2reborn.test.ToolsGameTest",
+      "net.ic2reborn.test.UtilityItemsGameTest",
+      "net.ic2reborn.test.ArmorGameTest",
+      "net.ic2reborn.test.ExplosivesAndTeleporterGameTest",
+      "net.ic2reborn.test.FoamGameTest"
     ]
   },
   "depends": {

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["CCC", "CWC", "CCC"],
+  "key": {"C": "ic2reborn:dust_coal", "W": "ic2reborn:water_cell"},
+  "result": {
+    "count": 8,
+    "id": "ic2reborn:dust_coal_fuel"
+  }
+}

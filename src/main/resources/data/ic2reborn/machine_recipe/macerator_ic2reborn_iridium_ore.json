@@ -1,0 +1,7 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:iridium_ore",
+  "input_count": 1,
+  "result": "ic2reborn:iridium_shard",
+  "result_count": 9
+}

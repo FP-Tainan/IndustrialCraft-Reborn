@@ -22,6 +22,9 @@ public class IC2BlockEntities {
     public static final RegistryObject<BlockEntityType<net.ic2reborn.crop.CropBlockEntity>> CROP =
             BLOCK_ENTITY_TYPES.register("crop", () ->
                     new BlockEntityType<>(net.ic2reborn.crop.CropBlockEntity::new, Set.of(IC2Blocks.CROP.get())));
+    public static final RegistryObject<BlockEntityType<net.ic2reborn.block.entity.TeleporterBlockEntity>> TELEPORTER =
+            BLOCK_ENTITY_TYPES.register("teleporter", () ->
+                    new BlockEntityType<>(net.ic2reborn.block.entity.TeleporterBlockEntity::new, Set.of(IC2AutoBlocks.TELEPORTER.get())));
     private static Block[] autoBlocks() {
         return IC2AutoBlocks.BLOCKS.getEntries().stream()
                 .map(RegistryObject::get)

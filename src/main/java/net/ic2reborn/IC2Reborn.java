@@ -52,7 +52,7 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.ASHES.get());
                         for (var item : java.util.List.of(IC2Items.TERRA_WART, IC2Items.OIL_BERRY, IC2Items.MILK_WART,
                                 IC2Items.BOBS_YER_UNCLE_RANKS_BERRY, IC2Items.HOPS, IC2Items.WEED,
-                                IC2Items.DUST_SMALL_DIAMOND, IC2Items.DUST_ENDER_PEARL, IC2Items.HYDRATION_CELL)) {
+                                IC2Items.DUST_SMALL_DIAMOND, IC2Items.DUST_ENDER_PEARL, IC2Items.HYDRATION_CELL, IC2Items.WALL)) {
                             output.accept(item.get());
                         }
                         output.accept(IC2Items.OD_SCANNER.get());
@@ -82,6 +82,8 @@ public class IC2Reborn implements ModInitializer {
         net.ic2reborn.fluid.IC2Fluids.FLUIDS.register();
         net.ic2reborn.fluid.IC2Fluids.BLOCKS.register();
         net.ic2reborn.registry.IC2Components.COMPONENTS.register();
+        net.ic2reborn.effect.IC2Effects.init();
+        net.ic2reborn.registry.IC2Entities.ENTITY_TYPES.register();
         IC2Blocks.BLOCKS.register();
         IC2AutoBlocks.BLOCKS.register();
         IC2AutoItems.ITEMS.register();
@@ -109,6 +111,25 @@ public class IC2Reborn implements ModInitializer {
         net.fabricmc.fabric.api.resource.v1.ResourceLoader.get(net.minecraft.server.packs.PackType.SERVER_DATA)
                 .registerReloadListener(net.ic2reborn.recipe.MachineRecipes.ID, net.ic2reborn.recipe.MachineRecipes.INSTANCE);
 
+        // radiação dos itens nucleares e caixa de sucata no dispensador
+        net.ic2reborn.effect.RadiationHandler.init();
+        net.minecraft.world.level.block.DispenserBlock.registerBehavior(IC2AutoItems.SCRAP_BOX.get(),
+                new net.minecraft.core.dispenser.DefaultDispenseItemBehavior() {
+                    @Override
+                    protected ItemStack execute(net.minecraft.core.dispenser.BlockSource source, ItemStack stack) {
+                        net.minecraft.core.Direction direction = source.state().getValue(net.minecraft.world.level.block.DispenserBlock.FACING);
+                        spawnItem(source.level(), net.ic2reborn.item.ScrapBoxItem.roll(source.level().getRandom()), 6, direction,
+                                net.minecraft.world.level.block.DispenserBlock.getDispensePosition(source));
+                        stack.shrink(1);
+                        return stack;
+                    }
+                });
+        // armaduras: absorção de dano, queda, hazmat e a tecla de visão noturna
+        net.ic2reborn.item.ArmorEffects.init();
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.serverboundPlay().register(
+                net.ic2reborn.network.NightVisionTogglePayload.TYPE, net.ic2reborn.network.NightVisionTogglePayload.CODEC);
+        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(net.ic2reborn.network.NightVisionTogglePayload.TYPE,
+                (payload, context) -> net.ic2reborn.item.ArmorEffects.toggleNightVision(context.player()));
         addWorldgen();
         LOGGER.info("IC2 Reborn carregado!");
     }

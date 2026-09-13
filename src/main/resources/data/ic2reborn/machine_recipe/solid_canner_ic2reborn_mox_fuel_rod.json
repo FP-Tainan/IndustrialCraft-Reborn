@@ -1,0 +1,9 @@
+{
+  "machine": "solid_canner",
+  "input": "ic2reborn:mox",
+  "input_count": 1,
+  "secondary_input": "ic2reborn:fuel_rod",
+  "secondary_count": 1,
+  "result": "ic2reborn:mox_fuel_rod",
+  "result_count": 1
+}

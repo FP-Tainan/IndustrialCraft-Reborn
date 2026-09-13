@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["PGP", "CBC", "ccc"],
+  "key": {"P": "ic2reborn:casing_gold", "G": "minecraft:glowstone_dust", "C": "ic2reborn:circuit", "B": "ic2reborn:advanced_re_battery", "c": "craftenergy:cable_copper_insulated"},
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:od_scanner"
+  }
+}

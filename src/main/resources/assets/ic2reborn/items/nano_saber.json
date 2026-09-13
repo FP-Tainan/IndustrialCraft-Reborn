@@ -1,4 +1,5 @@
 {
+  "hand_animation_on_swap": false,
   "model": {
     "type": "minecraft:condition",
     "property": "minecraft:has_component",

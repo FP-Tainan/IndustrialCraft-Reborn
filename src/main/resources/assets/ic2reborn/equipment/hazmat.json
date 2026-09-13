@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "ic2reborn:hazmat"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "ic2reborn:hazmat"
+      }
+    ]
+  }
+}

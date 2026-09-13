@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "linked=false": { "model": "ic2reborn:block/dynamite" },
+    "linked=true": { "model": "ic2reborn:block/dynamite_remote" }
+  }
+}

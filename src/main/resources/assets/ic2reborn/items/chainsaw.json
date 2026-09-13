@@ -1,6 +1,16 @@
 {
+  "hand_animation_on_swap": false,
   "model": {
-    "type": "minecraft:model",
-    "model": "ic2reborn:item/chainsaw"
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "ic2reborn:active",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "ic2reborn:item/chainsaw_active"
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "ic2reborn:item/chainsaw"
+    }
   }
 }

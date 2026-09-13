@@ -62,4 +62,34 @@ public class IC2Blocks {
                             .noOcclusion()
                             .lightLevel(net.ic2reborn.crop.CropBlock::lightLevel)
                             .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+
+    /** Dinamite colocada (vinculável ao controle remoto). */
+    public static final RegistryObject<net.ic2reborn.block.DynamiteBlock> DYNAMITE =
+            BLOCKS.register("dynamite", () -> new net.ic2reborn.block.DynamiteBlock(
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("dynamite"))
+                            .sound(SoundType.GRASS)
+                            .instabreak()
+                            .noCollision()
+                            .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+
+    /** Espuma de construção (atravessável; endurece em parede). */
+    public static final RegistryObject<net.ic2reborn.block.FoamBlock> FOAM =
+            BLOCKS.register("foam", () -> new net.ic2reborn.block.FoamBlock(
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("foam"))
+                            .sound(SoundType.WOOL)
+                            .strength(0.01f, 10.0f)
+                            .noCollision()
+                            .noOcclusion()
+                            .randomTicks()));
+
+    /** Parede de espuma endurecida, pintável. */
+    public static final RegistryObject<net.ic2reborn.block.WallBlock> WALL =
+            BLOCKS.register("wall", () -> new net.ic2reborn.block.WallBlock(
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("wall"))
+                            .sound(SoundType.STONE)
+                            .strength(3.0f, 30.0f)
+                            .requiresCorrectToolForDrops()));
 }
