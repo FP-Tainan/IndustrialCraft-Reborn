@@ -493,5 +493,6 @@
   "gui.ic2reborn.wind_kinetic.rotor_space_hint": "%s free blocks around",
   "gui.ic2reborn.water_kinetic.wrong_biome_hint": "Place it in water there",
   "gui.ic2reborn.water_kinetic.rotor_missing_hint": "Wooden rotor won't fit",
-  "gui.ic2reborn.water_kinetic.rotor_space_hint": "%s blocks of water around"
+  "gui.ic2reborn.water_kinetic.rotor_space_hint": "%s blocks of water around",
+  "tooltip.ic2reborn.stored_energy": "Stored energy: %s"
 }

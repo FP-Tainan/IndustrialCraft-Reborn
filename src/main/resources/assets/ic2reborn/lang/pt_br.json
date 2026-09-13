@@ -493,5 +493,6 @@
   "gui.ic2reborn.wind_kinetic.rotor_space_hint": "%s blocos livres em volta",
   "gui.ic2reborn.water_kinetic.wrong_biome_hint": "Coloque na água de lá",
   "gui.ic2reborn.water_kinetic.rotor_missing_hint": "O de madeira não serve",
-  "gui.ic2reborn.water_kinetic.rotor_space_hint": "%s blocos de água em volta"
+  "gui.ic2reborn.water_kinetic.rotor_space_hint": "%s blocos de água em volta",
+  "tooltip.ic2reborn.stored_energy": "Energia guardada: %s"
 }

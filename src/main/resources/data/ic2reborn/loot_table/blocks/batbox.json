@@ -6,7 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ic2reborn:batbox"
+          "name": "ic2reborn:batbox",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": ["craftenergy:stored_energy"]
+            }
+          ]
         }
       ],
       "conditions": [

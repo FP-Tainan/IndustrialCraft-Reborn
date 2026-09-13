@@ -69,6 +69,21 @@ public class MachineMenu extends AbstractContainerMenu {
         this.hotbarEnd = this.hotbarStart + HOTBAR_SIZE;
 
         addPlayerInventory(playerInventory, this.layout.inventoryX() + 1, this.layout.inventoryY() + 1);
+        // armazenamentos do IC2 (ContainerElectricBlock): armadura do jogador, para vestir e carregar
+        if (guiType == MachineGuiType.BATBOX || guiType == MachineGuiType.CESU
+                || guiType == MachineGuiType.MFE || guiType == MachineGuiType.MFSU) {
+            net.minecraft.world.entity.EquipmentSlot[] armor = {net.minecraft.world.entity.EquipmentSlot.HEAD,
+                    net.minecraft.world.entity.EquipmentSlot.CHEST, net.minecraft.world.entity.EquipmentSlot.LEGS,
+                    net.minecraft.world.entity.EquipmentSlot.FEET};
+            net.minecraft.resources.Identifier[] icons = {net.minecraft.world.inventory.InventoryMenu.EMPTY_ARMOR_SLOT_HELMET,
+                    net.minecraft.world.inventory.InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE,
+                    net.minecraft.world.inventory.InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS,
+                    net.minecraft.world.inventory.InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS};
+            for (int col = 0; col < armor.length; col++) {
+                this.addSlot(new net.minecraft.world.inventory.ArmorSlot(playerInventory, playerInventory.player, armor[col],
+                        armor[col].getIndex(36), 8 + col * 18, 84, icons[col]));
+            }
+        }
         this.addDataSlots(data);
     }
 
@@ -219,6 +234,11 @@ public class MachineMenu extends AbstractContainerMenu {
 
             if (quickMovedSlotIndex < this.machineSlotCount) {
                 if (!this.moveItemStackTo(rawStack, this.playerInventoryStart, this.hotbarEnd, true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (quickMovedSlotIndex >= this.hotbarEnd) {
+                // armadura de volta para o inventário
+                if (!this.moveItemStackTo(rawStack, this.playerInventoryStart, this.hotbarEnd, false)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.moveItemStackTo(rawStack, 0, this.machineSlotCount, false)) {

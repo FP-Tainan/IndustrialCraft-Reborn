@@ -62,8 +62,11 @@ public class IC2Reborn implements ModInitializer {
                             // baterias recarregáveis aparecem vazias e carregadas, como no IC2
                             if (entry.get() instanceof net.craftenergy.content.item.BatteryItem battery && battery.isRechargeable()) {
                                 output.accept(battery.charged());
-                            } else if (entry.get() instanceof net.craftenergy.content.item.ElectricItem electric) {
-                                output.accept(electric.charged());
+                            } else if (!(entry.get() instanceof net.craftenergy.content.item.BatteryItem)
+                                    && entry.get() instanceof net.craftenergy.content.item.EnergyItem energyItem) {
+                                ItemStack full = new ItemStack(entry.get());
+                                net.craftenergy.content.item.EnergyItems.setStored(full, energyItem.energyCapacity(full));
+                                output.accept(full);
                             }
                         });
                     })

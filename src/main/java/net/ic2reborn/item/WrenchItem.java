@@ -48,6 +48,7 @@ public class WrenchItem extends Item {
         if (!(state.getBlock() instanceof MachineBlock)) return InteractionResult.PASS;
 
         ItemStack stack = context.getItemInHand();
+        if (!canTakeDamage(stack, ROTATE_DAMAGE)) return InteractionResult.FAIL;
         Player player = context.getPlayer();
         Direction face = context.getClickedFace();
         Direction current = state.getValue(MachineBlock.FACING);
@@ -60,7 +61,7 @@ public class WrenchItem extends Item {
             target = context.isSecondaryUseActive() ? face.getOpposite() : face;
         }
         boolean canRotate = target.getAxis().isHorizontal() && target != current;
-        boolean canRemove = !this.rotateByHit && remainingDurability(stack) >= REMOVE_DAMAGE;
+        boolean canRemove = !this.rotateByHit && canTakeDamage(stack, REMOVE_DAMAGE);
 
         if (!canRotate && !canRemove) return InteractionResult.FAIL;
         if (level.isClientSide()) return InteractionResult.SUCCESS;
@@ -69,20 +70,21 @@ public class WrenchItem extends Item {
             level.setBlock(pos, state.setValue(MachineBlock.FACING, target), Block.UPDATE_ALL);
             // a saída do armazenamento e o lado de alta do transformador mudaram de face
             CraftEnergyApi.markChanged(level, pos);
-            damage(stack, player, context, ROTATE_DAMAGE);
+            applyDamage(stack, player, context, ROTATE_DAMAGE);
         } else {
             level.destroyBlock(pos, true, player);
-            damage(stack, player, context, REMOVE_DAMAGE);
+            applyDamage(stack, player, context, REMOVE_DAMAGE);
         }
         level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 0.6F, 1.6F);
         return InteractionResult.SUCCESS;
     }
 
-    private static int remainingDurability(ItemStack stack) {
-        return stack.isDamageableItem() ? stack.getMaxDamage() - stack.getDamageValue() : Integer.MAX_VALUE;
+    /** Se a chave aguenta {@code amount} de desgaste (durabilidade; na elétrica, energia). */
+    protected boolean canTakeDamage(ItemStack stack, int amount) {
+        return !stack.isDamageableItem() || stack.getMaxDamage() - stack.getDamageValue() >= amount;
     }
 
-    private static void damage(ItemStack stack, Player player, UseOnContext context, int amount) {
+    protected void applyDamage(ItemStack stack, Player player, UseOnContext context, int amount) {
         if (player != null) {
             stack.hurtAndBreak(amount, player, context.getHand());
         }

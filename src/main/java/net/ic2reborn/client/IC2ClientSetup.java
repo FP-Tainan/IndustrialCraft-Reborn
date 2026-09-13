@@ -10,6 +10,16 @@ public class IC2ClientSetup implements ClientModInitializer {
     public void onInitializeClient() {
         MenuScreens.register(IC2Menus.MACHINE.get(), MachineScreen::new);
 
+        // armazenamentos desmontados mostram a energia guardada no item
+        net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+            Long stored = stack.get(net.craftenergy.content.CEComponents.STORED_ENERGY.get());
+            if (stored != null && !(stack.getItem() instanceof net.craftenergy.content.item.EnergyItem)) {
+                lines.add(net.minecraft.network.chat.Component.translatableWithFallback("tooltip.ic2reborn.stored_energy",
+                                "Stored energy: %s", net.craftenergy.api.EnergyUnits.formatEnergy(stored))
+                        .withStyle(net.minecraft.ChatFormatting.GRAY));
+            }
+        });
+
         // fluidos do IC2 no mundo: textura parada e escorrendo, translúcidas
         for (net.ic2reborn.fluid.IC2Fluids.Entry entry : net.ic2reborn.fluid.IC2Fluids.all()) {
             net.minecraft.resources.Identifier still = net.minecraft.resources.Identifier.fromNamespaceAndPath(

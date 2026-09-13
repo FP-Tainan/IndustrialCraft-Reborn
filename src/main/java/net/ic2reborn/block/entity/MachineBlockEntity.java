@@ -1805,6 +1805,27 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return new MachineMenu(containerId, playerInventory, this);
     }
 
+    // ── energia no item ───────────────────────────────────────────────────
+    /** IC2 (energyRetainedInStorageBlockDrops): armazenamento quebrado ou desmontado guarda 80% da energia no item. */
+    private static final double STORAGE_ENERGY_RETAINED = 0.8;
+
+    @Override
+    protected void collectImplicitComponents(net.minecraft.core.component.DataComponentMap.Builder components) {
+        super.collectImplicitComponents(components);
+        if (this.profile.role() == MachineEnergyProfile.Role.STORAGE && this.energy > 0) {
+            components.set(net.craftenergy.content.CEComponents.STORED_ENERGY.get(), (long) (this.energy * STORAGE_ENERGY_RETAINED));
+        }
+    }
+
+    @Override
+    protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter components) {
+        super.applyImplicitComponents(components);
+        Long stored = components.get(net.craftenergy.content.CEComponents.STORED_ENERGY.get());
+        if (stored != null && this.profile.role() == MachineEnergyProfile.Role.STORAGE) {
+            this.energy = Math.max(0, Math.min(this.profile.capacity(), stored));
+        }
+    }
+
     // ── salvar/carregar ───────────────────────────────────────────────────
     @Override
     protected void saveAdditional(ValueOutput output) {

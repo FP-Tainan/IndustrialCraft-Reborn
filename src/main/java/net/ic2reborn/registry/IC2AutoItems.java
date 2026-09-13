@@ -236,7 +236,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> ELECTRIC_HOE = ITEMS.register("electric_hoe", () -> new Item(new Item.Properties().setId(ITEMS.key("electric_hoe"))));
     public static final RegistryObject<Item> ELECTRIC_MOTOR = ITEMS.register("electric_motor", () -> new Item(new Item.Properties().setId(ITEMS.key("electric_motor"))));
     public static final RegistryObject<Item> ELECTRIC_TREETAP = ITEMS.register("electric_treetap", () -> new Item(new Item.Properties().setId(ITEMS.key("electric_treetap"))));
-    public static final RegistryObject<Item> ELECTRIC_WRENCH = ITEMS.register("electric_wrench", () -> new Item(new Item.Properties().setId(ITEMS.key("electric_wrench"))));
+    public static final RegistryObject<Item> ELECTRIC_WRENCH = ITEMS.register("electric_wrench", () -> new net.ic2reborn.item.ElectricWrenchItem(new Item.Properties().setId(ITEMS.key("electric_wrench"))));
     public static final RegistryObject<Item> ENERGY_CRYSTAL = ITEMS.register("energy_crystal", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("energy_crystal")), EnergyUnits.fromCWh(500_000), 1_024_000, 2_400, true));
     public static final RegistryObject<Item> ENERGY_PACK = ITEMS.register("energy_pack", () -> new Item(new Item.Properties().setId(ITEMS.key("energy_pack"))));
     public static final RegistryObject<Item> FERTILIZER = ITEMS.register("fertilizer", () -> new Item(new Item.Properties().setId(ITEMS.key("fertilizer"))));
