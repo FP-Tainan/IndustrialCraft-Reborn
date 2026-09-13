@@ -23,6 +23,19 @@ public final class EnergyItems {
     }
 
     /**
+     * Gasta energia do próprio item (ferramentas elétricas).
+     *
+     * @return false, sem gastar nada, se o item não tem {@code amount} CW·tick
+     */
+    public static boolean use(ItemStack stack, long amount) {
+        if (!(stack.getItem() instanceof EnergyItem)) return false;
+        long stored = getStored(stack);
+        if (stored < amount) return false;
+        setStored(stack, stored - amount);
+        return true;
+    }
+
+    /**
      * Carrega o item a partir de uma máquina de tensão {@code machineVoltage}.
      *
      * @return quanto entrou no item, em CW·tick (limitado pela transferência e pelo espaço)

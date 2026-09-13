@@ -136,7 +136,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> ADVANCED_HEAT_EXCHANGER = ITEMS.register("advanced_heat_exchanger", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_heat_exchanger"))));
     public static final RegistryObject<Item> ADVANCED_HEAT_VENT = ITEMS.register("advanced_heat_vent", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_heat_vent"))));
     public static final RegistryObject<Item> ADVANCED_RE_BATTERY = ITEMS.register("advanced_re_battery", () -> new net.craftenergy.content.item.BatteryItem(new Item.Properties().setId(ITEMS.key("advanced_re_battery")), EnergyUnits.fromCWh(50_000), 128_000, 1_000, true));
-    public static final RegistryObject<Item> ADVANCED_SCANNER = ITEMS.register("advanced_scanner", () -> new Item(new Item.Properties().setId(ITEMS.key("advanced_scanner"))));
+    public static final RegistryObject<Item> ADVANCED_SCANNER = ITEMS.register("advanced_scanner", () -> new net.ic2reborn.item.ScannerItem(new Item.Properties().setId(ITEMS.key("advanced_scanner")), net.ic2reborn.item.ScannerItem.Tier.OV));
     public static final RegistryObject<Item> ALLOY_CHESTPLATE = ITEMS.register("alloy_chestplate", () -> new Item(new Item.Properties().setId(ITEMS.key("alloy_chestplate"))));
     public static final RegistryObject<Item> BATPACK = ITEMS.register("batpack", () -> new Item(new Item.Properties().setId(ITEMS.key("batpack"))));
     public static final RegistryObject<Item> BLOCK_CUTTING_BLADE_DIAMOND = ITEMS.register("block_cutting_blade_diamond", () -> new Item(new Item.Properties().setId(ITEMS.key("block_cutting_blade_diamond"))));
@@ -198,8 +198,8 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> DENSE_PLATE_IRON = ITEMS.register("dense_plate_iron", () -> new Item(new Item.Properties().setId(ITEMS.key("dense_plate_iron"))));
     public static final RegistryObject<Item> DENSE_PLATE_LEAD = ITEMS.register("dense_plate_lead", () -> new Item(new Item.Properties().setId(ITEMS.key("dense_plate_lead"))));
     public static final RegistryObject<Item> DENSE_PLATE_TIN = ITEMS.register("dense_plate_tin", () -> new Item(new Item.Properties().setId(ITEMS.key("dense_plate_tin"))));
-    public static final RegistryObject<Item> DIAMOND_DRILL = ITEMS.register("diamond_drill", () -> new Item(new Item.Properties().setId(ITEMS.key("diamond_drill"))));
-    public static final RegistryObject<Item> DRILL = ITEMS.register("drill", () -> new Item(new Item.Properties().setId(ITEMS.key("drill"))));
+    public static final RegistryObject<Item> DIAMOND_DRILL = ITEMS.register("diamond_drill", () -> new net.ic2reborn.item.DrillItem(new Item.Properties().setId(ITEMS.key("diamond_drill")), net.ic2reborn.item.DrillItem.Tier.DIAMOND));
+    public static final RegistryObject<Item> DRILL = ITEMS.register("drill", () -> new net.ic2reborn.item.DrillItem(new Item.Properties().setId(ITEMS.key("drill")), net.ic2reborn.item.DrillItem.Tier.BASIC));
     public static final RegistryObject<Item> DUAL_MOX_FUEL_ROD = ITEMS.register("dual_mox_fuel_rod", () -> new Item(new Item.Properties().setId(ITEMS.key("dual_mox_fuel_rod"))));
     public static final RegistryObject<Item> DUAL_URANIUM_FUEL_ROD = ITEMS.register("dual_uranium_fuel_rod", () -> new Item(new Item.Properties().setId(ITEMS.key("dual_uranium_fuel_rod"))));
     public static final RegistryObject<Item> DUST_BRONZE = ITEMS.register("dust_bronze", () -> new Item(new Item.Properties().setId(ITEMS.key("dust_bronze"))));
@@ -261,7 +261,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> IODINE = ITEMS.register("iodine", () -> new Item(new Item.Properties().setId(ITEMS.key("iodine"))));
     public static final RegistryObject<Item> IODINE_TABLET = ITEMS.register("iodine_tablet", () -> new Item(new Item.Properties().setId(ITEMS.key("iodine_tablet"))));
     public static final RegistryObject<Item> IRIDIUM = ITEMS.register("iridium", () -> new Item(new Item.Properties().setId(ITEMS.key("iridium"))));
-    public static final RegistryObject<Item> IRIDIUM_DRILL = ITEMS.register("iridium_drill", () -> new Item(new Item.Properties().setId(ITEMS.key("iridium_drill"))));
+    public static final RegistryObject<Item> IRIDIUM_DRILL = ITEMS.register("iridium_drill", () -> new net.ic2reborn.item.DrillItem(new Item.Properties().setId(ITEMS.key("iridium_drill")), net.ic2reborn.item.DrillItem.Tier.IRIDIUM));
     public static final RegistryObject<Item> IRIDIUM_ORE = ITEMS.register("iridium_ore", () -> new Item(new Item.Properties().setId(ITEMS.key("iridium_ore"))));
     public static final RegistryObject<Item> IRIDIUM_REFLECTOR = ITEMS.register("iridium_reflector", () -> new Item(new Item.Properties().setId(ITEMS.key("iridium_reflector"))));
     public static final RegistryObject<Item> IRIDIUM_SHARD = ITEMS.register("iridium_shard", () -> new Item(new Item.Properties().setId(ITEMS.key("iridium_shard"))));

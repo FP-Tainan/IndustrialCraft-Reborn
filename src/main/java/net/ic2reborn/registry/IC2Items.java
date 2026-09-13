@@ -43,6 +43,11 @@ public class IC2Items {
     public static final RegistryObject<Item> CRUSHED_URANIUM = simple("crushed_uranium");
     public static final RegistryObject<Item> PURIFIED_URANIUM = simple("purified_uranium");
 
+    /** Scanner OD do IC2 ("scanner" já é o bloco scanner de matéria UU). */
+    public static final RegistryObject<Item> OD_SCANNER = ITEMS.register("od_scanner",
+            () -> new net.ic2reborn.item.ScannerItem(new Item.Properties().setId(ITEMS.key("od_scanner")),
+                    net.ic2reborn.item.ScannerItem.Tier.OD));
+
     private static RegistryObject<Item> simple(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties().setId(ITEMS.key(name))));
     }

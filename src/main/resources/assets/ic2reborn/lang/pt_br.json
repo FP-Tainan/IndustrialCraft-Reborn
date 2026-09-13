@@ -470,5 +470,9 @@
   "gui.ic2reborn.metal_former.mode.rolling": "Laminar",
   "gui.ic2reborn.metal_former.mode.cutting": "Cortar",
   "gui.ic2reborn.block_cutter.blade": "Lâmina de corte",
-  "gui.ic2reborn.block_cutter.blade_too_weak": "Lâmina fraca demais para este bloco"
+  "gui.ic2reborn.block_cutter.blade_too_weak": "Lâmina fraca demais para este bloco",
+  "item.ic2reborn.od_scanner": "Scanner OD",
+  "item.ic2reborn.scanner.result": "Minérios num raio de %s blocos:",
+  "item.ic2reborn.scanner.none": "Nenhum minério encontrado",
+  "item.ic2reborn.scanner.empty": "Scanner sem energia"
 }

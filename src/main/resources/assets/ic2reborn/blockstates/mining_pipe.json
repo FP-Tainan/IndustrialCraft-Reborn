@@ -1,7 +1,6 @@
 {
   "variants": {
-    "": {
-      "model": "ic2reborn:block/mining_pipe"
-    }
+    "tip=false": { "model": "ic2reborn:block/mining_pipe" },
+    "tip=true": { "model": "ic2reborn:block/mining_pipe_tip" }
   }
 }

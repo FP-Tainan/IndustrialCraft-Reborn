@@ -179,6 +179,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case ORE_WASHING_PLANT -> new Slots(0, -1, new int[]{1, 2, 3}, 10, -1, 8, 9);
                 case SOLID_CANNER -> new Slots(0, 1, new int[]{2}, 3, -1, -1, -1);
                 case CANNER -> new Slots(0, 7, new int[]{1}, 2, -1, -1, -1);
+                // descarga 0, scanner 1, tubos 2, broca 3, upgrade 4, buffer 5–19 (usados pelo MinerLogic)
+                case MINER -> new Slots(-1, -1, NO_OUTPUTS, 0, -1, -1, -1);
                 // duas entradas (A, B) e duas saídas
                 case INDUCTION_FURNACE -> new Slots(0, 1, new int[]{2, 3}, 4, -1, -1, -1);
                 case CENTRIFUGE -> new Slots(0, -1, new int[]{2, 3, 4}, 1, -1, -1, -1);
@@ -204,6 +206,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private final @Nullable EnergyNode energyNode;
     private final @Nullable EnergySource storageOutput;
     private final @Nullable BufferedTransformer transformer;
+
+    /** Minerador: tubos, broca e scanner (IC2: TileEntityMiner). */
+    private final @Nullable MinerLogic miner;
 
     private long energy;
     private int progress;
@@ -300,6 +305,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.outputTank = secondTank;
         this.tankInput = input;
         this.exposedFluids = exposed;
+
+        this.miner = this.guiType == MachineGuiType.MINER ? new MinerLogic(this) : null;
 
         this.energyNode = switch (this.profile.role()) {
             case GENERATOR -> new GeneratorNode();
@@ -430,6 +437,18 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return false;
     }
 
+    /** Gasta energia do buffer (minerador); false, sem gastar, se não houver o bastante. */
+    boolean useEnergy(long amount) {
+        if (amount < 0 || this.energy < amount) return false;
+        this.energy -= amount;
+        setChanged();
+        return true;
+    }
+
+    int machineVoltage() {
+        return this.profile.voltage();
+    }
+
     /** Nó principal (armazenamentos: a entrada). Para nós por face, use {@link #getEnergyNode(Direction)}. */
     public @Nullable EnergyNode getEnergyNode() {
         return this.energyNode;
@@ -480,6 +499,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 default -> tickGenerator(level);
             };
             case PROCESSOR -> switch (this.guiType) {
+                case MINER -> this.miner != null && this.miner.tick(level);
                 case INDUCTION_FURNACE -> tickInduction(level);
                 case CENTRIFUGE -> tickCentrifugeHeat(level) | tickProcessor(level);
                 default -> tickProcessor(level);
@@ -1171,7 +1191,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
         @Override
         public long powerDemand() {
-            return Math.max(0, Math.min(profile.maxIntake(), profile.capacity() - energy));
+            long intake = guiType == MachineGuiType.MINER ? MinerLogic.MAX_INTAKE : profile.maxIntake();
+            return Math.max(0, Math.min(intake, profile.capacity() - energy));
         }
 
         @Override
@@ -1271,6 +1292,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         output.putInt("TotalFuel", this.totalFuel);
         output.putLong("FuelPower", this.fuelPower);
         output.putInt("Heat", this.heat);
+        if (this.miner != null) {
+            this.miner.write(output);
+        }
         if (this.guiType == MachineGuiType.METAL_FORMER) {
             output.putInt("MetalFormerMode", this.metalFormerMode);
         }
@@ -1310,6 +1334,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.totalFuel = input.getIntOr("TotalFuel", 0);
         this.fuelPower = input.getLongOr("FuelPower", 0);
         this.heat = Math.max(0, input.getIntOr("Heat", 0));
+        if (this.miner != null) {
+            this.miner.read(input);
+        }
         this.metalFormerMode = Math.floorMod(input.getIntOr("MetalFormerMode", 0), METAL_FORMER_RECIPES.length);
         if (this.guiType == MachineGuiType.GENERATOR) {
             this.maxProgress = this.totalFuel;

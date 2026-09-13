@@ -470,5 +470,9 @@
   "gui.ic2reborn.metal_former.mode.rolling": "Rolling",
   "gui.ic2reborn.metal_former.mode.cutting": "Cutting",
   "gui.ic2reborn.block_cutter.blade": "Cutting blade",
-  "gui.ic2reborn.block_cutter.blade_too_weak": "Blade too weak for this block"
+  "gui.ic2reborn.block_cutter.blade_too_weak": "Blade too weak for this block",
+  "item.ic2reborn.od_scanner": "OD Scanner",
+  "item.ic2reborn.scanner.result": "Ores within %s blocks:",
+  "item.ic2reborn.scanner.none": "No ores found",
+  "item.ic2reborn.scanner.empty": "Scanner out of energy"
 }
