@@ -23,4 +23,9 @@ public class IC2Menus {
     public static final RegistryObject<ExtendedMenuType<net.ic2reborn.menu.CropnalyzerMenu, net.minecraft.world.InteractionHand>> CROPNALYZER =
             MENUS.register("cropnalyzer", () -> new ExtendedMenuType<net.ic2reborn.menu.CropnalyzerMenu, net.minecraft.world.InteractionHand>(
                     net.ic2reborn.menu.CropnalyzerMenu::new, net.ic2reborn.menu.CropnalyzerMenu.HAND_CODEC));
+
+    /** Medidor de energia; o cliente recebe a posição do bloco medido. */
+    public static final RegistryObject<ExtendedMenuType<net.ic2reborn.menu.MeterMenu, net.minecraft.core.BlockPos>> METER =
+            MENUS.register("meter", () -> new ExtendedMenuType<net.ic2reborn.menu.MeterMenu, net.minecraft.core.BlockPos>(
+                    net.ic2reborn.menu.MeterMenu::new, net.minecraft.core.BlockPos.STREAM_CODEC));
 }

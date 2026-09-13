@@ -497,6 +497,32 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     public void performCropScan() {
         if (this.cropLogic != null && this.level != null) this.cropLogic.scan(this.level);
     }
+    /** Leitura do anemômetro nos geradores eólicos; null nas outras máquinas. */
+    public @Nullable Component windMeterReading() {
+        if (!(this.level instanceof ServerLevel serverLevel)) return null;
+        if (this.guiType == MachineGuiType.WIND_GENERATOR) {
+            int obstructions = countObstructions(serverLevel);
+            double wind = WindSim.get(serverLevel).windAt(serverLevel, this.worldPosition.getY()) * (1.0 - obstructions / 567.0);
+            return windText(wind, obstructions);
+        }
+        if (this.guiType == MachineGuiType.WIND_KINETIC_GENERATOR) {
+            if (rotorItem() == null) {
+                return Component.translatableWithFallback("message.ic2reborn.wind_meter.rotor_none", "No rotor to catch wind");
+            }
+            if (!this.rotorActive) {
+                return Component.translatableWithFallback("message.ic2reborn.wind_meter.rotor_blocked", "Rotor blocked from catching wind");
+            }
+            return windText(this.windStrength, Math.max(0, this.rotorObstructed));
+        }
+        return null;
+    }
+
+    private static Component windText(double wind, int obstructions) {
+        return wind <= 0.0
+                ? Component.translatableWithFallback("message.ic2reborn.wind_meter.obstructed", "No wind due to %s obstruction(s)", obstructions)
+                : Component.translatableWithFallback("message.ic2reborn.wind_meter.effective", "Effective wind strength: %s",
+                        net.ic2reborn.item.WindMeterItem.format(wind));
+    }
     /** Gasta energia do buffer (minerador); false, sem gastar, se não houver o bastante. */
     boolean useEnergy(long amount) {
         if (amount < 0 || this.energy < amount) return false;

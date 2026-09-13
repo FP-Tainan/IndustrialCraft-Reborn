@@ -19,5 +19,19 @@ public final class IC2Components {
                     .networkSynchronized(CropSeedItem.CropSeed.STREAM_CODEC)
                     .build());
 
+    /** Ferramenta ligada (nanossabre); a presença do componente muda o modelo do item. */
+    public static final RegistryObject<DataComponentType<net.minecraft.util.Unit>> ACTIVE = COMPONENTS.register("active",
+            () -> DataComponentType.<net.minecraft.util.Unit>builder()
+                    .persistent(net.minecraft.util.Unit.CODEC)
+                    .networkSynchronized(net.minecraft.network.codec.StreamCodec.unit(net.minecraft.util.Unit.INSTANCE))
+                    .build());
+
+    /** Motosserra com a tosquia desligada. */
+    public static final RegistryObject<DataComponentType<net.minecraft.util.Unit>> NO_SHEAR = COMPONENTS.register("no_shear",
+            () -> DataComponentType.<net.minecraft.util.Unit>builder()
+                    .persistent(net.minecraft.util.Unit.CODEC)
+                    .networkSynchronized(net.minecraft.network.codec.StreamCodec.unit(net.minecraft.util.Unit.INSTANCE))
+                    .build());
+
     private IC2Components() {}
 }

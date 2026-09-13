@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "ic2reborn:item/nano_saber_active"
+  }
+}

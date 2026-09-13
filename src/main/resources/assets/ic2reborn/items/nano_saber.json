@@ -1,6 +1,15 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "ic2reborn:item/nano_saber"
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "ic2reborn:active",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "ic2reborn:item/nano_saber_active"
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "ic2reborn:item/nano_saber"
+    }
   }
 }

@@ -72,6 +72,7 @@ public class MachineBlock extends Block implements EntityBlock {
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                              Player player, InteractionHand hand, BlockHitResult hit) {
+        if (stack.getItem() instanceof net.ic2reborn.item.MeterItem || stack.getItem() instanceof net.ic2reborn.item.WindMeterItem) return InteractionResult.PASS;
         // com a chave inglesa na mão, quem age é o item (girar/desmontar), não a GUI
         if (stack.getItem() instanceof net.ic2reborn.item.WrenchItem) {
             return InteractionResult.PASS;
