@@ -1,0 +1,10 @@
+{
+  "parent": "ic2reborn:block/machine_base5",
+  "textures": {
+    "top": "ic2reborn:block/canner_top",
+    "bottom": "ic2reborn:block/canner_bottom",
+    "front": "ic2reborn:block/canner_front_active",
+    "back": "ic2reborn:block/canner_back",
+    "side": "ic2reborn:block/canner_side_active"
+  }
+}

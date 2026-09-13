@@ -11,6 +11,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -33,16 +34,22 @@ public final class MachineRecipes extends SimpleJsonResourceReloadListener<Machi
 
     /** Primeira receita da máquina que aceita {@code input} (incluindo a quantidade). */
     public Optional<Compiled> find(String machine, ItemStack input) {
-        return find(machine, input, ItemStack.EMPTY);
+        return find(machine, input, ItemStack.EMPTY, null, 0);
     }
 
-    /** Idem, para máquinas com um segundo slot de entrada. */
-    public Optional<Compiled> find(String machine, ItemStack input, ItemStack secondary) {
+    /**
+     * Primeira receita que aceita as entradas e o conteúdo do tanque.
+     *
+     * @param tankFluid fluido no tanque (null se vazio ou sem tanque)
+     * @param tankMb    quantidade no tanque, em mB
+     */
+    public Optional<Compiled> find(String machine, ItemStack input, ItemStack secondary, @Nullable Fluid tankFluid, long tankMb) {
         if (input.isEmpty()) return Optional.empty();
         for (Compiled recipe : this.byMachine.getOrDefault(machine, List.of())) {
             if (input.getCount() < recipe.inputCount() || !recipe.input().test(input)) continue;
             if (recipe.secondary() != null
                     && (secondary.getCount() < recipe.secondaryCount() || !recipe.secondary().test(secondary))) continue;
+            if (recipe.fluid() != null && (tankFluid != recipe.fluid() || tankMb < recipe.fluidAmount())) continue;
             return Optional.of(recipe);
         }
         return Optional.empty();
@@ -84,9 +91,28 @@ public final class MachineRecipes extends SimpleJsonResourceReloadListener<Machi
                 secondary = parsed.get();
             }
 
+            Fluid fluid = null;
+            if (recipe.fluid().isPresent()) {
+                fluid = BuiltInRegistries.FLUID.getOptional(recipe.fluid().get()).orElse(null);
+                if (fluid == null) {
+                    IC2Reborn.LOGGER.warn("Receita de máquina {} ignorada: fluido {} não existe", id, recipe.fluid().get());
+                    continue;
+                }
+            }
+            Fluid resultFluid = null;
+            int resultFluidAmount = 0;
+            if (recipe.fluidResult().isPresent()) {
+                resultFluid = BuiltInRegistries.FLUID.getOptional(recipe.fluidResult().get().fluid()).orElse(null);
+                if (resultFluid == null) {
+                    IC2Reborn.LOGGER.warn("Receita de máquina {} ignorada: fluido {} não existe", id, recipe.fluidResult().get().fluid());
+                    continue;
+                }
+                resultFluidAmount = recipe.fluidResult().get().amount();
+            }
+
             grouped.computeIfAbsent(recipe.machine(), key -> new ArrayList<>())
                     .add(new Compiled(input.get(), recipe.inputCount(), secondary, recipe.secondaryCount(),
-                            List.copyOf(results), recipe.fluidAmount()));
+                            List.copyOf(results), fluid, recipe.fluidAmount(), resultFluid, resultFluidAmount));
             loaded++;
         }
         grouped.replaceAll((machine, list) -> List.copyOf(list));
@@ -113,10 +139,14 @@ public final class MachineRecipes extends SimpleJsonResourceReloadListener<Machi
     /**
      * Receita pronta para uso.
      *
-     * @param fluidAmount mB de fluido gastos por operação
+     * @param fluid             fluido exigido no tanque (null = o que houver)
+     * @param fluidAmount       mB gastos do tanque por operação
+     * @param resultFluid       fluido produzido no tanque de saída (null = nenhum)
+     * @param resultFluidAmount mB produzidos
      */
     public record Compiled(Predicate<ItemStack> input, int inputCount, @Nullable Predicate<ItemStack> secondary,
-                           int secondaryCount, List<Stack> results, int fluidAmount) {
+                           int secondaryCount, List<Stack> results, @Nullable Fluid fluid, int fluidAmount,
+                           @Nullable Fluid resultFluid, int resultFluidAmount) {
         /** Cópias novas das saídas. */
         public List<ItemStack> createResults() {
             return this.results.stream().map(Stack::create).toList();

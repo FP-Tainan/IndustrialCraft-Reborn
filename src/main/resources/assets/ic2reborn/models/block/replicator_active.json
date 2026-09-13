@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/replicator_top_active",
+    "bottom": "ic2reborn:block/replicator_bottom",
+    "front": "ic2reborn:block/replicator_front_active",
+    "side": "ic2reborn:block/replicator_side_active"
+  }
+}

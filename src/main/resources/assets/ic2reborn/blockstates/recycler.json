@@ -1,19 +1,12 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "ic2reborn:block/recycler"
-    },
-    "facing=east": {
-      "model": "ic2reborn:block/recycler",
-      "y": 90
-    },
-    "facing=south": {
-      "model": "ic2reborn:block/recycler",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "ic2reborn:block/recycler",
-      "y": 270
-    }
+    "active=false,facing=north": { "model": "ic2reborn:block/recycler" },
+    "active=false,facing=east": { "model": "ic2reborn:block/recycler", "y": 90 },
+    "active=false,facing=south": { "model": "ic2reborn:block/recycler", "y": 180 },
+    "active=false,facing=west": { "model": "ic2reborn:block/recycler", "y": 270 },
+    "active=true,facing=north": { "model": "ic2reborn:block/recycler_active" },
+    "active=true,facing=east": { "model": "ic2reborn:block/recycler_active", "y": 90 },
+    "active=true,facing=south": { "model": "ic2reborn:block/recycler_active", "y": 180 },
+    "active=true,facing=west": { "model": "ic2reborn:block/recycler_active", "y": 270 }
   }
 }

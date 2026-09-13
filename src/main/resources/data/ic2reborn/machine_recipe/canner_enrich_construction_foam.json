@@ -1,0 +1,8 @@
+{
+  "machine": "canner_enrich",
+  "input": "ic2reborn:cf_powder",
+  "input_count": 1,
+  "fluid": "minecraft:water",
+  "fluid_amount": 1000,
+  "fluid_result": { "fluid": "ic2reborn:construction_foam", "amount": 1000 }
+}

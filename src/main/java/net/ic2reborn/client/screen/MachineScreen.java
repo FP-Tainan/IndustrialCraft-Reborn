@@ -55,12 +55,12 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         for (MachineLayout.TankDef tank : this.layout.tanks()) {
             drawTank(graphics, tank, x, y);
             if (this.isHovering(tank.x(), tank.y(), tank.width(), tank.height(), mouseX, mouseY)) {
-                net.minecraft.world.level.material.Fluid fluid = this.menu.getFluid();
-                Component line = fluid == null || this.menu.getFluidAmount() <= 0
+                net.minecraft.world.level.material.Fluid fluid = this.menu.getFluid(tank.index());
+                Component line = fluid == null || this.menu.getFluidAmount(tank.index()) <= 0
                         ? Component.translatableWithFallback("gui.ic2reborn.tank.empty", "Empty")
                         : net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes.getName(
                                 net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant.of(fluid)).copy()
-                                .append(": " + this.menu.getFluidAmount() + " / " + this.menu.getFluidCapacity() + " mB");
+                                .append(": " + this.menu.getFluidAmount(tank.index()) + " / " + this.menu.getFluidCapacity(tank.index()) + " mB");
                 graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(line), mouseX, mouseY);
             }
         }
@@ -147,8 +147,8 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
      * por cima; vazio usa u=70. Só há um tanque sincronizado por máquina.
      */
     private void drawTank(GuiGraphicsExtractor graphics, MachineLayout.TankDef tank, int x, int y) {
-        net.minecraft.world.level.material.Fluid fluid = this.menu.getFluid();
-        boolean filled = fluid != null && this.menu.getFluidAmount() > 0;
+        net.minecraft.world.level.material.Fluid fluid = this.menu.getFluid(tank.index());
+        boolean filled = fluid != null && this.menu.getFluidAmount(tank.index()) > 0;
         int tankX = x + tank.x();
         int tankY = y + tank.y();
 
@@ -158,10 +158,10 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
                 return;
             }
             blit(graphics, MachineLayout.COMMON_TEXTURE, tankX, tankY, 6, 100, 20, 55);
-            drawFluid(graphics, fluid, tankX + 4, tankY + 4, 12, 47, this.menu.getFluidRatio());
+            drawFluid(graphics, fluid, tankX + 4, tankY + 4, 12, 47, this.menu.getFluidRatio(tank.index()));
             blit(graphics, MachineLayout.COMMON_TEXTURE, tankX, tankY, 38, 100, 20, 55);
         } else if (filled) {
-            drawFluid(graphics, fluid, tankX, tankY, tank.width(), tank.height(), this.menu.getFluidRatio());
+            drawFluid(graphics, fluid, tankX, tankY, tank.width(), tank.height(), this.menu.getFluidRatio(tank.index()));
         }
     }
 
@@ -256,8 +256,40 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         }
     }
 
+    /** Enlatadora: botão de modo (63, 81) cicla os 4 modos e o de setas (77, 64) troca os tanques, como no GuiCanner. */
+    @Override
+    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+        if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.CANNER && event.button() == 0) {
+            int button = -1;
+            if (this.isHovering(63, 81, 50, 14, event.x(), event.y())) {
+                button = net.ic2reborn.block.entity.MachineBlockEntity.BUTTON_CANNER_MODE + (this.menu.getMachineMode() + 1) % 4;
+            } else if (this.isHovering(77, 64, 22, 13, event.x(), event.y())) {
+                button = net.ic2reborn.block.entity.MachineBlockEntity.BUTTON_SWAP_TANKS;
+            }
+            if (button >= 0) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, button);
+                return true;
+            }
+        }
+        return super.mouseClicked(event, doubleClick);
+    }
+
+    private static final String[] CANNER_MODES = {"bottle_solid", "empty_liquid", "bottle_liquid", "enrich_liquid"};
+    private static final String[] CANNER_MODE_FALLBACKS = {"Can solids", "Empty container into tank", "Fill container from tank", "Enrich fluid"};
+
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.CANNER) {
+            int mode = Math.floorMod(this.menu.getMachineMode(), CANNER_MODES.length);
+            if (this.isHovering(63, 81, 50, 14, mouseX, mouseY)) {
+                graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(Component.translatableWithFallback(
+                        "gui.ic2reborn.canner.mode." + CANNER_MODES[mode], CANNER_MODE_FALLBACKS[mode])), mouseX, mouseY);
+            } else if (this.isHovering(77, 64, 22, 13, mouseX, mouseY)) {
+                graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(
+                        Component.translatableWithFallback("gui.ic2reborn.canner.swap", "Swap tanks")), mouseX, mouseY);
+            }
+        }
+
         int textColor = 0xFF000000 | MachineLayout.TEXT_COLOR;
 
         if (isTransformer()) {

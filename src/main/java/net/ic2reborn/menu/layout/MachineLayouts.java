@@ -170,6 +170,16 @@ public final class MachineLayouts {
                     .slotAt(41, 17)
                     .energy(12, 62)
                     .tank(39, 42).tank(117, 42)
+                    .progress(74, 22, PROGRESS_CANNER)
+                    // GuiCanner: tampa as setas que o modo não usa e mostra a gota nos modos de recipiente
+                    .imageIf(menu -> menu.getMachineMode() <= 1, "guicanner.png", 59, 53, 3, 4, 9, 18, 256, 256)
+                    .imageIf(menu -> menu.getMachineMode() == 0 || menu.getMachineMode() == 2, "guicanner.png", 99, 53, 3, 4, 18, 23, 256, 256)
+                    .imageIf(menu -> menu.getMachineMode() == 1 || menu.getMachineMode() == 2, "guicanner.png", 71, 43, 196, 0, 26, 18, 256, 256)
+                    // botão de modo (63, 81): ícone do modo atual
+                    .imageIf(menu -> menu.getMachineMode() == 0, "guicanner.png", 63, 81, 176, 18, 50, 14, 256, 256)
+                    .imageIf(menu -> menu.getMachineMode() == 1, "guicanner.png", 63, 81, 176, 32, 50, 14, 256, 256)
+                    .imageIf(menu -> menu.getMachineMode() == 2, "guicanner.png", 63, 81, 176, 46, 50, 14, 256, 256)
+                    .imageIf(menu -> menu.getMachineMode() == 3, "guicanner.png", 63, 81, 176, 60, 50, 14, 256, 256)
                     .build();
 
             case FERMENTER -> MachineLayout.textured("guifermenter.png", 184)

@@ -1,0 +1,10 @@
+{
+  "parent": "ic2reborn:block/machine_base5",
+  "textures": {
+    "top": "ic2reborn:block/fermenter_top",
+    "bottom": "ic2reborn:block/fermenter_bottom",
+    "front": "ic2reborn:block/fermenter_front_active",
+    "back": "ic2reborn:block/fermenter_back_active",
+    "side": "ic2reborn:block/fermenter_side_active"
+  }
+}

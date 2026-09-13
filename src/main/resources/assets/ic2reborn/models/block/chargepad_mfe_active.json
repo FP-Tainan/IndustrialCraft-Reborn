@@ -1,0 +1,10 @@
+{
+  "parent": "ic2reborn:block/machine_base5",
+  "textures": {
+    "top": "ic2reborn:block/chargepad_mfe_top_active",
+    "bottom": "ic2reborn:block/chargepad_mfe_bottom",
+    "front": "ic2reborn:block/chargepad_mfe_front",
+    "back": "ic2reborn:block/chargepad_mfe_back_active",
+    "side": "ic2reborn:block/chargepad_mfe_side"
+  }
+}

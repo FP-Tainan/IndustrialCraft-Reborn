@@ -28,6 +28,10 @@ public class IC2Items {
                     .food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(2).saturationModifier(0.3F).build())
                     .usingConvertsTo(IC2AutoItems.TIN_CAN.get())));
 
+    /** Palha orgânica: macerar plantas; na enlatadora, com água, vira biomassa. */
+    public static final RegistryObject<Item> BIO_CHAFF =
+            ITEMS.register("bio_chaff", () -> new Item(new Item.Properties().setId(ITEMS.key("bio_chaff"))));
+
     public static final RegistryObject<Item> RAW_LEAD =
             ITEMS.register("raw_lead", () -> new Item(new Item.Properties().setId(ITEMS.key("raw_lead"))));
     public static final RegistryObject<Item> RAW_URANIUM =

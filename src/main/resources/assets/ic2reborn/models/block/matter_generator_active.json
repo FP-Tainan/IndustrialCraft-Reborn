@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/matter_generator_top",
+    "bottom": "ic2reborn:block/matter_generator_bottom",
+    "front": "ic2reborn:block/matter_generator_front_active",
+    "side": "ic2reborn:block/matter_generator_side"
+  }
+}

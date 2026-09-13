@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -30,11 +31,14 @@ import net.minecraft.world.phys.BlockHitResult;
 public class MachineBlock extends Block implements EntityBlock {
 
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
+    /** Máquina trabalhando: troca para as texturas "_active" do IC2. */
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
     public MachineBlock(Properties props) {
         super(props);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH));
+                .setValue(FACING, Direction.NORTH)
+                .setValue(ACTIVE, false));
     }
 
     @Override
@@ -101,6 +105,6 @@ public class MachineBlock extends Block implements EntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, ACTIVE);
     }
 }

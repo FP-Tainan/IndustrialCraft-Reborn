@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:pumpkin_seeds",
+  "input_count": 16,
+  "result": "ic2reborn:bio_chaff"
+}

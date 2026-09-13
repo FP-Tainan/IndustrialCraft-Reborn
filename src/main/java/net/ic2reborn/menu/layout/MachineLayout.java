@@ -64,7 +64,8 @@ public final class MachineLayout {
 
     public record GaugeDef(int x, int y, GaugeStyle style, GaugeSource source) {}
 
-    public record TankDef(int x, int y, int width, int height, TankStyle style) {}
+    /** {@code index}: 0 = tanque principal (entrada), 1 = tanque de saída. */
+    public record TankDef(int x, int y, int width, int height, TankStyle style, int index) {}
 
     public record ImageDef(Identifier texture, int x, int y, int u, int v, int width, int height,
                            int textureWidth, int textureHeight, Predicate<MachineMenu> visible) {}
@@ -244,12 +245,12 @@ public final class MachineLayout {
         }
 
         public Builder tank(int x, int y) {
-            this.tanks.add(new TankDef(x, y, 20, 55, TankStyle.NORMAL));
+            this.tanks.add(new TankDef(x, y, 20, 55, TankStyle.NORMAL, this.tanks.size()));
             return this;
         }
 
         public Builder plainTank(int x, int y, int width, int height) {
-            this.tanks.add(new TankDef(x, y, width, height, TankStyle.PLAIN));
+            this.tanks.add(new TankDef(x, y, width, height, TankStyle.PLAIN, this.tanks.size()));
             return this;
         }
 

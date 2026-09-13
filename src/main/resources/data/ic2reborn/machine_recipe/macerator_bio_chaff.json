@@ -1,0 +1,5 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:bio_chaff",
+  "result": "minecraft:dirt"
+}

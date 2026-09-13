@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#minecraft:leaves",
+  "input_count": 8,
+  "result": "ic2reborn:bio_chaff"
+}

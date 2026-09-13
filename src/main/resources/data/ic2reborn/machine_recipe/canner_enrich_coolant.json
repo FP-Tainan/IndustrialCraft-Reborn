@@ -1,0 +1,8 @@
+{
+  "machine": "canner_enrich",
+  "input": "ic2reborn:dust_lapis",
+  "input_count": 8,
+  "fluid": "minecraft:water",
+  "fluid_amount": 1000,
+  "fluid_result": { "fluid": "ic2reborn:coolant", "amount": 1000 }
+}

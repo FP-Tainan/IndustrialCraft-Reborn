@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "minecraft:wheat_seeds",
+  "input_count": 16,
+  "result": "ic2reborn:bio_chaff"
+}

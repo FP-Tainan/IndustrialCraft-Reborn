@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#minecraft:saplings",
+  "input_count": 4,
+  "result": "ic2reborn:bio_chaff"
+}

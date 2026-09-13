@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "ic2reborn:plant_ball",
+  "input_count": 1,
+  "result": "ic2reborn:bio_chaff"
+}

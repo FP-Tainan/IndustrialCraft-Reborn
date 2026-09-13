@@ -31,6 +31,8 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
             case WIND_GENERATOR -> simple(Role.GENERATOR, 220, 5_000, 5_000L * 20);
             // IC2: 20 EU/t e 2.400 EU guardados
             case GEO_GENERATOR -> simple(Role.GENERATOR, 220, 10_000, EnergyUnits.fromCWh(1_200));
+            // IC2: 8–32 EU/t conforme o combustível e 32.000 EU guardados
+            case SEMIFLUID_GENERATOR -> simple(Role.GENERATOR, 220, 16_000, EnergyUnits.fromCWh(16_000));
 
             case BATBOX -> simple(Role.STORAGE, 220, 4_400, EnergyUnits.fromCWh(20_000));
             case CESU -> simple(Role.STORAGE, 1_000, 20_000, EnergyUnits.fromCWh(150_000));
@@ -42,6 +44,7 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
             case RECYCLER -> processor(220, 1_000, 45);
             case SOLID_CANNER -> processor(220, 2_000, 200);
             case ORE_WASHING_PLANT -> processor(1_000, 16_000, 500);
+            case CANNER -> processor(220, 4_000, 200);
 
             case LV_TRANSFORMER -> transformer(220, 1_000, 20_000, 0.97);
             case MV_TRANSFORMER -> transformer(1_000, 2_400, 120_000, 0.975);

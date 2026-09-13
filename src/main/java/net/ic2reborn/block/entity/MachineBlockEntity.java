@@ -12,10 +12,13 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.FilteringStorage;
 import net.ic2reborn.IC2Reborn;
 import net.ic2reborn.block.MachineBlock;
 import net.ic2reborn.energy.MachineEnergyProfile;
 import net.ic2reborn.energy.WindSim;
+import net.ic2reborn.fluid.IC2Fluids;
 import net.ic2reborn.fluid.MachineFluids;
 import net.ic2reborn.menu.MachineGuiType;
 import net.ic2reborn.menu.MachineMenu;
@@ -49,6 +52,7 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -61,13 +65,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Block entity genérico das máquinas do IC2 Reborn.
  *
  * <p>O inventário vem do layout da GUI; a parte elétrica vem do {@link MachineEnergyProfile}:
  * <ul>
- *   <li>geradores são {@link EnergySource} (combustão, geotérmico, solar, água, vento);</li>
+ *   <li>geradores são {@link EnergySource} (combustão, geotérmico, semifluido, solar, água, vento);</li>
  *   <li>armazenamentos (BatBox, CESU, MFE, MFSU) têm entrada nas faces laterais — um carregador
  *   que aceita qualquer tensão até a sua, com corrente limitada à nominal — e saída na face da
  *   frente, na tensão do bloco (como no IC2);</li>
@@ -76,9 +81,8 @@ import java.util.function.Function;
  *   faces), com os modos do IC2: redstone, abaixa fixo, eleva fixo.</li>
  * </ul>
  * Slots de carga e descarga movem energia de/para itens do Craft Energy (baterias), respeitando
- * o nível de tensão. Máquinas com fluido têm um tanque exposto pelo Transfer API do Fabric e um
- * slot que esvazia baldes e células nele. Os nós de energia são expostos ao Craft Energy pelo
- * lookup registrado em {@code IC2Reborn}.
+ * o nível de tensão. Máquinas com fluido têm tanques expostos pelo Transfer API do Fabric e um
+ * slot que esvazia baldes e células neles. Enquanto trabalha, a máquina fica {@link MachineBlock#ACTIVE}.
  */
 public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvider<MachineGuiType> {
     /** Campos lógicos sincronizados com a GUI; cada um viaja como dois valores de 16 bits. */
@@ -88,14 +92,23 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     public static final int DATA_MAX_PROGRESS = 3;
     public static final int DATA_POWER = 4;           // CW que passaram pelo bloco no último tick
     public static final int DATA_VOLTAGE = 5;         // MV
-    public static final int DATA_MODE = 6;            // modo do transformador
+    public static final int DATA_MODE = 6;            // modo do transformador ou da enlatadora
     public static final int DATA_FLUID = 7;           // id do fluido no registro + 1 (0 = vazio)
     public static final int DATA_FLUID_AMOUNT = 8;    // mB
     public static final int DATA_FLUID_CAPACITY = 9;  // mB
-    public static final int DATA_COUNT = 10;
+    /** Campos por tanque; o tanque de saída vem logo depois (10, 11, 12). */
+    public static final int DATA_PER_TANK = 3;
+    public static final int DATA_COUNT = 13;
+
+    /** Botões da GUI: 0–2 modos do transformador, 10–13 modos da enlatadora, 14 troca os tanques. */
+    public static final int BUTTON_CANNER_MODE = 10;
+    public static final int BUTTON_SWAP_TANKS = 14;
 
     /** Modos do transformador do IC2. */
     public enum TransformerMode { REDSTONE, STEP_DOWN, STEP_UP }
+
+    /** Modos da enlatadora do IC2. */
+    public enum CannerMode { BOTTLE_SOLID, EMPTY_LIQUID, BOTTLE_LIQUID, ENRICH_LIQUID }
 
     /** Itens que o reciclador consome sem nunca dar sucata. */
     public static final TagKey<Item> RECYCLER_BLACKLIST = TagKey.create(Registries.ITEM,
@@ -111,11 +124,28 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private static final double WIND_CW_PER_UNIT = 50.0;
     /** Geotérmico do IC2: 2 mB de lava por tick de produção (1 balde = 500 ticks). */
     private static final long GEO_LAVA_PER_TICK = FluidConstants.BUCKET / 500;
-    /** Tanques do IC2 (geotérmico, lavadora de minério): 8 baldes. */
+    /** Tanques do IC2: 8 baldes (semifluido: 10). */
     private static final long TANK_CAPACITY = 8 * FluidConstants.BUCKET;
+    /** A textura ativa continua alguns ticks depois de parar, para não piscar. */
+    private static final int ACTIVE_HOLD_TICKS = 10;
 
     private static final int GENERATOR_FUEL_SLOT = 1;
     private static final int WATER_FUEL_SLOT = 0;
+
+    /**
+     * Combustível do gerador semifluido (IC2: {@code SemiFluidFuelManager}).
+     *
+     * @param power          CW produzidos por tick
+     * @param dropletsPerTick fluido gasto por tick
+     */
+    private record SemifluidFuel(long power, long dropletsPerTick) {}
+
+    private static @Nullable SemifluidFuel semifluidFuel(Fluid fluid) {
+        if (fluid == IC2Fluids.BIOMASS.fluid()) return new SemifluidFuel(8_000, FluidConstants.BUCKET / 1_000);
+        if (fluid == IC2Fluids.BIOGAS.fluid()) return new SemifluidFuel(16_000, FluidConstants.BUCKET / 2_000);
+        if (fluid == IC2Fluids.CREOSOTE.fluid()) return new SemifluidFuel(8_000, FluidConstants.BUCKET / 375);
+        return null;
+    }
 
     /** Índices dos slots de cada máquina, na ordem do layout; -1 quando não existe. */
     private record Slots(int input, int secondary, int[] outputs, int discharge, int charge, int fluidIn, int fluidOut) {
@@ -129,10 +159,11 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             return switch (type) {
                 case GENERATOR, SOLAR_GENERATOR, WIND_GENERATOR -> charge(0);
                 case WATER_GENERATOR -> charge(1);
-                case GEO_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, -1, 2, 0, 1);
+                case GEO_GENERATOR, SEMIFLUID_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, -1, 2, 0, 1);
                 case BATBOX, CESU, MFE, MFSU -> new Slots(-1, -1, NO_OUTPUTS, 1, 0, -1, -1);
                 case ORE_WASHING_PLANT -> new Slots(0, -1, new int[]{1, 2, 3}, 10, -1, 8, 9);
                 case SOLID_CANNER -> new Slots(0, 1, new int[]{2}, 3, -1, -1, -1);
+                case CANNER -> new Slots(0, 7, new int[]{1}, 2, -1, -1, -1);
                 default -> role == MachineEnergyProfile.Role.PROCESSOR
                         ? new Slots(0, -1, new int[]{1}, 2, -1, -1, -1)
                         : new Slots(-1, -1, NO_OUTPUTS, -1, -1, -1, -1);
@@ -145,7 +176,13 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private final Slots slots;
     private final String recipeKey;
     private final SimpleContainer inventory;
+    /** Tanque principal (entrada) e, na enlatadora, o de saída. */
     private final @Nullable MachineTank tank;
+    private final @Nullable MachineTank outputTank;
+    /** Como o tanque principal aceita fluido de fora (slot de fluido, canos). */
+    private final @Nullable Storage<FluidVariant> tankInput;
+    /** O que canos e outros mods enxergam. */
+    private final @Nullable Storage<FluidVariant> exposedFluids;
     private final @Nullable EnergyNode energyNode;
     private final @Nullable EnergySource storageOutput;
     private final @Nullable BufferedTransformer transformer;
@@ -159,7 +196,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private int lastInputVoltage;
     private long flowThisTick;
     private long lastFlow;
+    private int activeHold;
     private TransformerMode transformerMode = TransformerMode.REDSTONE;
+    private CannerMode cannerMode = CannerMode.BOTTLE_SOLID;
     private @Nullable RecipeHolder<SmeltingRecipe> lastSmelting;
     // geradores sem combustível
     private double sunlight;
@@ -207,12 +246,36 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             }
         };
 
-        Fluid tankFluid = switch (this.guiType) {
-            case GEO_GENERATOR -> Fluids.LAVA;
-            case ORE_WASHING_PLANT -> Fluids.WATER;
-            default -> null;
-        };
-        this.tank = tankFluid == null ? null : new MachineTank(TANK_CAPACITY, tankFluid);
+        MachineTank mainTank = null;
+        MachineTank secondTank = null;
+        Storage<FluidVariant> input = null;
+        Storage<FluidVariant> exposed = null;
+        switch (this.guiType) {
+            case GEO_GENERATOR -> {
+                mainTank = new MachineTank(TANK_CAPACITY);
+                input = exposed = insertOnly(mainTank, fluid -> fluid == Fluids.LAVA);
+            }
+            case ORE_WASHING_PLANT -> {
+                mainTank = new MachineTank(TANK_CAPACITY);
+                input = exposed = insertOnly(mainTank, fluid -> fluid == Fluids.WATER);
+            }
+            case SEMIFLUID_GENERATOR -> {
+                mainTank = new MachineTank(10 * FluidConstants.BUCKET);
+                input = exposed = insertOnly(mainTank, fluid -> semifluidFuel(fluid) != null);
+            }
+            case CANNER -> {
+                mainTank = new MachineTank(TANK_CAPACITY);
+                secondTank = new MachineTank(TANK_CAPACITY);
+                input = insertOnly(mainTank, fluid -> true);
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            default -> {
+            }
+        }
+        this.tank = mainTank;
+        this.outputTank = secondTank;
+        this.tankInput = input;
+        this.exposedFluids = exposed;
 
         this.energyNode = switch (this.profile.role()) {
             case GENERATOR -> new GeneratorNode();
@@ -235,6 +298,21 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                         explode();
                     }
                 };
+    }
+
+    /** Visão do tanque que só aceita entrada dos fluidos permitidos. */
+    private static Storage<FluidVariant> insertOnly(Storage<FluidVariant> tank, Predicate<Fluid> accepts) {
+        return new FilteringStorage<>(tank) {
+            @Override
+            protected boolean canInsert(FluidVariant resource) {
+                return accepts.test(resource.getFluid());
+            }
+
+            @Override
+            protected boolean canExtract(FluidVariant resource) {
+                return false;
+            }
+        };
     }
 
     public SimpleContainer getInventory() {
@@ -260,13 +338,22 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         setChanged();
     }
 
-    /** Tanque da máquina para canos e outros mods (só entrada), ou null se ela não tem. */
+    /** Tanques para canos e outros mods (entrada filtrada; na enlatadora também a saída), ou null. */
     public @Nullable Storage<FluidVariant> getFluidStorage(@Nullable Direction side) {
-        return this.tank;
+        return this.exposedFluids;
+    }
+
+    /** Tanque 0 (principal) ou 1 (saída da enlatadora), ou null se a máquina não tem. */
+    public @Nullable SingleFluidStorage getTank(int index) {
+        return index == 0 ? this.tank : index == 1 ? this.outputTank : null;
     }
 
     public TransformerMode getTransformerMode() {
         return this.transformerMode;
+    }
+
+    public CannerMode getCannerMode() {
+        return this.cannerMode;
     }
 
     /** Botão da GUI: 0 = redstone, 1 = abaixa fixo, 2 = eleva fixo. Só vale para transformadores. */
@@ -275,6 +362,31 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.transformerMode = TransformerMode.values()[mode];
         setChanged();
         return true;
+    }
+
+    /** Botões da GUI: modos do transformador, modos da enlatadora e troca de tanques. */
+    public boolean handleMenuButton(int id) {
+        if (this.transformer != null) return setTransformerMode(id);
+        if (this.guiType != MachineGuiType.CANNER) return false;
+
+        if (id >= BUTTON_CANNER_MODE && id < BUTTON_CANNER_MODE + CannerMode.values().length) {
+            this.cannerMode = CannerMode.values()[id - BUTTON_CANNER_MODE];
+            this.progress = 0;
+            setChanged();
+            return true;
+        }
+        if (id == BUTTON_SWAP_TANKS && this.tank != null && this.outputTank != null) {
+            FluidVariant variant = this.tank.variant;
+            long amount = this.tank.amount;
+            this.tank.variant = this.outputTank.variant;
+            this.tank.amount = this.outputTank.amount;
+            this.outputTank.variant = variant;
+            this.outputTank.amount = amount;
+            this.progress = 0;
+            setChanged();
+            return true;
+        }
+        return false;
     }
 
     /** Nó principal (armazenamentos: a entrada). Para nós por face, use {@link #getEnergyNode(Direction)}. */
@@ -312,15 +424,18 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.flowThisTick = 0;
 
         boolean changed = handleEnergyItems();
-        if (this.tank != null && this.slots.fluidIn() >= 0) {
-            changed |= MachineFluids.drainIntoTank(this.inventory, this.slots.fluidIn(), this.slots.fluidOut(), this.tank);
+        if (this.tankInput != null && this.slots.fluidIn() >= 0) {
+            changed |= MachineFluids.drainIntoTank(this.inventory, this.slots.fluidIn(), this.slots.fluidOut(), this.tankInput);
         }
+
+        long energyBefore = this.energy;
         changed |= switch (this.profile.role()) {
             case GENERATOR -> switch (this.guiType) {
                 case SOLAR_GENERATOR -> tickSolar(level);
                 case WATER_GENERATOR -> tickWater(level);
                 case WIND_GENERATOR -> tickWind(level);
                 case GEO_GENERATOR -> tickGeo();
+                case SEMIFLUID_GENERATOR -> tickSemifluid();
                 default -> tickGenerator(level);
             };
             case PROCESSOR -> tickProcessor(level);
@@ -328,6 +443,28 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case STORAGE, NONE -> false;
         };
         if (changed) setChanged();
+
+        boolean working = switch (this.profile.role()) {
+            case GENERATOR -> this.energy > energyBefore;
+            case PROCESSOR -> this.energy < energyBefore;
+            case TRANSFORMER -> this.transformer != null && this.transformer.mode() == BufferedTransformer.Mode.STEP_UP;
+            case STORAGE, NONE -> false;
+        };
+        updateActive(level, working);
+    }
+
+    /** Troca a textura para ativa/inativa (IC2: {@code setActive}). */
+    private void updateActive(Level level, boolean working) {
+        if (working) {
+            this.activeHold = ACTIVE_HOLD_TICKS;
+        } else if (this.activeHold > 0) {
+            this.activeHold--;
+        }
+        boolean active = this.activeHold > 0;
+        BlockState state = this.getBlockState();
+        if (state.hasProperty(MachineBlock.ACTIVE) && state.getValue(MachineBlock.ACTIVE) != active) {
+            level.setBlock(this.worldPosition, state.setValue(MachineBlock.ACTIVE, active), Block.UPDATE_CLIENTS);
+        }
     }
 
     // ── slots de carga e descarga ─────────────────────────────────────────
@@ -419,6 +556,19 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.profile.capacity() - this.energy < production || this.tank.amount < GEO_LAVA_PER_TICK) return false;
         this.tank.consume(GEO_LAVA_PER_TICK);
         this.energy += production;
+        return true;
+    }
+
+    /** Semifluido do IC2: biomassa e creosoto dão 8.000 CW, biogás 16.000 CW; cada um dura um tanto por balde. */
+    private boolean tickSemifluid() {
+        if (this.tank == null || this.tank.isResourceBlank()) return false;
+        SemifluidFuel fuel = semifluidFuel(this.tank.variant.getFluid());
+        if (fuel == null || this.tank.amount < fuel.dropletsPerTick()
+                || this.profile.capacity() - this.energy < fuel.power()) return false;
+        this.tank.consume(fuel.dropletsPerTick());
+        this.energy += fuel.power();
+        this.progress = (int) fuel.power();
+        this.maxProgress = (int) this.profile.power();
         return true;
     }
 
@@ -547,12 +697,10 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     // ── máquinas de processamento ─────────────────────────────────────────
     /** Máquina padrão do IC2: gasta a potência por tick e completa a operação no fim da duração. */
     private boolean tickProcessor(Level level) {
-        if (this.slots.input() < 0) return false;
-        ItemStack input = this.inventory.getItem(this.slots.input());
-        ItemStack secondary = this.slots.secondary() >= 0 ? this.inventory.getItem(this.slots.secondary()) : ItemStack.EMPTY;
-        Operation operation = findOperation(level, input, secondary);
+        Operation operation = findOperation(level);
 
-        if (operation == null || !insertResults(operation.preview(), true) || !hasFluid(operation.fluid())) {
+        if (operation == null || !insertResults(operation.preview(), true) || !hasFluid(operation.fluid())
+                || !canFillOutput(operation)) {
             if (this.progress == 0) return false;
             this.progress = 0;
             return true;
@@ -563,43 +711,96 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (++this.progress >= this.profile.operationTicks()) {
             this.progress = 0;
             List<ItemStack> results = operation.result().apply(level.getRandom());
-            input.shrink(operation.inputCount());
-            this.inventory.setItem(this.slots.input(), input);
-            if (operation.secondaryCount() > 0) {
-                secondary.shrink(operation.secondaryCount());
-                this.inventory.setItem(this.slots.secondary(), secondary);
-            }
+            shrinkSlot(this.slots.input(), operation.inputCount());
+            shrinkSlot(this.slots.secondary(), operation.secondaryCount());
             if (this.tank != null && operation.fluid() > 0) {
                 this.tank.consume(operation.fluid());
+            }
+            if (this.outputTank != null && operation.resultFluid() != null) {
+                this.outputTank.fill(operation.resultFluid(), operation.resultFluidAmount());
             }
             insertResults(results, false);
         }
         return true;
     }
 
+    private void shrinkSlot(int slot, int count) {
+        if (slot < 0 || count <= 0) return;
+        ItemStack stack = this.inventory.getItem(slot);
+        stack.shrink(count);
+        this.inventory.setItem(slot, stack);
+    }
+
     /**
-     * Operação possível para a entrada atual.
+     * Operação possível agora.
      *
-     * @param inputCount     quantos itens a operação consome da entrada
-     * @param secondaryCount quantos itens consome do segundo slot (latas)
-     * @param preview        maiores resultados possíveis, para conferir se cabem na saída
-     * @param result         resultados reais (o reciclador depende de sorte)
-     * @param fluid          fluido gasto do tanque, em gotas do Fabric
+     * @param inputCount        quantos itens consome da entrada
+     * @param secondaryCount    quantos itens consome do segundo slot (latas, recipientes)
+     * @param preview           maiores resultados possíveis, para conferir se cabem na saída
+     * @param result            resultados reais (o reciclador depende de sorte; a enlatadora move fluido aqui)
+     * @param fluid             fluido gasto do tanque principal, em gotas do Fabric
+     * @param resultFluid       fluido produzido no tanque de saída (ou null)
+     * @param resultFluidAmount gotas produzidas
      */
     private record Operation(int inputCount, int secondaryCount, List<ItemStack> preview,
-                             Function<RandomSource, List<ItemStack>> result, long fluid) {}
+                             Function<RandomSource, List<ItemStack>> result, long fluid,
+                             @Nullable FluidVariant resultFluid, long resultFluidAmount) {
+        static Operation items(int inputCount, int secondaryCount, List<ItemStack> preview,
+                               Function<RandomSource, List<ItemStack>> result) {
+            return new Operation(inputCount, secondaryCount, preview, result, 0, null, 0);
+        }
+    }
 
-    private @Nullable Operation findOperation(Level level, ItemStack input, ItemStack secondary) {
+    private @Nullable Operation findOperation(Level level) {
+        ItemStack input = this.slots.input() >= 0 ? this.inventory.getItem(this.slots.input()) : ItemStack.EMPTY;
+        ItemStack secondary = this.slots.secondary() >= 0 ? this.inventory.getItem(this.slots.secondary()) : ItemStack.EMPTY;
+        if (this.guiType == MachineGuiType.CANNER) return cannerOperation(input, secondary);
         if (input.isEmpty()) return null;
         return switch (this.guiType) {
             case ELECTRIC_FURNACE -> smeltingOperation(level, input);
             case RECYCLER -> recyclingOperation(input);
-            default -> MachineRecipes.INSTANCE.find(this.recipeKey, input, secondary)
-                    .map(recipe -> new Operation(recipe.inputCount(), recipe.secondary() == null ? 0 : recipe.secondaryCount(),
-                            recipe.createResults(), random -> recipe.createResults(),
-                            recipe.fluidAmount() * FluidConstants.BUCKET / 1000))
-                    .orElse(null);
+            default -> recipeOperation(this.recipeKey, input, secondary);
         };
+    }
+
+    private @Nullable Operation recipeOperation(String machine, ItemStack input, ItemStack secondary) {
+        if (input.isEmpty()) return null;
+        Fluid tankFluid = this.tank == null || this.tank.isResourceBlank() ? null : this.tank.variant.getFluid();
+        long tankMb = this.tank == null ? 0 : this.tank.amount * 1000 / FluidConstants.BUCKET;
+        return MachineRecipes.INSTANCE.find(machine, input, secondary, tankFluid, tankMb)
+                .map(recipe -> new Operation(recipe.inputCount(), recipe.secondary() == null ? 0 : recipe.secondaryCount(),
+                        recipe.createResults(), random -> recipe.createResults(),
+                        recipe.fluidAmount() * FluidConstants.BUCKET / 1000,
+                        recipe.resultFluid() == null ? null : FluidVariant.of(recipe.resultFluid()),
+                        recipe.resultFluidAmount() * FluidConstants.BUCKET / 1000))
+                .orElse(null);
+    }
+
+    /**
+     * Enlatadora do IC2 ({@code TileEntityCanner}):
+     * sólidos = receitas do enlatador de sólidos; esvaziar = recipiente → tanque de saída;
+     * encher = tanque de entrada → recipiente; enriquecer = fluido de entrada + item → fluido de saída.
+     */
+    private @Nullable Operation cannerOperation(ItemStack input, ItemStack container) {
+        return switch (this.cannerMode) {
+            case BOTTLE_SOLID -> recipeOperation("solid_canner", input, container);
+            case ENRICH_LIQUID -> recipeOperation("canner_enrich", input, ItemStack.EMPTY);
+            case EMPTY_LIQUID -> containerOperation(container, this.outputTank, false);
+            case BOTTLE_LIQUID -> containerOperation(container, this.tank, true);
+        };
+    }
+
+    private @Nullable Operation containerOperation(ItemStack container, @Nullable MachineTank target, boolean fill) {
+        if (target == null || container.isEmpty()) return null;
+        MachineFluids.Transfer preview = MachineFluids.transfer(container, target, fill, false);
+        if (preview == null) return null;
+
+        ItemStack single = container.copyWithCount(1);
+        return Operation.items(0, 1, preview.leftover().isEmpty() ? List.of() : List.of(preview.leftover()), random -> {
+            MachineFluids.Transfer done = MachineFluids.transfer(single, target, fill, true);
+            if (done == null) return List.of(single); // não deveria acontecer: devolve o recipiente
+            return done.leftover().isEmpty() ? List.of() : List.of(done.leftover());
+        });
     }
 
     /** Fornalha elétrica: as mesmas receitas da fornalha do vanilla. */
@@ -614,19 +815,24 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.lastSmelting = recipe.get();
         ItemStack result = recipe.get().value().assemble(recipeInput);
         if (result.isEmpty()) return null;
-        return new Operation(1, 0, List.of(result), random -> List.of(result.copy()), 0);
+        return Operation.items(1, 0, List.of(result), random -> List.of(result.copy()));
     }
 
     /** Reciclador: consome qualquer item; 1 em 8 vira sucata (exceto a lista negra). */
     private Operation recyclingOperation(ItemStack input) {
         Item scrap = IC2AutoItems.SCRAP.get();
         boolean blacklisted = BuiltInRegistries.ITEM.wrapAsHolder(input.getItem()).is(RECYCLER_BLACKLIST);
-        return new Operation(1, 0, List.of(new ItemStack(scrap)),
-                random -> !blacklisted && random.nextInt(RECYCLE_CHANCE) == 0 ? List.of(new ItemStack(scrap)) : List.of(), 0);
+        return Operation.items(1, 0, List.of(new ItemStack(scrap)),
+                random -> !blacklisted && random.nextInt(RECYCLE_CHANCE) == 0 ? List.of(new ItemStack(scrap)) : List.of());
     }
 
     private boolean hasFluid(long amount) {
         return amount <= 0 || (this.tank != null && this.tank.amount >= amount);
+    }
+
+    private boolean canFillOutput(Operation operation) {
+        return operation.resultFluid() == null
+                || (this.outputTank != null && this.outputTank.canFill(operation.resultFluid(), operation.resultFluidAmount()));
     }
 
     /** Distribui os resultados nos slots de saída; com {@code simulate} só confere se cabem. */
@@ -673,29 +879,17 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     }
 
     // ── tanque ────────────────────────────────────────────────────────────
-    /** Tanque de um fluido só, como os do IC2: canos e slots enchem, só a máquina gasta. */
+    /** Tanque de um fluido por vez. A máquina mexe direto; de fora só pelas visões filtradas. */
     private final class MachineTank extends SingleFluidStorage {
         private final long capacity;
-        private final Fluid accepted;
 
-        MachineTank(long capacity, Fluid accepted) {
+        MachineTank(long capacity) {
             this.capacity = capacity;
-            this.accepted = accepted;
         }
 
         @Override
         protected long getCapacity(FluidVariant variant) {
             return this.capacity;
-        }
-
-        @Override
-        protected boolean canInsert(FluidVariant variant) {
-            return variant.getFluid() == this.accepted;
-        }
-
-        @Override
-        protected boolean canExtract(FluidVariant variant) {
-            return false;
         }
 
         @Override
@@ -706,6 +900,15 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         void consume(long droplets) {
             this.amount = Math.max(0, this.amount - droplets);
             if (this.amount == 0) this.variant = FluidVariant.blank();
+        }
+
+        boolean canFill(FluidVariant fluid, long droplets) {
+            return (this.isResourceBlank() || this.variant.equals(fluid)) && this.capacity - this.amount >= droplets;
+        }
+
+        void fill(FluidVariant fluid, long droplets) {
+            if (this.isResourceBlank()) this.variant = fluid;
+            this.amount = Math.min(this.capacity, this.amount + droplets);
         }
     }
 
@@ -815,6 +1018,15 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     // ── GUI ───────────────────────────────────────────────────────────────
     private int logicalValue(int field) {
+        if (field >= DATA_FLUID && field < DATA_FLUID + 2 * DATA_PER_TANK) {
+            MachineTank fluidTank = (field - DATA_FLUID) / DATA_PER_TANK == 0 ? this.tank : this.outputTank;
+            if (fluidTank == null) return 0;
+            return switch ((field - DATA_FLUID) % DATA_PER_TANK) {
+                case 0 -> fluidTank.isResourceBlank() ? 0 : BuiltInRegistries.FLUID.getId(fluidTank.variant.getFluid()) + 1;
+                case 1 -> clampToInt(fluidTank.amount * 1000 / FluidConstants.BUCKET);
+                default -> clampToInt(fluidTank.capacity * 1000 / FluidConstants.BUCKET);
+            };
+        }
         return switch (field) {
             case DATA_ENERGY -> clampToInt(this.energy / EnergyUnits.TICKS_PER_HOUR);
             case DATA_CAPACITY -> clampToInt(this.profile.capacity() / EnergyUnits.TICKS_PER_HOUR);
@@ -822,11 +1034,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case DATA_MAX_PROGRESS -> this.maxProgress;
             case DATA_POWER -> clampToInt(this.lastFlow);
             case DATA_VOLTAGE -> this.profile.voltage();
-            case DATA_MODE -> this.transformerMode.ordinal();
-            case DATA_FLUID -> this.tank == null || this.tank.isResourceBlank() ? 0
-                    : BuiltInRegistries.FLUID.getId(this.tank.variant.getFluid()) + 1;
-            case DATA_FLUID_AMOUNT -> this.tank == null ? 0 : clampToInt(this.tank.amount * 1000 / FluidConstants.BUCKET);
-            case DATA_FLUID_CAPACITY -> this.tank == null ? 0 : clampToInt(this.tank.capacity * 1000 / FluidConstants.BUCKET);
+            case DATA_MODE -> this.transformer != null ? this.transformerMode.ordinal() : this.cannerMode.ordinal();
             default -> 0;
         };
     }
@@ -882,6 +1090,11 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.tank != null) {
             this.tank.writeValue(output);
         }
+        if (this.outputTank != null) {
+            output.store("OutputFluid", FluidVariant.CODEC, this.outputTank.variant);
+            output.putLong("OutputFluidAmount", this.outputTank.amount);
+            output.putInt("CannerMode", this.cannerMode.ordinal());
+        }
         if (this.transformer != null) {
             output.putLong("TransformerBuffer", this.transformer.bufferedPower());
             output.putInt("TransformerMode", this.transformerMode.ordinal());
@@ -914,6 +1127,12 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         }
         if (this.tank != null) {
             this.tank.readValue(input);
+        }
+        if (this.outputTank != null) {
+            this.outputTank.variant = input.read("OutputFluid", FluidVariant.CODEC).orElse(FluidVariant.blank());
+            this.outputTank.amount = this.outputTank.variant.isBlank() ? 0 : input.getLongOr("OutputFluidAmount", 0);
+            int mode = input.getIntOr("CannerMode", 0);
+            this.cannerMode = CannerMode.values()[Math.max(0, Math.min(CannerMode.values().length - 1, mode))];
         }
         if (this.transformer != null) {
             this.transformer.setBufferedPower(input.getLongOr("TransformerBuffer", 0));

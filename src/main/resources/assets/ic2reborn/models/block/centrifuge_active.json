@@ -1,0 +1,10 @@
+{
+  "parent": "ic2reborn:block/machine_base5",
+  "textures": {
+    "top": "ic2reborn:block/centrifuge_top_active",
+    "bottom": "ic2reborn:block/centrifuge_bottom",
+    "front": "ic2reborn:block/centrifuge_front_active",
+    "back": "ic2reborn:block/centrifuge_back",
+    "side": "ic2reborn:block/centrifuge_side_active"
+  }
+}

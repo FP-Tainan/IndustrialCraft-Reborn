@@ -1,0 +1,10 @@
+{
+  "parent": "ic2reborn:block/machine_base5",
+  "textures": {
+    "top": "ic2reborn:block/rt_heat_generator_top_active",
+    "bottom": "ic2reborn:block/rt_heat_generator_bottom",
+    "front": "ic2reborn:block/rt_heat_generator_front_active",
+    "back": "ic2reborn:block/rt_heat_generator_back_active",
+    "side": "ic2reborn:block/rt_heat_generator_side"
+  }
+}

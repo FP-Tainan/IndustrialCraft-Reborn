@@ -1,0 +1,10 @@
+{
+  "parent": "ic2reborn:block/machine_base5",
+  "textures": {
+    "top": "ic2reborn:block/semifluid_generator_top",
+    "bottom": "ic2reborn:block/semifluid_generator_bottom",
+    "front": "ic2reborn:block/semifluid_generator_front_active",
+    "back": "ic2reborn:block/semifluid_generator_back",
+    "side": "ic2reborn:block/semifluid_generator_side_active"
+  }
+}

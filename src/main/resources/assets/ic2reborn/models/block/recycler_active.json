@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/recycler_top_active",
+    "bottom": "ic2reborn:block/recycler_bottom",
+    "front": "ic2reborn:block/recycler_front_active",
+    "side": "ic2reborn:block/recycler_side"
+  }
+}

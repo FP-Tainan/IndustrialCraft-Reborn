@@ -145,24 +145,24 @@ public class MachineMenu extends AbstractContainerMenu {
         return max <= 0 ? 0.0 : Math.max(0.0, Math.min(1.0, (double) value / max));
     }
 
-    /** Fluido do tanque, ou null se vazio. */
-    public net.minecraft.world.level.material.@org.jetbrains.annotations.Nullable Fluid getFluid() {
-        int id = value(MachineBlockEntity.DATA_FLUID) - 1;
+    /** Fluido do tanque {@code tank} (0 = principal, 1 = saída), ou null se vazio. */
+    public net.minecraft.world.level.material.@org.jetbrains.annotations.Nullable Fluid getFluid(int tank) {
+        int id = value(MachineBlockEntity.DATA_FLUID + tank * MachineBlockEntity.DATA_PER_TANK) - 1;
         return id < 0 ? null : net.minecraft.core.registries.BuiltInRegistries.FLUID.byId(id);
     }
 
     /** Fluido no tanque, em mB. */
-    public int getFluidAmount() {
-        return value(MachineBlockEntity.DATA_FLUID_AMOUNT);
+    public int getFluidAmount(int tank) {
+        return value(MachineBlockEntity.DATA_FLUID_AMOUNT + tank * MachineBlockEntity.DATA_PER_TANK);
     }
 
     /** Capacidade do tanque, em mB. */
-    public int getFluidCapacity() {
-        return value(MachineBlockEntity.DATA_FLUID_CAPACITY);
+    public int getFluidCapacity(int tank) {
+        return value(MachineBlockEntity.DATA_FLUID_CAPACITY + tank * MachineBlockEntity.DATA_PER_TANK);
     }
 
-    public double getFluidRatio() {
-        return ratio(getFluidAmount(), getFluidCapacity());
+    public double getFluidRatio(int tank) {
+        return ratio(getFluidAmount(tank), getFluidCapacity(tank));
     }
 
     /** Modo configurado do transformador: 0 = redstone, 1 = abaixa, 2 = eleva. */
@@ -170,10 +170,15 @@ public class MachineMenu extends AbstractContainerMenu {
         return value(MachineBlockEntity.DATA_MODE);
     }
 
-    /** Botões da GUI (modo do transformador) chegam aqui no servidor. */
+    /** Modo da máquina: transformador (0–2) ou enlatadora (0–3). */
+    public int getMachineMode() {
+        return value(MachineBlockEntity.DATA_MODE);
+    }
+
+    /** Botões da GUI (modos, trocar tanques) chegam aqui no servidor. */
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (this.blockEntity != null && this.blockEntity.setTransformerMode(id)) {
+        if (this.blockEntity != null && this.blockEntity.handleMenuButton(id)) {
             return true;
         }
         return super.clickMenuButton(player, id);

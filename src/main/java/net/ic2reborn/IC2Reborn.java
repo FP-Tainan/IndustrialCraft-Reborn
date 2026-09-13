@@ -48,6 +48,8 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.INGOT_LEAD.get());
                         output.accept(IC2Items.INGOT_URANIUM.get());
                         output.accept(IC2Items.FILLED_TIN_CAN.get());
+                        output.accept(IC2Items.BIO_CHAFF.get());
+                        net.ic2reborn.fluid.IC2Fluids.ITEMS.getEntries().forEach(entry -> output.accept(entry.get()));
                         IC2AutoItems.ITEMS.getEntries().forEach(entry -> {
                             output.accept(entry.get());
                             // baterias recarregáveis aparecem vazias e carregadas, como no IC2
@@ -60,10 +62,13 @@ public class IC2Reborn implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        net.ic2reborn.fluid.IC2Fluids.FLUIDS.register();
+        net.ic2reborn.fluid.IC2Fluids.BLOCKS.register();
         IC2Blocks.BLOCKS.register();
         IC2AutoBlocks.BLOCKS.register();
         IC2AutoItems.ITEMS.register();
         IC2Items.ITEMS.register();
+        net.ic2reborn.fluid.IC2Fluids.ITEMS.register();
         IC2BlockEntities.BLOCK_ENTITY_TYPES.register();
         IC2Menus.MENUS.register();
         TABS.register();

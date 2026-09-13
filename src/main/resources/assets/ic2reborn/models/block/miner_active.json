@@ -1,0 +1,10 @@
+{
+  "parent": "ic2reborn:block/machine_base5",
+  "textures": {
+    "top": "ic2reborn:block/miner_top",
+    "bottom": "ic2reborn:block/miner_bottom_active",
+    "front": "ic2reborn:block/miner_front_active",
+    "back": "ic2reborn:block/miner_back_active",
+    "side": "ic2reborn:block/miner_side_active"
+  }
+}

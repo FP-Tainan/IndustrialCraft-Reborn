@@ -30,6 +30,7 @@ public enum GaugeStyle {
     HEAT_CENTRIFUGE(225, 54, 20, 4, Orientation.RIGHT, -1, -1, 22, 6, 224, 47, null),
     PROGRESS_ORE_WASHER(177, 118, 18, 18, Orientation.RIGHT, -1, -1, 20, 19, 102, 38, "guiorewashingplant.png"),
     PROGRESS_BLOCK_CUTTER(176, 15, 46, 17, Orientation.RIGHT, 0, 0, 46, 17, 55, 33, "guiblockcutter.png"),
+    PROGRESS_CANNER(233, 0, 23, 14, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guicanner.png"),
     HEAT_FERMENTER(177, 10, 40, 3, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guifermenter.png"),
     PROGRESS_FERMENTER(177, 1, 40, 7, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guifermenter.png");
 

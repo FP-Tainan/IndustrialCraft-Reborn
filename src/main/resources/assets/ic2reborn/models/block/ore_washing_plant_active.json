@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/ore_washing_plant_top",
+    "bottom": "ic2reborn:block/ore_washing_plant_bottom",
+    "front": "ic2reborn:block/ore_washing_plant_front_active",
+    "side": "ic2reborn:block/ore_washing_plant_side_active"
+  }
+}

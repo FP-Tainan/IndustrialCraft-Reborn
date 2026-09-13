@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/chargepad_batbox_top_active",
+    "bottom": "ic2reborn:block/chargepad_batbox_bottom",
+    "front": "ic2reborn:block/chargepad_batbox_front",
+    "side": "ic2reborn:block/chargepad_batbox_side_active"
+  }
+}

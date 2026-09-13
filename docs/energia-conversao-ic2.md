@@ -74,6 +74,10 @@ Cabos sem isolamento vão dar choque em entidades (fase posterior).
 | Gerador de água | 220 MV | 500–1.000 CW | 2,3–4,5 RA |
 | Gerador eólico | 220 MV | 0–5.000 CW (vento e altura) | 0–22,7 RA |
 
+Combustíveis do semifluido (tanque de 10 baldes): biomassa 8.000 CW por 1.000 ticks/balde (8.000 CWh),
+biogás 16.000 CW por 2.000 ticks/balde (32.000 CWh), creosoto 8.000 CW por 375 ticks/balde (3.000 CWh).
+Geotérmico: lava, 10.000 CW por 500 ticks/balde (5.000 CWh).
+
 Um gerador de 5.000 CW a plena carga já passa dos 20 RA do cobre sem isolamento:
 precisa de ouro/ferro, de dois cabos de cobre, ou de subir a tensão.
 

@@ -1,0 +1,10 @@
+{
+  "parent": "ic2reborn:block/machine_base5",
+  "textures": {
+    "top": "ic2reborn:block/induction_furnace_top",
+    "bottom": "ic2reborn:block/induction_furnace_bottom",
+    "front": "ic2reborn:block/induction_furnace_front_active",
+    "back": "ic2reborn:block/induction_furnace_back",
+    "side": "ic2reborn:block/induction_furnace_side_active"
+  }
+}

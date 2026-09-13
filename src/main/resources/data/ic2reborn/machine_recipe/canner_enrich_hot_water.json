@@ -1,0 +1,8 @@
+{
+  "machine": "canner_enrich",
+  "input": "minecraft:stick",
+  "input_count": 1,
+  "fluid": "minecraft:water",
+  "fluid_amount": 6000,
+  "fluid_result": { "fluid": "ic2reborn:hot_water", "amount": 1000 }
+}

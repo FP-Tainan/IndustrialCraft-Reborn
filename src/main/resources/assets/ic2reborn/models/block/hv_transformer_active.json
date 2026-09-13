@@ -1,0 +1,9 @@
+{
+  "parent": "ic2reborn:block/machine_base",
+  "textures": {
+    "top": "ic2reborn:block/hv_transformer_top_active",
+    "bottom": "ic2reborn:block/hv_transformer_bottom_active",
+    "front": "ic2reborn:block/hv_transformer_front_active",
+    "side": "ic2reborn:block/hv_transformer_side_active"
+  }
+}
