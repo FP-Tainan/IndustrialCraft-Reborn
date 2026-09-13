@@ -1,0 +1,9 @@
+{
+  "machine": "solid_canner",
+  "input": "minecraft:cooked_mutton",
+  "input_count": 1,
+  "secondary_input": "ic2reborn:tin_can",
+  "secondary_count": 6,
+  "result": "ic2reborn:filled_tin_can",
+  "result_count": 6
+}

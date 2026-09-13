@@ -52,7 +52,8 @@ public enum MachineGuiType {
 
     // ── generators ───────────────────────────────────────────────────────
     GENERATOR("generator"),
-    GEO_GENERATOR("geo_generator", "semifluid_generator"),
+    GEO_GENERATOR("geo_generator"),
+    SEMIFLUID_GENERATOR("semifluid_generator"),
     SOLAR_GENERATOR("solar_generator"),
     WATER_GENERATOR("water_generator"),
     WIND_GENERATOR("wind_generator"),

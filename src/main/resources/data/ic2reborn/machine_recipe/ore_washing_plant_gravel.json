@@ -1,0 +1,6 @@
+{
+  "machine": "ore_washing_plant",
+  "input": "minecraft:gravel",
+  "result": "ic2reborn:dust_stone",
+  "fluid_amount": 1000
+}

@@ -1,0 +1,9 @@
+{
+  "machine": "solid_canner",
+  "input": "minecraft:rotten_flesh",
+  "input_count": 2,
+  "secondary_input": "ic2reborn:tin_can",
+  "secondary_count": 1,
+  "result": "ic2reborn:filled_tin_can",
+  "result_count": 1
+}

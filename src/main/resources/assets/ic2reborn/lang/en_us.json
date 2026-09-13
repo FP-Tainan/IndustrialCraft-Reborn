@@ -402,5 +402,7 @@
   "gui.ic2reborn.kinetic.bandwidth": "Bandwidth: %s",
   "gui.ic2reborn.kinetic.production": "Production: %s",
   "gui.ic2reborn.mass_fabricator.energy": "Energy: %s%%",
-  "gui.ic2reborn.mass_fabricator.scrap": "Scrap: %s%%"
+  "gui.ic2reborn.mass_fabricator.scrap": "Scrap: %s%%",
+  "item.ic2reborn.filled_tin_can": "Filled Tin Can",
+  "gui.ic2reborn.tank.empty": "Empty"
 }

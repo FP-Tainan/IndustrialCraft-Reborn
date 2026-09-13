@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Descrição de uma GUI de máquina no estilo do IC2 Experimental.
@@ -66,7 +67,7 @@ public final class MachineLayout {
     public record TankDef(int x, int y, int width, int height, TankStyle style) {}
 
     public record ImageDef(Identifier texture, int x, int y, int u, int v, int width, int height,
-                           int textureWidth, int textureHeight) {}
+                           int textureWidth, int textureHeight, Predicate<MachineMenu> visible) {}
 
     /** Texto; se width/height > 0 ele é centralizado dentro dessa caixa. */
     public record TextDef(Function<MachineMenu, Component> text, int x, int y, int width, int height, int color) {}
@@ -254,7 +255,14 @@ public final class MachineLayout {
 
         public Builder image(String texture, int x, int y, int u, int v, int width, int height,
                              int textureWidth, int textureHeight) {
-            this.images.add(new ImageDef(gui(texture), x, y, u, v, width, height, textureWidth, textureHeight));
+            this.images.add(new ImageDef(gui(texture), x, y, u, v, width, height, textureWidth, textureHeight, menu -> true));
+            return this;
+        }
+
+        /** Imagem desenhada só quando {@code visible} vale (o <only if> do guidef). */
+        public Builder imageIf(Predicate<MachineMenu> visible, String texture, int x, int y, int u, int v,
+                               int width, int height, int textureWidth, int textureHeight) {
+            this.images.add(new ImageDef(gui(texture), x, y, u, v, width, height, textureWidth, textureHeight, visible));
             return this;
         }
 

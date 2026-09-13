@@ -1,0 +1,10 @@
+{
+  "machine": "ore_washing_plant",
+  "input": "ic2reborn:crushed_lead",
+  "results": [
+    { "item": "ic2reborn:purified_lead", "count": 1 },
+    { "item": "ic2reborn:dust_small_sulfur", "count": 3 },
+    { "item": "ic2reborn:dust_stone", "count": 1 }
+  ],
+  "fluid_amount": 1000
+}

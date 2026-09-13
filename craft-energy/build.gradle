@@ -44,3 +44,9 @@ java {
 test {
     useJUnitPlatform()
 }
+
+// O Craft Energy roda dentro do IC2 Reborn (jar-in-jar); sem isso `gradlew runClient`
+// abre um segundo Minecraft só com a biblioteca.
+tasks.matching { it.name.startsWith('run') }.configureEach {
+    enabled = false
+}

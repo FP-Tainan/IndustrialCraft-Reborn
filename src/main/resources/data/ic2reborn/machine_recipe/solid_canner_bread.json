@@ -1,0 +1,9 @@
+{
+  "machine": "solid_canner",
+  "input": "minecraft:bread",
+  "input_count": 1,
+  "secondary_input": "ic2reborn:tin_can",
+  "secondary_count": 5,
+  "result": "ic2reborn:filled_tin_can",
+  "result_count": 5
+}

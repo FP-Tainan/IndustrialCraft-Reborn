@@ -1,0 +1,9 @@
+{
+  "machine": "solid_canner",
+  "input": "minecraft:carrot",
+  "input_count": 1,
+  "secondary_input": "ic2reborn:tin_can",
+  "secondary_count": 3,
+  "result": "ic2reborn:filled_tin_can",
+  "result_count": 3
+}

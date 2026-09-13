@@ -126,7 +126,7 @@ public final class MachineLayouts {
                     .progress(57, 36, FUEL)
                     .build();
 
-            case GEO_GENERATOR -> MachineLayout.dynamic(176, 166)
+            case GEO_GENERATOR, SEMIFLUID_GENERATOR -> MachineLayout.dynamic(176, 166)
                     .slot(26, 16).output(26, 52)
                     .slot(114, 48)
                     .energyBar(110, 30)
@@ -136,6 +136,8 @@ public final class MachineLayouts {
             case SOLAR_GENERATOR -> MachineLayout.dynamic(176, 166)
                     .slot(79, 25)
                     .image("overlay/solar_sun.png", 81, 45, 0, 0, 14, 14, 28, 14)
+                    // <only if="sunlight">: o sol acende enquanto o painel produz
+                    .imageIf(menu -> menu.getProgress() > 0, "overlay/solar_sun.png", 81, 45, 14, 0, 14, 14, 28, 14)
                     .build();
 
             case WATER_GENERATOR -> MachineLayout.dynamic(176, 166)

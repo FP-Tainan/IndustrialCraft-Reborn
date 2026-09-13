@@ -43,6 +43,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
 
         // no IC2 as imagens do guidef vêm antes dos slots, que ficam por cima delas
         for (MachineLayout.ImageDef image : this.layout.images()) {
+            if (!image.visible().test(this.menu)) continue;
             graphics.blit(RenderPipelines.GUI_TEXTURED, image.texture(), x + image.x(), y + image.y(),
                     image.u(), image.v(), image.width(), image.height(), image.textureWidth(), image.textureHeight());
         }
@@ -52,9 +53,15 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         }
 
         for (MachineLayout.TankDef tank : this.layout.tanks()) {
-            // TankGauge vazio (fluidos ainda não implementados)
-            if (tank.style() == MachineLayout.TankStyle.NORMAL) {
-                blit(graphics, MachineLayout.COMMON_TEXTURE, x + tank.x(), y + tank.y(), 70, 100, 20, 55);
+            drawTank(graphics, tank, x, y);
+            if (this.isHovering(tank.x(), tank.y(), tank.width(), tank.height(), mouseX, mouseY)) {
+                net.minecraft.world.level.material.Fluid fluid = this.menu.getFluid();
+                Component line = fluid == null || this.menu.getFluidAmount() <= 0
+                        ? Component.translatableWithFallback("gui.ic2reborn.tank.empty", "Empty")
+                        : net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes.getName(
+                                net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant.of(fluid)).copy()
+                                .append(": " + this.menu.getFluidAmount() + " / " + this.menu.getFluidCapacity() + " mB");
+                graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(line), mouseX, mouseY);
             }
         }
 
@@ -133,6 +140,48 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         for (int col = 0; col < 9; col++) {
             blit(graphics, tex, invX + col * 18, invY + 58, normal.u, normal.v, normal.width, normal.height);
         }
+    }
+
+    /**
+     * TankGauge do IC2: fundo cheio (u=6), o fluido subindo de baixo para cima e a régua (u=38)
+     * por cima; vazio usa u=70. Só há um tanque sincronizado por máquina.
+     */
+    private void drawTank(GuiGraphicsExtractor graphics, MachineLayout.TankDef tank, int x, int y) {
+        net.minecraft.world.level.material.Fluid fluid = this.menu.getFluid();
+        boolean filled = fluid != null && this.menu.getFluidAmount() > 0;
+        int tankX = x + tank.x();
+        int tankY = y + tank.y();
+
+        if (tank.style() == MachineLayout.TankStyle.NORMAL) {
+            if (!filled) {
+                blit(graphics, MachineLayout.COMMON_TEXTURE, tankX, tankY, 70, 100, 20, 55);
+                return;
+            }
+            blit(graphics, MachineLayout.COMMON_TEXTURE, tankX, tankY, 6, 100, 20, 55);
+            drawFluid(graphics, fluid, tankX + 4, tankY + 4, 12, 47, this.menu.getFluidRatio());
+            blit(graphics, MachineLayout.COMMON_TEXTURE, tankX, tankY, 38, 100, 20, 55);
+        } else if (filled) {
+            drawFluid(graphics, fluid, tankX, tankY, tank.width(), tank.height(), this.menu.getFluidRatio());
+        }
+    }
+
+    /** Textura "still" do fluido, repetida em quadrados e cortada na altura do nível. */
+    private static void drawFluid(GuiGraphicsExtractor graphics, net.minecraft.world.level.material.Fluid fluid,
+                                  int x, int y, int width, int height, double ratio) {
+        int fluidHeight = (int) Math.round(height * ratio);
+        if (fluidHeight <= 0) return;
+
+        net.minecraft.client.renderer.texture.TextureAtlasSprite sprite = net.minecraft.client.Minecraft.getInstance()
+                .getModelManager().getFluidStateModelSet().get(fluid.defaultFluidState()).stillMaterial().sprite();
+        int color = 0xFF000000 | net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering.getColor(
+                net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant.of(fluid));
+
+        int top = y + height - fluidHeight;
+        graphics.enableScissor(x, top, x + width, y + height);
+        for (int tileY = y + height - width; tileY > top - width; tileY -= width) {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, x, tileY, width, width, color);
+        }
+        graphics.disableScissor();
     }
 
     /** Gauge.drawBackground do IC2. */

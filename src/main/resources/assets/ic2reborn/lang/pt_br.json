@@ -402,5 +402,7 @@
   "gui.ic2reborn.kinetic.bandwidth": "Capacidade: %s",
   "gui.ic2reborn.kinetic.production": "Produção: %s",
   "gui.ic2reborn.mass_fabricator.energy": "Energia: %s%%",
-  "gui.ic2reborn.mass_fabricator.scrap": "Sucata: %s%%"
+  "gui.ic2reborn.mass_fabricator.scrap": "Sucata: %s%%",
+  "item.ic2reborn.filled_tin_can": "Lata de Estanho Cheia",
+  "gui.ic2reborn.tank.empty": "Vazio"
 }

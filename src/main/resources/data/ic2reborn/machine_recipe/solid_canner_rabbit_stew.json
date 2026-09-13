@@ -1,0 +1,9 @@
+{
+  "machine": "solid_canner",
+  "input": "minecraft:rabbit_stew",
+  "input_count": 1,
+  "secondary_input": "ic2reborn:tin_can",
+  "secondary_count": 10,
+  "result": "ic2reborn:filled_tin_can",
+  "result_count": 10
+}

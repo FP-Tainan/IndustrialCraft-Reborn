@@ -145,6 +145,26 @@ public class MachineMenu extends AbstractContainerMenu {
         return max <= 0 ? 0.0 : Math.max(0.0, Math.min(1.0, (double) value / max));
     }
 
+    /** Fluido do tanque, ou null se vazio. */
+    public net.minecraft.world.level.material.@org.jetbrains.annotations.Nullable Fluid getFluid() {
+        int id = value(MachineBlockEntity.DATA_FLUID) - 1;
+        return id < 0 ? null : net.minecraft.core.registries.BuiltInRegistries.FLUID.byId(id);
+    }
+
+    /** Fluido no tanque, em mB. */
+    public int getFluidAmount() {
+        return value(MachineBlockEntity.DATA_FLUID_AMOUNT);
+    }
+
+    /** Capacidade do tanque, em mB. */
+    public int getFluidCapacity() {
+        return value(MachineBlockEntity.DATA_FLUID_CAPACITY);
+    }
+
+    public double getFluidRatio() {
+        return ratio(getFluidAmount(), getFluidCapacity());
+    }
+
     /** Modo configurado do transformador: 0 = redstone, 1 = abaixa, 2 = eleva. */
     public int getTransformerMode() {
         return value(MachineBlockEntity.DATA_MODE);

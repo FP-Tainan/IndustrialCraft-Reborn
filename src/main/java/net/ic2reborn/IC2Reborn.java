@@ -47,6 +47,7 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.RAW_URANIUM.get());
                         output.accept(IC2Items.INGOT_LEAD.get());
                         output.accept(IC2Items.INGOT_URANIUM.get());
+                        output.accept(IC2Items.FILLED_TIN_CAN.get());
                         IC2AutoItems.ITEMS.getEntries().forEach(entry -> {
                             output.accept(entry.get());
                             // baterias recarregáveis aparecem vazias e carregadas, como no IC2
@@ -60,9 +61,9 @@ public class IC2Reborn implements ModInitializer {
     @Override
     public void onInitialize() {
         IC2Blocks.BLOCKS.register();
-        IC2Items.ITEMS.register();
         IC2AutoBlocks.BLOCKS.register();
         IC2AutoItems.ITEMS.register();
+        IC2Items.ITEMS.register();
         IC2BlockEntities.BLOCK_ENTITY_TYPES.register();
         IC2Menus.MENUS.register();
         TABS.register();
@@ -75,6 +76,12 @@ public class IC2Reborn implements ModInitializer {
         net.craftenergy.fabric.CraftEnergyApi.NODE.registerForBlockEntity(
                 (machine, face) -> machine.getEnergyNode(face),
                 IC2BlockEntities.MACHINE.get());
+
+        // tanques das máquinas (geotérmico, lavadora de minério) e células de fluido
+        net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage.SIDED.registerForBlockEntity(
+                (machine, side) -> machine.getFluidStorage(side),
+                IC2BlockEntities.MACHINE.get());
+        net.ic2reborn.fluid.MachineFluids.init();
 
         net.fabricmc.fabric.api.resource.v1.ResourceLoader.get(net.minecraft.server.packs.PackType.SERVER_DATA)
                 .registerReloadListener(net.ic2reborn.recipe.MachineRecipes.ID, net.ic2reborn.recipe.MachineRecipes.INSTANCE);
