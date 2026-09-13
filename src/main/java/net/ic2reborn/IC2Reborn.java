@@ -52,7 +52,7 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.ASHES.get());
                         for (var item : java.util.List.of(IC2Items.TERRA_WART, IC2Items.OIL_BERRY, IC2Items.MILK_WART,
                                 IC2Items.BOBS_YER_UNCLE_RANKS_BERRY, IC2Items.HOPS, IC2Items.WEED,
-                                IC2Items.DUST_SMALL_DIAMOND, IC2Items.DUST_ENDER_PEARL)) {
+                                IC2Items.DUST_SMALL_DIAMOND, IC2Items.DUST_ENDER_PEARL, IC2Items.HYDRATION_CELL)) {
                             output.accept(item.get());
                         }
                         output.accept(IC2Items.OD_SCANNER.get());

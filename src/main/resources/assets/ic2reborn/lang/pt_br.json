@@ -563,5 +563,18 @@
   "crop.ic2reborn.slime_plant": "Planta de Slime",
   "crop.ic2reborn.spidernip": "Erva-de-Aranha",
   "crop.ic2reborn.tearstalks": "Talos de Lágrima",
-  "crop.ic2reborn.withereed": "Cana Wither"
+  "crop.ic2reborn.withereed": "Cana Wither",
+  "item.ic2reborn.hydration_cell": "Célula de Hidratação",
+  "gui.ic2reborn.cropnalyzer.unknown": "DESCONHECIDA",
+  "gui.ic2reborn.cropnalyzer.tier": "Nível: %s",
+  "gui.ic2reborn.cropnalyzer.discovered": "Descoberta por:",
+  "gui.ic2reborn.cropnalyzer.growth": "Cresc.:",
+  "gui.ic2reborn.cropnalyzer.gain": "Ganho:",
+  "gui.ic2reborn.cropnalyzer.resistance": "Resist.:",
+  "message.ic2reborn.cropnalyzer.name": "Planta: %s (por %s)",
+  "message.ic2reborn.cropnalyzer.size": "Tamanho: %s/%s",
+  "message.ic2reborn.cropnalyzer.nutrients": "Nutrientes: %s/100",
+  "message.ic2reborn.cropnalyzer.water": "Água: %s/200",
+  "message.ic2reborn.cropnalyzer.herbicide": "Herbicida: %s/100",
+  "message.ic2reborn.cropnalyzer.growth": "Pontos de crescimento: %s/%s"
 }

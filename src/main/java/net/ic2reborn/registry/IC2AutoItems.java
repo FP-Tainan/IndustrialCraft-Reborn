@@ -185,7 +185,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> CONTAINMENT_PLATING = ITEMS.register("containment_plating", () -> new Item(new Item.Properties().setId(ITEMS.key("containment_plating"))));
     public static final RegistryObject<Item> COPPER_BOILER = ITEMS.register("copper_boiler", () -> new Item(new Item.Properties().setId(ITEMS.key("copper_boiler"))));
     public static final RegistryObject<Item> CROP_STICK = ITEMS.register("crop_stick", () -> new net.ic2reborn.item.CropStickItem(new Item.Properties().setId(ITEMS.key("crop_stick"))));
-    public static final RegistryObject<Item> CROPNALYZER = ITEMS.register("cropnalyzer", () -> new Item(new Item.Properties().setId(ITEMS.key("cropnalyzer"))));
+    public static final RegistryObject<Item> CROPNALYZER = ITEMS.register("cropnalyzer", () -> new net.ic2reborn.item.CropnalyzerItem(new Item.Properties().setId(ITEMS.key("cropnalyzer"))));
     public static final RegistryObject<Item> CROWBAR = ITEMS.register("crowbar", () -> new Item(new Item.Properties().setId(ITEMS.key("crowbar"))));
     public static final RegistryObject<Item> CRUSHED_COPPER = ITEMS.register("crushed_copper", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_copper"))));
     public static final RegistryObject<Item> CRUSHED_GOLD = ITEMS.register("crushed_gold", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_gold"))));

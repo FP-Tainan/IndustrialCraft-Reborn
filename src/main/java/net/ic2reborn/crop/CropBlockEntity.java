@@ -380,6 +380,12 @@ public class CropBlockEntity extends BlockEntity {
             changed();
             return true;
         }
+        if (held.getItem() instanceof net.ic2reborn.item.HydrationCellItem) {
+            int wanted = 200 - this.storageWater;
+            if (wanted <= 0) return false;
+            addWater(net.ic2reborn.item.HydrationCellItem.drain(held, wanted));
+            return true;
+        }
         if (FluidStorage.ITEM.find(held, ContainerItemContext.forPlayerInteraction(player, hand)) != null) {
             if (applyFluid(player, hand, Fluids.WATER, 200, true) || applyFluid(player, hand, IC2Fluids.WEED_EX.fluid(), 100, false)) {
                 changed();
@@ -441,6 +447,30 @@ public class CropBlockEntity extends BlockEntity {
         if (this.storageNutrients >= 100) return false;
         this.storageNutrients += manual ? 100 : 90;
         return true;
+    }
+
+    /** Recebe até {@code available} mB de água (limite 200); retorna quanto usou. */
+    public int addWater(int available) {
+        int taken = Math.max(0, Math.min(available, 200 - this.storageWater));
+        if (taken > 0) {
+            this.storageWater += taken;
+            changed();
+        }
+        return taken;
+    }
+
+    /** Recebe herbicida (limite 100 à mão, 150 pelo Cropmatron); retorna quanto usou. */
+    public int addWeedEx(int available, boolean manual) {
+        int taken = Math.max(0, Math.min(available, (manual ? 100 : 150) - this.storageWeedEx));
+        if (taken > 0) {
+            this.storageWeedEx += taken;
+            changed();
+        }
+        return taken;
+    }
+
+    public int getGrowthPoints() {
+        return this.growthPoints;
     }
 
     /** Tira água (limite 200) ou herbicida (limite 100) de um balde, célula ou recipiente de outros mods. */

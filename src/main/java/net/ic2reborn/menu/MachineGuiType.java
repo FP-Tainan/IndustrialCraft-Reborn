@@ -42,6 +42,8 @@ public enum MachineGuiType {
     CANNER("canner"),
     FERMENTER("fermenter"),
     MINER("miner"),
+    CROP_HARVESTER("crop_harvester"),
+    CROPMATRON("cropmatron"),
     SCANNER("scanner"),
     REPLICATOR("replicator"),
     BATCH_CRAFTER("batch_crafter"),

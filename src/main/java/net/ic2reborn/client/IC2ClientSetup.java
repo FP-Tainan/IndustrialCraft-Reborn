@@ -9,6 +9,7 @@ public class IC2ClientSetup implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         MenuScreens.register(IC2Menus.MACHINE.get(), MachineScreen::new);
+        MenuScreens.register(IC2Menus.CROPNALYZER.get(), net.ic2reborn.client.screen.CropnalyzerScreen::new);
 
         // armazenamentos desmontados mostram a energia guardada no item
         net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {

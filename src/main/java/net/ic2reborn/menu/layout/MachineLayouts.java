@@ -202,6 +202,24 @@ public final class MachineLayouts {
                     .energy(155, 41)
                     .build();
 
+            // descarga, 15 slots de colheita, 4 upgrades
+            case CROP_HARVESTER -> MachineLayout.textured("guicropharvester.png", 166)
+                    .slotAt(16, 53)
+                    .gridAt(48, 17, 5, 3, true)
+                    .upgrades(151, 7)
+                    .energy(19, 37)
+                    .build();
+
+            // descarga, 7 fertilizantes, célula de herbicida (entra/sai), célula de água (entra/sai), 4 upgrades
+            case CROPMATRON -> MachineLayout.textured("guicropmatron.png", 192)
+                    .slotAt(134, 80)
+                    .gridAt(8, 80, 7, 1, false)
+                    .slotAt(49, 27).outputAt(67, 27)
+                    .slotAt(57, 56).outputAt(75, 56)
+                    .upgrades(151, 25)
+                    .plainTank(11, 26, 24, 47).plainTank(105, 26, 24, 47)
+                    .energy(138, 82)
+                    .build();
             case SCANNER -> MachineLayout.textured("guiscanner.png", 166)
                     .slotAt(8, 43).slotAt(55, 35).slotAt(152, 65)
                     .energy(12, 25)

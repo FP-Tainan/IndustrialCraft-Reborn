@@ -192,6 +192,10 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 // duas entradas (A, B) e duas saídas
                 case INDUCTION_FURNACE -> new Slots(0, 1, new int[]{2, 3}, 4, -1, -1, -1);
                 case CENTRIFUGE -> new Slots(0, -1, new int[]{2, 3, 4}, 1, -1, -1, -1);
+                // colheitadeira: descarga 0, colheita 1–15, upgrades 16–19
+                case CROP_HARVESTER -> new Slots(-1, -1, java.util.stream.IntStream.rangeClosed(1, 15).toArray(), 0, -1, -1, -1);
+                // cropmatron: descarga 0, fertilizante 1–7, herbicida 8→9, água 10→11, upgrades 12–15
+                case CROPMATRON -> new Slots(-1, -1, new int[]{9, 11}, 0, -1, 10, 11);
                 default -> role == MachineEnergyProfile.Role.PROCESSOR
                         ? new Slots(0, -1, new int[]{1}, 2, -1, -1, -1)
                         : new Slots(-1, -1, NO_OUTPUTS, -1, -1, -1, -1);
@@ -217,6 +221,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     /** Minerador: tubos, broca e scanner (IC2: TileEntityMiner). */
     private final @Nullable MinerLogic miner;
+    private final @Nullable CropMachineLogic cropLogic;
 
     // calor (fermentador e geradores de calor)
     private int heatBuffer;
@@ -330,6 +335,12 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 mainTank = new MachineTank(10 * FluidConstants.BUCKET);
                 input = exposed = insertOnly(mainTank, fluid -> heatFuel(fluid) != null);
             }
+            case CROPMATRON -> {
+                mainTank = new MachineTank(2 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(2 * FluidConstants.BUCKET);
+                input = insertOnly(mainTank, fluid -> fluid == Fluids.WATER);
+                exposed = new CombinedStorage<>(List.of(input, insertOnly(secondTank, fluid -> fluid == IC2Fluids.WEED_EX.fluid())));
+            }
             case CANNER -> {
                 mainTank = new MachineTank(TANK_CAPACITY);
                 secondTank = new MachineTank(TANK_CAPACITY);
@@ -345,6 +356,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.exposedFluids = exposed;
 
         this.miner = this.guiType == MachineGuiType.MINER ? new MinerLogic(this) : null;
+        this.cropLogic = this.guiType == MachineGuiType.CROP_HARVESTER || this.guiType == MachineGuiType.CROPMATRON
+                ? new CropMachineLogic(this, this.guiType == MachineGuiType.CROP_HARVESTER) : null;
 
         this.energyNode = switch (this.profile.role()) {
             case GENERATOR -> new GeneratorNode();
@@ -475,6 +488,15 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return false;
     }
 
+    /** Tanques do Cropmatron: 0 = água, 1 = herbicida. */
+    @Nullable SingleFluidStorage cropTank(int index) {
+        return index == 0 ? this.tank : this.outputTank;
+    }
+
+    /** Colheitadeira/Cropmatron: olha agora a próxima posição da área (testes). */
+    public void performCropScan() {
+        if (this.cropLogic != null && this.level != null) this.cropLogic.scan(this.level);
+    }
     /** Gasta energia do buffer (minerador); false, sem gastar, se não houver o bastante. */
     boolean useEnergy(long amount) {
         if (amount < 0 || this.energy < amount) return false;
@@ -546,6 +568,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case ELECTRIC_KINETIC_GENERATOR -> tickElectricKinetic();
                 case ELECTRIC_HEAT_GENERATOR -> tickElectricHeat();
                 case MINER -> this.miner != null && this.miner.tick(level);
+                case CROP_HARVESTER, CROPMATRON -> this.cropLogic != null && this.cropLogic.tick(level);
                 case INDUCTION_FURNACE -> tickInduction(level);
                 case CENTRIFUGE -> tickCentrifugeHeat(level) | tickProcessor(level);
                 default -> tickProcessor(level);

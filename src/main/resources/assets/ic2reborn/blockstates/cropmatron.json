@@ -1,7 +1,6 @@
 {
   "variants": {
-    "": {
-      "model": "ic2reborn:block/cropmatron"
-    }
+    "active=false": { "model": "ic2reborn:block/cropmatron" },
+    "active=true": { "model": "ic2reborn:block/cropmatron_active" }
   }
 }

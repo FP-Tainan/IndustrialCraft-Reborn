@@ -99,6 +99,30 @@ public abstract class CropCard {
         return 1;
     }
 
+    /** Tamanho em que a colheitadeira colhe, além do máximo (IC2: getOptimalHarvestSize). */
+    public int optimalHarvestSize(CropBlockEntity crop) {
+        return maxSize();
+    }
+
+    /** Linha {@code line} (0 ou 1) dos atributos, como o Cropnalyzer mostra. */
+    public String desc(int line) {
+        String[] attributes = attributes();
+        if (attributes.length == 0) return "";
+        if (line == 0) {
+            String text = attributes[0];
+            if (attributes.length >= 2) {
+                text += ", " + attributes[1];
+                if (attributes.length >= 3) text += ",";
+            }
+            return text;
+        }
+        if (attributes.length < 3) return "";
+        String text = attributes[2];
+        if (attributes.length >= 4) text += ", " + attributes[3];
+        if (attributes.length >= 5) text += ", ...";
+        return text;
+    }
+
     public boolean onLeftClick(CropBlockEntity crop, Player player) {
         return crop.pick();
     }

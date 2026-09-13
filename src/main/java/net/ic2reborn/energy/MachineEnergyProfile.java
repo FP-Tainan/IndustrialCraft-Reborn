@@ -63,6 +63,8 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
             // IC2: aquece com 1 EU/t, processa com mais 15 EU/t; a operação termina em 4.000 pontos de progresso
             case INDUCTION_FURNACE -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 16_000, EnergyUnits.fromCWh(5_000), 4_000, 0, 0.0);
 
+            // IC2: 10.000 EU guardados; 1 CWh por posição olhada, 20 CWh por item colhido, 10 CWh por cuidado
+            case CROP_HARVESTER, CROPMATRON -> new MachineEnergyProfile(Role.PROCESSOR, 220, 2_000, EnergyUnits.fromCWh(10_000), 0, 0, 0.0);
             case LV_TRANSFORMER -> transformer(220, 1_000, 20_000, 0.97);
             case MV_TRANSFORMER -> transformer(1_000, 2_400, 120_000, 0.975);
             case HV_TRANSFORMER -> transformer(2_400, 13_800, 1_000_000, 0.98);

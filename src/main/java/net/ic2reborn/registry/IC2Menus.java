@@ -18,4 +18,9 @@ public class IC2Menus {
     public static final RegistryObject<ExtendedMenuType<MachineMenu, MachineGuiType>> MACHINE =
             MENUS.register("machine", () -> new ExtendedMenuType<MachineMenu, MachineGuiType>(
                     MachineMenu::new, MachineGuiType.STREAM_CODEC));
+
+    /** Cropnalyzer na mão; o cliente recebe qual mão abriu a tela. */
+    public static final RegistryObject<ExtendedMenuType<net.ic2reborn.menu.CropnalyzerMenu, net.minecraft.world.InteractionHand>> CROPNALYZER =
+            MENUS.register("cropnalyzer", () -> new ExtendedMenuType<net.ic2reborn.menu.CropnalyzerMenu, net.minecraft.world.InteractionHand>(
+                    net.ic2reborn.menu.CropnalyzerMenu::new, net.ic2reborn.menu.CropnalyzerMenu.HAND_CODEC));
 }

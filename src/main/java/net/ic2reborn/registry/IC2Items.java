@@ -66,6 +66,9 @@ public class IC2Items {
     /** Saco de sementes com planta e atributos (componente ic2reborn:crop_seed). */
     public static final RegistryObject<Item> CROP_SEED_BAG = ITEMS.register("crop_seed_bag",
             () -> new net.ic2reborn.item.CropSeedItem(new Item.Properties().setId(ITEMS.key("crop_seed_bag"))));
+    /** Célula de hidratação: 10.000 mB de água para plantações e Cropmatron. */
+    public static final RegistryObject<Item> HYDRATION_CELL = ITEMS.register("hydration_cell",
+            () -> new net.ic2reborn.item.HydrationCellItem(new Item.Properties().setId(ITEMS.key("hydration_cell"))));
     private static RegistryObject<Item> simple(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties().setId(ITEMS.key(name))));
     }

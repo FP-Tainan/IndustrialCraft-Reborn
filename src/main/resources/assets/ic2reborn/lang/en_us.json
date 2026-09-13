@@ -563,5 +563,18 @@
   "crop.ic2reborn.slime_plant": "Slime Plant",
   "crop.ic2reborn.spidernip": "Spidernip",
   "crop.ic2reborn.tearstalks": "Tearstalks",
-  "crop.ic2reborn.withereed": "Withereed"
+  "crop.ic2reborn.withereed": "Withereed",
+  "item.ic2reborn.hydration_cell": "Hydration Cell",
+  "gui.ic2reborn.cropnalyzer.unknown": "UNKNOWN",
+  "gui.ic2reborn.cropnalyzer.tier": "Tier: %s",
+  "gui.ic2reborn.cropnalyzer.discovered": "Discovered by:",
+  "gui.ic2reborn.cropnalyzer.growth": "Growth:",
+  "gui.ic2reborn.cropnalyzer.gain": "Gain:",
+  "gui.ic2reborn.cropnalyzer.resistance": "Resis.:",
+  "message.ic2reborn.cropnalyzer.name": "Crop name: %s (by %s)",
+  "message.ic2reborn.cropnalyzer.size": "Crop size: %s/%s",
+  "message.ic2reborn.cropnalyzer.nutrients": "Nutrient storage: %s/100",
+  "message.ic2reborn.cropnalyzer.water": "Water storage: %s/200",
+  "message.ic2reborn.cropnalyzer.herbicide": "Herbicide storage: %s/100",
+  "message.ic2reborn.cropnalyzer.growth": "Growth points: %s/%s"
 }

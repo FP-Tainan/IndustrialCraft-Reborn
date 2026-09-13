@@ -293,6 +293,7 @@ public final class CropCards {
 
     static final class Venomilia extends CropCard {
         Venomilia() { super("venomilia"); }
+        @Override public int optimalHarvestSize(CropBlockEntity crop) { return 4; }
         @Override public String discoveredBy() { return "raGan"; }
         @Override public Properties properties() { return new Properties(3, 3, 1, 3, 3, 3); }
         @Override public String[] attributes() { return new String[]{"Purple", "Flower", "Tulip", "Poison"}; }
@@ -527,6 +528,7 @@ public final class CropCards {
 
     static final class Potato extends CropCard {
         Potato() { super("potato"); }
+        @Override public int optimalHarvestSize(CropBlockEntity crop) { return 3; }
         @Override public String discoveredBy() { return "Notch"; }
         @Override public Properties properties() { return new Properties(2, 0, 4, 0, 0, 2); }
         @Override public String[] attributes() { return new String[]{"Yellow", "Food", "Potato"}; }
@@ -550,6 +552,7 @@ public final class CropCards {
     /** Planta carnívora: morde e segura quem chega perto; acima do tamanho 3 precisa de lava embaixo. */
     static final class EatingPlant extends CropCard {
         EatingPlant() { super("eatingplant"); }
+        @Override public int optimalHarvestSize(CropBlockEntity crop) { return 4; }
         @Override public Properties properties() { return new Properties(6, 1, 1, 3, 1, 4); }
         @Override public String[] attributes() { return new String[]{"Bad", "Food"}; }
         @Override public int maxSize() { return 6; }

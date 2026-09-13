@@ -93,6 +93,8 @@ public class CropBlock extends Block implements EntityBlock {
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                           InteractionHand hand, BlockHitResult hit) {
+        // o Cropnalyzer lê a plantação (Item.useOn) em vez de colher
+        if (stack.getItem() instanceof net.ic2reborn.item.CropnalyzerItem) return InteractionResult.PASS;
         if (level.isClientSide()) return InteractionResult.SUCCESS;
         if (level.getBlockEntity(pos) instanceof CropBlockEntity crop && crop.useItem(player, hand)) {
             return InteractionResult.SUCCESS;
