@@ -20,12 +20,15 @@ import java.util.Optional;
  *   <li>{@code results}: lista de {@code {"item", "count"}} para várias saídas (lavadora de minério);</li>
  *   <li>{@code fluid}/{@code fluid_amount}: fluido (e mB) gastos do tanque por operação — sem
  *   {@code fluid}, vale o que estiver no tanque;</li>
- *   <li>{@code fluid_result}: {@code {"fluid", "amount"}} produzido no tanque de saída (enlatadora).</li>
+ *   <li>{@code fluid_result}: {@code {"fluid", "amount"}} produzido no tanque de saída (enlatadora);</li>
+ *   <li>{@code min_heat}: calor mínimo (centrífuga térmica);</li>
+ *   <li>{@code hardness}: dureza mínima da lâmina (cortador de blocos).</li>
  * </ul>
  */
 public record MachineRecipe(String machine, String input, int inputCount, Optional<String> secondaryInput,
                             int secondaryCount, Optional<Identifier> result, int resultCount, List<Output> results,
-                            Optional<Identifier> fluid, int fluidAmount, Optional<FluidOutput> fluidResult) {
+                            Optional<Identifier> fluid, int fluidAmount, Optional<FluidOutput> fluidResult,
+                            int minHeat, int hardness) {
     public record Output(Identifier item, int count) {
         public static final Codec<Output> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("item").forGetter(Output::item),
@@ -51,7 +54,9 @@ public record MachineRecipe(String machine, String input, int inputCount, Option
             Output.CODEC.listOf().optionalFieldOf("results", List.of()).forGetter(MachineRecipe::results),
             Identifier.CODEC.optionalFieldOf("fluid").forGetter(MachineRecipe::fluid),
             Codec.INT.optionalFieldOf("fluid_amount", 0).forGetter(MachineRecipe::fluidAmount),
-            FluidOutput.CODEC.optionalFieldOf("fluid_result").forGetter(MachineRecipe::fluidResult)
+            FluidOutput.CODEC.optionalFieldOf("fluid_result").forGetter(MachineRecipe::fluidResult),
+            Codec.INT.optionalFieldOf("min_heat", 0).forGetter(MachineRecipe::minHeat),
+            Codec.INT.optionalFieldOf("hardness", 0).forGetter(MachineRecipe::hardness)
     ).apply(instance, MachineRecipe::new));
 
     /** Todas as saídas: {@code result} (se houver) seguido de {@code results}. */

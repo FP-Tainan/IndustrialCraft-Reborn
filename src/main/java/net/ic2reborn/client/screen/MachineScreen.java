@@ -190,6 +190,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         double ratio = switch (gauge.source()) {
             case ENERGY -> this.menu.getEnergyRatio();
             case PROGRESS -> this.menu.getProgressRatio();
+            case HEAT -> this.menu.getHeatRatio();
             case NONE -> 0.0;
         };
 
@@ -259,6 +260,13 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     /** Enlatadora: botão de modo (63, 81) cicla os 4 modos e o de setas (77, 64) troca os tanques, como no GuiCanner. */
     @Override
     public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+        // GuiMetalFormer: botão (65, 53) alterna extrudar → laminar → cortar
+        if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.METAL_FORMER && event.button() == 0
+                && this.isHovering(65, 53, 20, 20, event.x(), event.y())) {
+            this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId,
+                    net.ic2reborn.block.entity.MachineBlockEntity.BUTTON_METAL_FORMER_MODE);
+            return true;
+        }
         if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.CANNER && event.button() == 0) {
             int button = -1;
             if (this.isHovering(63, 81, 50, 14, event.x(), event.y())) {
@@ -274,11 +282,38 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         return super.mouseClicked(event, doubleClick);
     }
 
+    private static final String[] METAL_FORMER_MODES = {"extruding", "rolling", "cutting"};
+    private static final String[] METAL_FORMER_MODE_FALLBACKS = {"Extruding", "Rolling", "Cutting"};
+    /** Ícones do botão no IC2: cabo de cobre, martelo e alicate. */
+    private static final String[] METAL_FORMER_ICONS = {"craftenergy:cable_copper", "craftenergy:hammer", "craftenergy:cutter"};
+
     private static final String[] CANNER_MODES = {"bottle_solid", "empty_liquid", "bottle_liquid", "enrich_liquid"};
     private static final String[] CANNER_MODE_FALLBACKS = {"Can solids", "Empty container into tank", "Fill container from tank", "Enrich fluid"};
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.METAL_FORMER) {
+            boolean hovered = this.isHovering(65, 53, 20, 20, mouseX, mouseY);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Identifier.withDefaultNamespace(
+                    hovered ? "widget/button_highlighted" : "widget/button"), 65, 53, 20, 20);
+            int mode = Math.floorMod(this.menu.getMachineMode(), METAL_FORMER_MODES.length);
+            graphics.item(new net.minecraft.world.item.ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM
+                    .getOptional(Identifier.parse(METAL_FORMER_ICONS[mode]))
+                    .orElse(net.minecraft.world.item.Items.BARRIER)), 67, 55);
+            if (hovered) {
+                graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(Component.translatableWithFallback(
+                        "gui.ic2reborn.metal_former.mode." + METAL_FORMER_MODES[mode], METAL_FORMER_MODE_FALLBACKS[mode])), mouseX, mouseY);
+            }
+        }
+        if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.BLOCK_CUTTER) {
+            if (this.menu.getMachineMode() == 1 && this.isHovering(63, 54, 30, 26, mouseX, mouseY)) {
+                graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(Component.translatableWithFallback(
+                        "gui.ic2reborn.block_cutter.blade_too_weak", "Blade too weak for this block")), mouseX, mouseY);
+            } else if (this.isHovering(70, 34, 16, 16, mouseX, mouseY) && !this.menu.slots.get(3).hasItem()) {
+                graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(Component.translatableWithFallback(
+                        "gui.ic2reborn.block_cutter.blade", "Cutting blade")), mouseX, mouseY);
+            }
+        }
         if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.CANNER) {
             int mode = Math.floorMod(this.menu.getMachineMode(), CANNER_MODES.length);
             if (this.isHovering(63, 81, 50, 14, mouseX, mouseY)) {

@@ -48,7 +48,7 @@ public final class MachineLayout {
         }
     }
 
-    public enum GaugeSource { ENERGY, PROGRESS, NONE }
+    public enum GaugeSource { ENERGY, PROGRESS, HEAT, NONE }
 
     public enum TankStyle { NORMAL, PLAIN }
 

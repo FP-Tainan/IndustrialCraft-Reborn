@@ -49,6 +49,10 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.INGOT_URANIUM.get());
                         output.accept(IC2Items.FILLED_TIN_CAN.get());
                         output.accept(IC2Items.BIO_CHAFF.get());
+                        for (var item : java.util.List.of(IC2Items.PLATE_OBSIDIAN, IC2Items.COIN, IC2Items.FUEL_ROD, IC2Items.SLAG,
+                                IC2Items.DUST_CLAY, IC2Items.CRUSHED_URANIUM, IC2Items.PURIFIED_URANIUM)) {
+                            output.accept(item.get());
+                        }
                         net.ic2reborn.fluid.IC2Fluids.ITEMS.getEntries().forEach(entry -> output.accept(entry.get()));
                         IC2AutoItems.ITEMS.getEntries().forEach(entry -> {
                             output.accept(entry.get());

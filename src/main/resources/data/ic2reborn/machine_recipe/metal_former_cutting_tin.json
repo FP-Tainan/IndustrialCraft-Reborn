@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_cutting",
+  "input": "craftenergy:plate_tin",
+  "input_count": 1,
+  "result": "craftenergy:cable_tin",
+  "result_count": 3
+}

@@ -32,6 +32,21 @@ public class IC2Items {
     public static final RegistryObject<Item> BIO_CHAFF =
             ITEMS.register("bio_chaff", () -> new Item(new Item.Properties().setId(ITEMS.key("bio_chaff"))));
 
+    // itens que as receitas do conformador, cortador e centrífuga do IC2 pedem
+    public static final RegistryObject<Item> PLATE_OBSIDIAN = simple("plate_obsidian");
+    /** Crédito industrial (IC2: ic2:crafting#coin). */
+    public static final RegistryObject<Item> COIN = simple("coin");
+    /** Barra de combustível vazia, enchida na enlatadora com urânio. */
+    public static final RegistryObject<Item> FUEL_ROD = simple("fuel_rod");
+    public static final RegistryObject<Item> SLAG = simple("slag");
+    public static final RegistryObject<Item> DUST_CLAY = simple("dust_clay");
+    public static final RegistryObject<Item> CRUSHED_URANIUM = simple("crushed_uranium");
+    public static final RegistryObject<Item> PURIFIED_URANIUM = simple("purified_uranium");
+
+    private static RegistryObject<Item> simple(String name) {
+        return ITEMS.register(name, () -> new Item(new Item.Properties().setId(ITEMS.key(name))));
+    }
+
     public static final RegistryObject<Item> RAW_LEAD =
             ITEMS.register("raw_lead", () -> new Item(new Item.Properties().setId(ITEMS.key("raw_lead"))));
     public static final RegistryObject<Item> RAW_URANIUM =

@@ -1,0 +1,9 @@
+{
+  "machine": "thermal_centrifuge",
+  "input": "minecraft:quartz",
+  "input_count": 2,
+  "results": [
+    { "item": "ic2reborn:dust_small_lithium", "count": 1 }
+  ],
+  "min_heat": 500
+}

@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_rolling",
+  "input": "ic2reborn:ingot_bronze",
+  "input_count": 1,
+  "result": "ic2reborn:plate_bronze",
+  "result_count": 1
+}

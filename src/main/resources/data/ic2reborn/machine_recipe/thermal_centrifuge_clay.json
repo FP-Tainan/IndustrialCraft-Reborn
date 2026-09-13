@@ -1,0 +1,9 @@
+{
+  "machine": "thermal_centrifuge",
+  "input": "ic2reborn:dust_clay",
+  "input_count": 4,
+  "results": [
+    { "item": "ic2reborn:dust_silicon_dioxide", "count": 1 }
+  ],
+  "min_heat": 250
+}

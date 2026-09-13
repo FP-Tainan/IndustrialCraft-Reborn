@@ -1,0 +1,8 @@
+{
+  "machine": "block_cutter",
+  "input": "minecraft:obsidian",
+  "input_count": 1,
+  "result": "ic2reborn:plate_obsidian",
+  "result_count": 4,
+  "hardness": 8
+}

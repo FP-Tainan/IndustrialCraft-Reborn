@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_cutting",
+  "input": "ic2reborn:casing_iron",
+  "input_count": 1,
+  "result": "ic2reborn:coin",
+  "result_count": 1
+}

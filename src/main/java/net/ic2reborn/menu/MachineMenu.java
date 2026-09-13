@@ -165,6 +165,20 @@ public class MachineMenu extends AbstractContainerMenu {
         return ratio(getFluidAmount(tank), getFluidCapacity(tank));
     }
 
+    /** Calor atual (forno de indução, centrífuga térmica). */
+    public int getHeat() {
+        return value(MachineBlockEntity.DATA_HEAT);
+    }
+
+    /** Calor máximo (indução) ou calor pedido pela receita (centrífuga). */
+    public int getMaxHeat() {
+        return value(MachineBlockEntity.DATA_MAX_HEAT);
+    }
+
+    public double getHeatRatio() {
+        return ratio(getHeat(), getMaxHeat());
+    }
+
     /** Modo configurado do transformador: 0 = redstone, 1 = abaixa, 2 = eleva. */
     public int getTransformerMode() {
         return value(MachineBlockEntity.DATA_MODE);

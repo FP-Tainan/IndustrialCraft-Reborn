@@ -1,0 +1,6 @@
+{
+  "machine": "macerator",
+  "input": "#c:raw_materials/uranium",
+  "result": "ic2reborn:crushed_uranium",
+  "result_count": 2
+}

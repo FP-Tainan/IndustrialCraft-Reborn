@@ -1,0 +1,8 @@
+{
+  "machine": "block_cutter",
+  "input": "ic2reborn:bronze_block",
+  "input_count": 1,
+  "result": "ic2reborn:plate_bronze",
+  "result_count": 9,
+  "hardness": 2
+}

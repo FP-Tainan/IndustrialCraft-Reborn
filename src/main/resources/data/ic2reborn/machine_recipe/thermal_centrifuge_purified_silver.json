@@ -1,0 +1,10 @@
+{
+  "machine": "thermal_centrifuge",
+  "input": "ic2reborn:purified_silver",
+  "input_count": 1,
+  "results": [
+    { "item": "ic2reborn:dust_small_lead", "count": 1 },
+    { "item": "ic2reborn:dust_silver", "count": 1 }
+  ],
+  "min_heat": 1000
+}

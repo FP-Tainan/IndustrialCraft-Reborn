@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_rolling",
+  "input": "minecraft:iron_ingot",
+  "input_count": 1,
+  "result": "craftenergy:plate_iron",
+  "result_count": 1
+}

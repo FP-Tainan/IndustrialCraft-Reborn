@@ -458,5 +458,17 @@
   "gui.ic2reborn.canner.mode.empty_liquid": "Empty container into tank",
   "gui.ic2reborn.canner.mode.bottle_liquid": "Fill container from tank",
   "gui.ic2reborn.canner.mode.enrich_liquid": "Enrich fluid",
-  "gui.ic2reborn.canner.swap": "Swap tanks"
+  "gui.ic2reborn.canner.swap": "Swap tanks",
+  "item.ic2reborn.plate_obsidian": "Obsidian Plate",
+  "item.ic2reborn.coin": "Industrial Credit",
+  "item.ic2reborn.fuel_rod": "Fuel Rod (Empty)",
+  "item.ic2reborn.slag": "Slag",
+  "item.ic2reborn.dust_clay": "Clay Dust",
+  "item.ic2reborn.crushed_uranium": "Crushed Uranium Ore",
+  "item.ic2reborn.purified_uranium": "Purified Crushed Uranium Ore",
+  "gui.ic2reborn.metal_former.mode.extruding": "Extruding",
+  "gui.ic2reborn.metal_former.mode.rolling": "Rolling",
+  "gui.ic2reborn.metal_former.mode.cutting": "Cutting",
+  "gui.ic2reborn.block_cutter.blade": "Cutting blade",
+  "gui.ic2reborn.block_cutter.blade_too_weak": "Blade too weak for this block"
 }

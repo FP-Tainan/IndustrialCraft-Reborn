@@ -458,5 +458,17 @@
   "gui.ic2reborn.canner.mode.empty_liquid": "Esvaziar recipiente no tanque",
   "gui.ic2reborn.canner.mode.bottle_liquid": "Encher recipiente do tanque",
   "gui.ic2reborn.canner.mode.enrich_liquid": "Enriquecer fluido",
-  "gui.ic2reborn.canner.swap": "Trocar tanques"
+  "gui.ic2reborn.canner.swap": "Trocar tanques",
+  "item.ic2reborn.plate_obsidian": "Placa de Obsidiana",
+  "item.ic2reborn.coin": "Crédito Industrial",
+  "item.ic2reborn.fuel_rod": "Barra de Combustível (Vazia)",
+  "item.ic2reborn.slag": "Escória",
+  "item.ic2reborn.dust_clay": "Pó de Argila",
+  "item.ic2reborn.crushed_uranium": "Minério de Urânio Triturado",
+  "item.ic2reborn.purified_uranium": "Minério de Urânio Purificado",
+  "gui.ic2reborn.metal_former.mode.extruding": "Extrudar",
+  "gui.ic2reborn.metal_former.mode.rolling": "Laminar",
+  "gui.ic2reborn.metal_former.mode.cutting": "Cortar",
+  "gui.ic2reborn.block_cutter.blade": "Lâmina de corte",
+  "gui.ic2reborn.block_cutter.blade_too_weak": "Lâmina fraca demais para este bloco"
 }

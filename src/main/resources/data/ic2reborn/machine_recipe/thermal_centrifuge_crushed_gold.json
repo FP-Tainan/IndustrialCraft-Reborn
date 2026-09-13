@@ -1,0 +1,11 @@
+{
+  "machine": "thermal_centrifuge",
+  "input": "ic2reborn:crushed_gold",
+  "input_count": 1,
+  "results": [
+    { "item": "ic2reborn:dust_small_silver", "count": 1 },
+    { "item": "ic2reborn:dust_gold", "count": 1 },
+    { "item": "ic2reborn:dust_stone", "count": 1 }
+  ],
+  "min_heat": 2000
+}

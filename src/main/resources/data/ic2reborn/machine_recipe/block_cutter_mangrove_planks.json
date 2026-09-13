@@ -1,0 +1,8 @@
+{
+  "machine": "block_cutter",
+  "input": "#minecraft:mangrove_logs",
+  "input_count": 1,
+  "result": "minecraft:mangrove_planks",
+  "result_count": 6,
+  "hardness": 1
+}

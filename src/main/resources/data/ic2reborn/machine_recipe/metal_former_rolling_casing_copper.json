@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_rolling",
+  "input": "craftenergy:plate_copper",
+  "input_count": 1,
+  "result": "ic2reborn:casing_copper",
+  "result_count": 2
+}

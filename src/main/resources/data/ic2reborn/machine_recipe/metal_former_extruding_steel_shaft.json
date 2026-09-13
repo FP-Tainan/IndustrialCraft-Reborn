@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_extruding",
+  "input": "ic2reborn:steel_block",
+  "input_count": 1,
+  "result": "ic2reborn:steel_shaft",
+  "result_count": 1
+}

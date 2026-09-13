@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_rolling",
+  "input": "craftenergy:ingot_tin",
+  "input_count": 1,
+  "result": "craftenergy:plate_tin",
+  "result_count": 1
+}

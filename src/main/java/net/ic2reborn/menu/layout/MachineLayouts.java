@@ -47,6 +47,8 @@ public final class MachineLayouts {
                     .upgrades(151, 7)
                     .energy(29, 37)
                     .progress(55, 33, PROGRESS_BLOCK_CUTTER)
+                    // <only if="isBladeTooWeak">: aviso de lâmina fraca demais
+                    .imageIf(menu -> menu.getMachineMode() == 1, "guiblockcutter.png", 63, 54, 176, 34, 30, 26, 256, 256)
                     .build();
 
             case INDUCTION_FURNACE -> MachineLayout.dynamic(176, 166)
@@ -59,7 +61,7 @@ public final class MachineLayouts {
                     .energy(55, 37)
                     .progress(81, 35, PROGRESS_ARROW)
                     .text(tr("heat", "Heat:"), 10, 36)
-                    .text(menu -> Component.literal("0%"), 10, 46)
+                    .text(menu -> Component.literal((menu.getMaxHeat() <= 0 ? 0 : menu.getHeat() * 100 / menu.getMaxHeat()) + "%"), 10, 46)
                     .build();
 
             case BLAST_FURNACE -> MachineLayout.dynamic(176, 166)
@@ -81,7 +83,7 @@ public final class MachineLayouts {
                     .upgrades(151, 7)
                     .progress(84, 25, PROGRESS_CENTRIFUGE)
                     .energy(15, 38)
-                    .gauge(68, 67, HEAT_CENTRIFUGE, NONE)
+                    .gauge(68, 67, HEAT_CENTRIFUGE, MachineLayout.GaugeSource.HEAT)
                     .build();
 
             case ORE_WASHING_PLANT -> MachineLayout.dynamic(176, 166)

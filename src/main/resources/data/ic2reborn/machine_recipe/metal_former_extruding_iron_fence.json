@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_extruding",
+  "input": "ic2reborn:casing_iron",
+  "input_count": 1,
+  "result": "ic2reborn:iron_fence",
+  "result_count": 1
+}

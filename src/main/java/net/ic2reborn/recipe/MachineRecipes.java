@@ -112,7 +112,7 @@ public final class MachineRecipes extends SimpleJsonResourceReloadListener<Machi
 
             grouped.computeIfAbsent(recipe.machine(), key -> new ArrayList<>())
                     .add(new Compiled(input.get(), recipe.inputCount(), secondary, recipe.secondaryCount(),
-                            List.copyOf(results), fluid, recipe.fluidAmount(), resultFluid, resultFluidAmount));
+                            List.copyOf(results), fluid, recipe.fluidAmount(), resultFluid, resultFluidAmount, recipe.minHeat(), recipe.hardness()));
             loaded++;
         }
         grouped.replaceAll((machine, list) -> List.copyOf(list));
@@ -146,7 +146,7 @@ public final class MachineRecipes extends SimpleJsonResourceReloadListener<Machi
      */
     public record Compiled(Predicate<ItemStack> input, int inputCount, @Nullable Predicate<ItemStack> secondary,
                            int secondaryCount, List<Stack> results, @Nullable Fluid fluid, int fluidAmount,
-                           @Nullable Fluid resultFluid, int resultFluidAmount) {
+                           @Nullable Fluid resultFluid, int resultFluidAmount, int minHeat, int hardness) {
         /** Cópias novas das saídas. */
         public List<ItemStack> createResults() {
             return this.results.stream().map(Stack::create).toList();

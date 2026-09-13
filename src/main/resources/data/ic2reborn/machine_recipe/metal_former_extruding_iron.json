@@ -1,0 +1,7 @@
+{
+  "machine": "metal_former_extruding",
+  "input": "minecraft:iron_ingot",
+  "input_count": 1,
+  "result": "craftenergy:cable_iron",
+  "result_count": 4
+}

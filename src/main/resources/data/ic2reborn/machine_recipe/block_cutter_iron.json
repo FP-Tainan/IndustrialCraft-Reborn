@@ -1,0 +1,8 @@
+{
+  "machine": "block_cutter",
+  "input": "minecraft:iron_block",
+  "input_count": 1,
+  "result": "craftenergy:plate_iron",
+  "result_count": 9,
+  "hardness": 5
+}

@@ -92,23 +92,29 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     public static final int DATA_MAX_PROGRESS = 3;
     public static final int DATA_POWER = 4;           // CW que passaram pelo bloco no último tick
     public static final int DATA_VOLTAGE = 5;         // MV
-    public static final int DATA_MODE = 6;            // modo do transformador ou da enlatadora
+    public static final int DATA_MODE = 6;            // modo (transformador, enlatadora, conformador) ou aviso da lâmina
     public static final int DATA_FLUID = 7;           // id do fluido no registro + 1 (0 = vazio)
     public static final int DATA_FLUID_AMOUNT = 8;    // mB
     public static final int DATA_FLUID_CAPACITY = 9;  // mB
     /** Campos por tanque; o tanque de saída vem logo depois (10, 11, 12). */
     public static final int DATA_PER_TANK = 3;
-    public static final int DATA_COUNT = 13;
+    public static final int DATA_HEAT = 13;
+    public static final int DATA_MAX_HEAT = 14;
+    public static final int DATA_COUNT = 15;
 
-    /** Botões da GUI: 0–2 modos do transformador, 10–13 modos da enlatadora, 14 troca os tanques. */
+    /** Botões da GUI: 0–2 modos do transformador, 10–13 modos da enlatadora, 14 troca os tanques, 20 modo do conformador. */
     public static final int BUTTON_CANNER_MODE = 10;
     public static final int BUTTON_SWAP_TANKS = 14;
+    public static final int BUTTON_METAL_FORMER_MODE = 20;
 
     /** Modos do transformador do IC2. */
     public enum TransformerMode { REDSTONE, STEP_DOWN, STEP_UP }
 
     /** Modos da enlatadora do IC2. */
     public enum CannerMode { BOTTLE_SOLID, EMPTY_LIQUID, BOTTLE_LIQUID, ENRICH_LIQUID }
+
+    /** Receitas do conformador de metal, na ordem dos modos do IC2: extrudar, laminar, cortar. */
+    private static final String[] METAL_FORMER_RECIPES = {"metal_former_extruding", "metal_former_rolling", "metal_former_cutting"};
 
     /** Itens que o reciclador consome sem nunca dar sucata. */
     public static final TagKey<Item> RECYCLER_BLACKLIST = TagKey.create(Registries.ITEM,
@@ -128,9 +134,18 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private static final long TANK_CAPACITY = 8 * FluidConstants.BUCKET;
     /** A textura ativa continua alguns ticks depois de parar, para não piscar. */
     private static final int ACTIVE_HOLD_TICKS = 10;
+    /** Aquecer (indução, centrífuga) gasta 1 EU/t no IC2 → 1.000 CW a 1.000 MV. */
+    private static final long HEATING_POWER = 1_000;
+    /** Forno de indução: calor máximo 10.000, operação em 4.000 pontos, processar gasta 15 EU/t a mais. */
+    private static final int INDUCTION_MAX_HEAT = 10_000;
+    private static final int INDUCTION_OPERATION = 4_000;
+    private static final long INDUCTION_PROCESS_POWER = 15_000;
+    /** Centrífuga térmica: calor máximo 5.000. */
+    private static final int CENTRIFUGE_MAX_HEAT = 5_000;
 
     private static final int GENERATOR_FUEL_SLOT = 1;
     private static final int WATER_FUEL_SLOT = 0;
+    private static final int BLADE_SLOT = 3;
 
     /**
      * Combustível do gerador semifluido (IC2: {@code SemiFluidFuelManager}).
@@ -164,6 +179,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case ORE_WASHING_PLANT -> new Slots(0, -1, new int[]{1, 2, 3}, 10, -1, 8, 9);
                 case SOLID_CANNER -> new Slots(0, 1, new int[]{2}, 3, -1, -1, -1);
                 case CANNER -> new Slots(0, 7, new int[]{1}, 2, -1, -1, -1);
+                // duas entradas (A, B) e duas saídas
+                case INDUCTION_FURNACE -> new Slots(0, 1, new int[]{2, 3}, 4, -1, -1, -1);
+                case CENTRIFUGE -> new Slots(0, -1, new int[]{2, 3, 4}, 1, -1, -1, -1);
                 default -> role == MachineEnergyProfile.Role.PROCESSOR
                         ? new Slots(0, -1, new int[]{1}, 2, -1, -1, -1)
                         : new Slots(-1, -1, NO_OUTPUTS, -1, -1, -1, -1);
@@ -197,6 +215,11 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private long flowThisTick;
     private long lastFlow;
     private int activeHold;
+    private int heat;
+    private int maxHeat;
+    private int workHeat = CENTRIFUGE_MAX_HEAT;
+    private boolean bladeTooWeak;
+    private int metalFormerMode;
     private TransformerMode transformerMode = TransformerMode.REDSTONE;
     private CannerMode cannerMode = CannerMode.BOTTLE_SOLID;
     private @Nullable RecipeHolder<SmeltingRecipe> lastSmelting;
@@ -231,6 +254,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.slots = Slots.of(this.guiType, this.profile.role());
         this.recipeKey = this.guiType.name().toLowerCase(Locale.ROOT);
         this.maxProgress = this.profile.operationTicks();
+        this.maxHeat = this.guiType == MachineGuiType.INDUCTION_FURNACE ? INDUCTION_MAX_HEAT : CENTRIFUGE_MAX_HEAT;
 
         MachineLayout layout = this.guiType.layout();
         this.inventory = new SimpleContainer(layout.slotCount()) {
@@ -356,6 +380,16 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return this.cannerMode;
     }
 
+    /** Calor atual (forno de indução, centrífuga térmica). */
+    public int getHeat() {
+        return this.heat;
+    }
+
+    /** Cortador de blocos: sem lâmina, ou lâmina mais mole que o bloco. */
+    public boolean isBladeTooWeak() {
+        return this.bladeTooWeak;
+    }
+
     /** Botão da GUI: 0 = redstone, 1 = abaixa fixo, 2 = eleva fixo. Só vale para transformadores. */
     public boolean setTransformerMode(int mode) {
         if (this.transformer == null || mode < 0 || mode >= TransformerMode.values().length) return false;
@@ -364,9 +398,16 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return true;
     }
 
-    /** Botões da GUI: modos do transformador, modos da enlatadora e troca de tanques. */
+    /** Botões da GUI: modos do transformador, da enlatadora e do conformador, e troca de tanques. */
     public boolean handleMenuButton(int id) {
         if (this.transformer != null) return setTransformerMode(id);
+
+        if (this.guiType == MachineGuiType.METAL_FORMER && id == BUTTON_METAL_FORMER_MODE) {
+            this.metalFormerMode = (this.metalFormerMode + 1) % METAL_FORMER_RECIPES.length;
+            this.progress = 0;
+            setChanged();
+            return true;
+        }
         if (this.guiType != MachineGuiType.CANNER) return false;
 
         if (id >= BUTTON_CANNER_MODE && id < BUTTON_CANNER_MODE + CannerMode.values().length) {
@@ -438,7 +479,11 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case SEMIFLUID_GENERATOR -> tickSemifluid();
                 default -> tickGenerator(level);
             };
-            case PROCESSOR -> tickProcessor(level);
+            case PROCESSOR -> switch (this.guiType) {
+                case INDUCTION_FURNACE -> tickInduction(level);
+                case CENTRIFUGE -> tickCentrifugeHeat(level) | tickProcessor(level);
+                default -> tickProcessor(level);
+            };
             case TRANSFORMER -> tickTransformer(level);
             case STORAGE, NONE -> false;
         };
@@ -694,13 +739,115 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return true;
     }
 
+    // ── máquinas com calor ────────────────────────────────────────────────
+    /**
+     * Forno de indução do IC2: com algo para fundir (ou redstone) aquece 1 ponto por tick até 10.000;
+     * sem isso esfria 4 por tick. Processando, o progresso sobe calor ÷ 30 por tick e, a cada
+     * 4.000 pontos, funde as duas entradas de uma vez.
+     */
+    private boolean tickInduction(Level level) {
+        boolean changed = false;
+        int inputA = this.slots.input();
+        int inputB = this.slots.secondary();
+        int outputA = this.slots.outputs()[0];
+        int outputB = this.slots.outputs()[1];
+
+        if (this.progress >= INDUCTION_OPERATION) {
+            smeltInto(level, inputA, outputA);
+            smeltInto(level, inputB, outputB);
+            this.progress = 0;
+            changed = true;
+        }
+
+        boolean canOperate = smeltResult(level, inputA, outputA) != null || smeltResult(level, inputB, outputB) != null;
+        if ((canOperate || level.hasNeighborSignal(this.worldPosition)) && this.energy >= HEATING_POWER) {
+            this.energy -= HEATING_POWER;
+            if (this.heat < INDUCTION_MAX_HEAT) this.heat++;
+            changed = true;
+        } else if (this.heat > 0) {
+            this.heat -= Math.min(this.heat, 4);
+            changed = true;
+        }
+
+        if (canOperate && this.energy >= INDUCTION_PROCESS_POWER) {
+            this.energy -= INDUCTION_PROCESS_POWER;
+            this.progress += this.heat / 30;
+            changed = true;
+        } else if (!canOperate && this.progress != 0) {
+            this.progress = 0;
+            changed = true;
+        }
+        this.maxProgress = INDUCTION_OPERATION;
+        this.maxHeat = INDUCTION_MAX_HEAT;
+        return changed;
+    }
+
+    /** Resultado da fornalha para o slot, se couber na saída. */
+    private @Nullable ItemStack smeltResult(Level level, int inputSlot, int outputSlot) {
+        if (!(level instanceof ServerLevel serverLevel)) return null;
+        ItemStack input = this.inventory.getItem(inputSlot);
+        if (input.isEmpty()) return null;
+        SingleRecipeInput recipeInput = new SingleRecipeInput(input);
+        Optional<RecipeHolder<SmeltingRecipe>> recipe = serverLevel.recipeAccess().getRecipeFor(RecipeType.SMELTING, recipeInput, serverLevel);
+        if (recipe.isEmpty()) return null;
+        ItemStack result = recipe.get().value().assemble(recipeInput);
+        if (result.isEmpty()) return null;
+        ItemStack output = this.inventory.getItem(outputSlot);
+        if (!output.isEmpty() && (!ItemStack.isSameItemSameComponents(output, result)
+                || output.getCount() + result.getCount() > output.getMaxStackSize())) return null;
+        return result;
+    }
+
+    private void smeltInto(Level level, int inputSlot, int outputSlot) {
+        ItemStack result = smeltResult(level, inputSlot, outputSlot);
+        if (result == null) return;
+        shrinkSlot(inputSlot, 1);
+        ItemStack output = this.inventory.getItem(outputSlot);
+        if (output.isEmpty()) {
+            this.inventory.setItem(outputSlot, result);
+        } else {
+            output.grow(result.getCount());
+            this.inventory.setItem(outputSlot, output);
+        }
+    }
+
+    /**
+     * Centrífuga térmica do IC2: aquece 1 ponto por tick até o calor que a receita pede (máx. 5.000),
+     * ou até 5.000 com redstone; sem receita esfria 1 por tick. A operação só anda com calor suficiente.
+     */
+    private boolean tickCentrifugeHeat(Level level) {
+        ItemStack input = this.inventory.getItem(this.slots.input());
+        boolean redstone = level.hasNeighborSignal(this.worldPosition);
+        Optional<MachineRecipes.Compiled> recipe = MachineRecipes.INSTANCE.find("thermal_centrifuge", input);
+
+        int requested = Integer.MIN_VALUE;
+        if (recipe.isPresent() && !redstone) {
+            requested = Math.min(CENTRIFUGE_MAX_HEAT, recipe.get().minHeat());
+            this.workHeat = requested;
+            if (this.heat > requested) this.heat = requested;
+        } else if (this.heat <= CENTRIFUGE_MAX_HEAT && redstone) {
+            requested = CENTRIFUGE_MAX_HEAT;
+            this.workHeat = requested;
+        }
+
+        int before = this.heat;
+        if (this.energy >= HEATING_POWER && this.heat - 1 < requested) {
+            this.energy -= HEATING_POWER;
+            this.heat++;
+        } else {
+            this.heat -= Math.min(this.heat, 1);
+        }
+        this.maxHeat = this.workHeat;
+        return this.heat != before;
+    }
+
     // ── máquinas de processamento ─────────────────────────────────────────
     /** Máquina padrão do IC2: gasta a potência por tick e completa a operação no fim da duração. */
     private boolean tickProcessor(Level level) {
         Operation operation = findOperation(level);
 
         if (operation == null || !insertResults(operation.preview(), true) || !hasFluid(operation.fluid())
-                || !canFillOutput(operation)) {
+                || !canFillOutput(operation) || this.heat < operation.minHeat()) {
             if (this.progress == 0) return false;
             this.progress = 0;
             return true;
@@ -741,24 +888,28 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
      * @param fluid             fluido gasto do tanque principal, em gotas do Fabric
      * @param resultFluid       fluido produzido no tanque de saída (ou null)
      * @param resultFluidAmount gotas produzidas
+     * @param minHeat           calor mínimo para trabalhar
+     * @param hardness          dureza mínima da lâmina
      */
     private record Operation(int inputCount, int secondaryCount, List<ItemStack> preview,
                              Function<RandomSource, List<ItemStack>> result, long fluid,
-                             @Nullable FluidVariant resultFluid, long resultFluidAmount) {
+                             @Nullable FluidVariant resultFluid, long resultFluidAmount, int minHeat, int hardness) {
         static Operation items(int inputCount, int secondaryCount, List<ItemStack> preview,
                                Function<RandomSource, List<ItemStack>> result) {
-            return new Operation(inputCount, secondaryCount, preview, result, 0, null, 0);
+            return new Operation(inputCount, secondaryCount, preview, result, 0, null, 0, 0, 0);
         }
     }
 
     private @Nullable Operation findOperation(Level level) {
         ItemStack input = this.slots.input() >= 0 ? this.inventory.getItem(this.slots.input()) : ItemStack.EMPTY;
         ItemStack secondary = this.slots.secondary() >= 0 ? this.inventory.getItem(this.slots.secondary()) : ItemStack.EMPTY;
-        if (this.guiType == MachineGuiType.CANNER) return cannerOperation(input, secondary);
-        if (input.isEmpty()) return null;
         return switch (this.guiType) {
-            case ELECTRIC_FURNACE -> smeltingOperation(level, input);
-            case RECYCLER -> recyclingOperation(input);
+            case CANNER -> cannerOperation(input, secondary);
+            case BLOCK_CUTTER -> cutterOperation(input);
+            case ELECTRIC_FURNACE -> input.isEmpty() ? null : smeltingOperation(level, input);
+            case RECYCLER -> input.isEmpty() ? null : recyclingOperation(input);
+            case METAL_FORMER -> recipeOperation(METAL_FORMER_RECIPES[this.metalFormerMode], input, secondary);
+            case CENTRIFUGE -> recipeOperation("thermal_centrifuge", input, secondary);
             default -> recipeOperation(this.recipeKey, input, secondary);
         };
     }
@@ -772,8 +923,29 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                         recipe.createResults(), random -> recipe.createResults(),
                         recipe.fluidAmount() * FluidConstants.BUCKET / 1000,
                         recipe.resultFluid() == null ? null : FluidVariant.of(recipe.resultFluid()),
-                        recipe.resultFluidAmount() * FluidConstants.BUCKET / 1000))
+                        recipe.resultFluidAmount() * FluidConstants.BUCKET / 1000,
+                        recipe.minHeat(), recipe.hardness()))
                 .orElse(null);
+    }
+
+    /** Cortador de blocos do IC2: precisa de lâmina tão dura quanto o bloco (ferro 3, aço 6, diamante 9); a lâmina não gasta. */
+    private @Nullable Operation cutterOperation(ItemStack input) {
+        ItemStack blade = this.inventory.getItem(BLADE_SLOT);
+        if (blade.isEmpty()) {
+            this.bladeTooWeak = true;
+            return null;
+        }
+        Operation operation = recipeOperation("block_cutter", input, ItemStack.EMPTY);
+        this.bladeTooWeak = operation != null && operation.hardness() > bladeHardness(blade);
+        return this.bladeTooWeak ? null : operation;
+    }
+
+    private static int bladeHardness(ItemStack blade) {
+        Item item = blade.getItem();
+        if (item == IC2AutoItems.BLOCK_CUTTING_BLADE_IRON.get()) return 3;
+        if (item == IC2AutoItems.BLOCK_CUTTING_BLADE_STEEL.get()) return 6;
+        if (item == IC2AutoItems.BLOCK_CUTTING_BLADE_DIAMOND.get()) return 9;
+        return 0;
     }
 
     /**
@@ -1034,8 +1206,19 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case DATA_MAX_PROGRESS -> this.maxProgress;
             case DATA_POWER -> clampToInt(this.lastFlow);
             case DATA_VOLTAGE -> this.profile.voltage();
-            case DATA_MODE -> this.transformer != null ? this.transformerMode.ordinal() : this.cannerMode.ordinal();
+            case DATA_MODE -> machineMode();
+            case DATA_HEAT -> this.heat;
+            case DATA_MAX_HEAT -> this.maxHeat;
             default -> 0;
+        };
+    }
+
+    private int machineMode() {
+        if (this.transformer != null) return this.transformerMode.ordinal();
+        return switch (this.guiType) {
+            case METAL_FORMER -> this.metalFormerMode;
+            case BLOCK_CUTTER -> this.bladeTooWeak ? 1 : 0;
+            default -> this.cannerMode.ordinal();
         };
     }
 
@@ -1087,6 +1270,10 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         output.putInt("Fuel", this.fuel);
         output.putInt("TotalFuel", this.totalFuel);
         output.putLong("FuelPower", this.fuelPower);
+        output.putInt("Heat", this.heat);
+        if (this.guiType == MachineGuiType.METAL_FORMER) {
+            output.putInt("MetalFormerMode", this.metalFormerMode);
+        }
         if (this.tank != null) {
             this.tank.writeValue(output);
         }
@@ -1122,6 +1309,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.fuel = input.getIntOr("Fuel", 0);
         this.totalFuel = input.getIntOr("TotalFuel", 0);
         this.fuelPower = input.getLongOr("FuelPower", 0);
+        this.heat = Math.max(0, input.getIntOr("Heat", 0));
+        this.metalFormerMode = Math.floorMod(input.getIntOr("MetalFormerMode", 0), METAL_FORMER_RECIPES.length);
         if (this.guiType == MachineGuiType.GENERATOR) {
             this.maxProgress = this.totalFuel;
         }
