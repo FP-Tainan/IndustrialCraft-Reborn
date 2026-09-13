@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "ic2reborn:block/crop/pumpkin_1"
+  }
+}

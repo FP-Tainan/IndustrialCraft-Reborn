@@ -50,6 +50,11 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.FILLED_TIN_CAN.get());
                         output.accept(IC2Items.BIO_CHAFF.get());
                         output.accept(IC2Items.ASHES.get());
+                        for (var item : java.util.List.of(IC2Items.TERRA_WART, IC2Items.OIL_BERRY, IC2Items.MILK_WART,
+                                IC2Items.BOBS_YER_UNCLE_RANKS_BERRY, IC2Items.HOPS, IC2Items.WEED,
+                                IC2Items.DUST_SMALL_DIAMOND, IC2Items.DUST_ENDER_PEARL)) {
+                            output.accept(item.get());
+                        }
                         output.accept(IC2Items.OD_SCANNER.get());
                         output.accept(((net.craftenergy.content.item.ElectricItem) IC2Items.OD_SCANNER.get()).charged());
                         for (var item : java.util.List.of(IC2Items.PLATE_OBSIDIAN, IC2Items.COIN, IC2Items.FUEL_ROD, IC2Items.SLAG,
@@ -76,6 +81,7 @@ public class IC2Reborn implements ModInitializer {
     public void onInitialize() {
         net.ic2reborn.fluid.IC2Fluids.FLUIDS.register();
         net.ic2reborn.fluid.IC2Fluids.BLOCKS.register();
+        net.ic2reborn.registry.IC2Components.COMPONENTS.register();
         IC2Blocks.BLOCKS.register();
         IC2AutoBlocks.BLOCKS.register();
         IC2AutoItems.ITEMS.register();

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "ic2reborn:dust_small_diamond",
+    "ic2reborn:dust_small_diamond",
+    "ic2reborn:dust_small_diamond",
+    "ic2reborn:dust_small_diamond",
+    "ic2reborn:dust_small_diamond",
+    "ic2reborn:dust_small_diamond",
+    "ic2reborn:dust_small_diamond",
+    "ic2reborn:dust_small_diamond",
+    "ic2reborn:dust_small_diamond"
+  ],
+  "result": {
+    "id": "ic2reborn:dust_diamond",
+    "count": 1
+  }
+}

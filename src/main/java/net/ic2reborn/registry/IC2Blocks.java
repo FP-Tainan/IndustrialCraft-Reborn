@@ -50,4 +50,16 @@ public class IC2Blocks {
                             .strength(4.5f, 3.0f)
                             .requiresCorrectToolForDrops(),
                     () -> IC2Items.RAW_URANIUM.get()));
+
+    /** Plantação do IC2: varetas em terra arada (colocadas pela vareta de cultivo, sem item próprio). */
+    public static final RegistryObject<net.ic2reborn.crop.CropBlock> CROP =
+            BLOCKS.register("crop", () -> new net.ic2reborn.crop.CropBlock(
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("crop"))
+                            .sound(SoundType.CROP)
+                            .strength(0.8f)
+                            .noCollision()
+                            .noOcclusion()
+                            .lightLevel(net.ic2reborn.crop.CropBlock::lightLevel)
+                            .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 }

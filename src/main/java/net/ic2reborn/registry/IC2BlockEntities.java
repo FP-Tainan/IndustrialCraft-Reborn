@@ -19,6 +19,9 @@ public class IC2BlockEntities {
             BLOCK_ENTITY_TYPES.register("machine", () ->
                     new BlockEntityType<>(MachineBlockEntity::new, Set.of(autoBlocks())));
 
+    public static final RegistryObject<BlockEntityType<net.ic2reborn.crop.CropBlockEntity>> CROP =
+            BLOCK_ENTITY_TYPES.register("crop", () ->
+                    new BlockEntityType<>(net.ic2reborn.crop.CropBlockEntity::new, Set.of(IC2Blocks.CROP.get())));
     private static Block[] autoBlocks() {
         return IC2AutoBlocks.BLOCKS.getEntries().stream()
                 .map(RegistryObject::get)

@@ -50,6 +50,22 @@ public class IC2Items {
             () -> new net.ic2reborn.item.ScannerItem(new Item.Properties().setId(ITEMS.key("od_scanner")),
                     net.ic2reborn.item.ScannerItem.Tier.OD));
 
+    // plantações do IC2
+    /** Fungo da Terra: comer tira os efeitos ruins. */
+    public static final RegistryObject<Item> TERRA_WART = ITEMS.register("terra_wart",
+            () -> new net.ic2reborn.item.TerraWartItem(new Item.Properties().setId(ITEMS.key("terra_wart"))
+                    .food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(0).saturationModifier(1.0F).alwaysEdible().build())));
+    public static final RegistryObject<Item> OIL_BERRY = simple("oil_berry");
+    public static final RegistryObject<Item> MILK_WART = simple("milk_wart");
+    public static final RegistryObject<Item> BOBS_YER_UNCLE_RANKS_BERRY = simple("bobs_yer_uncle_ranks_berry");
+    public static final RegistryObject<Item> HOPS = simple("hops");
+    /** Erva daninha tirada com a espátula de capina. */
+    public static final RegistryObject<Item> WEED = simple("weed");
+    public static final RegistryObject<Item> DUST_SMALL_DIAMOND = simple("dust_small_diamond");
+    public static final RegistryObject<Item> DUST_ENDER_PEARL = simple("dust_ender_pearl");
+    /** Saco de sementes com planta e atributos (componente ic2reborn:crop_seed). */
+    public static final RegistryObject<Item> CROP_SEED_BAG = ITEMS.register("crop_seed_bag",
+            () -> new net.ic2reborn.item.CropSeedItem(new Item.Properties().setId(ITEMS.key("crop_seed_bag"))));
     private static RegistryObject<Item> simple(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties().setId(ITEMS.key(name))));
     }

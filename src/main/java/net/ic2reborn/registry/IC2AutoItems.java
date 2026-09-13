@@ -184,7 +184,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> CONTAINMENT_BOX = ITEMS.register("containment_box", () -> new Item(new Item.Properties().setId(ITEMS.key("containment_box"))));
     public static final RegistryObject<Item> CONTAINMENT_PLATING = ITEMS.register("containment_plating", () -> new Item(new Item.Properties().setId(ITEMS.key("containment_plating"))));
     public static final RegistryObject<Item> COPPER_BOILER = ITEMS.register("copper_boiler", () -> new Item(new Item.Properties().setId(ITEMS.key("copper_boiler"))));
-    public static final RegistryObject<Item> CROP_STICK = ITEMS.register("crop_stick", () -> new Item(new Item.Properties().setId(ITEMS.key("crop_stick"))));
+    public static final RegistryObject<Item> CROP_STICK = ITEMS.register("crop_stick", () -> new net.ic2reborn.item.CropStickItem(new Item.Properties().setId(ITEMS.key("crop_stick"))));
     public static final RegistryObject<Item> CROPNALYZER = ITEMS.register("cropnalyzer", () -> new Item(new Item.Properties().setId(ITEMS.key("cropnalyzer"))));
     public static final RegistryObject<Item> CROWBAR = ITEMS.register("crowbar", () -> new Item(new Item.Properties().setId(ITEMS.key("crowbar"))));
     public static final RegistryObject<Item> CRUSHED_COPPER = ITEMS.register("crushed_copper", () -> new Item(new Item.Properties().setId(ITEMS.key("crushed_copper"))));
@@ -383,7 +383,7 @@ public class IC2AutoItems {
     public static final RegistryObject<Item> URANIUM_238 = ITEMS.register("uranium_238", () -> new Item(new Item.Properties().setId(ITEMS.key("uranium_238"))));
     public static final RegistryObject<Item> URANIUM_FUEL_ROD = ITEMS.register("uranium_fuel_rod", () -> new Item(new Item.Properties().setId(ITEMS.key("uranium_fuel_rod"))));
     public static final RegistryObject<Item> WATER_CELL = ITEMS.register("water_cell", () -> new Item(new Item.Properties().setId(ITEMS.key("water_cell"))));
-    public static final RegistryObject<Item> WEEDING_TROWEL = ITEMS.register("weeding_trowel", () -> new Item(new Item.Properties().setId(ITEMS.key("weeding_trowel"))));
+    public static final RegistryObject<Item> WEEDING_TROWEL = ITEMS.register("weeding_trowel", () -> new net.ic2reborn.item.WeedingTrowelItem(new Item.Properties().setId(ITEMS.key("weeding_trowel"))));
     public static final RegistryObject<Item> WIND_METER = ITEMS.register("wind_meter", () -> new Item(new Item.Properties().setId(ITEMS.key("wind_meter"))));
     public static final RegistryObject<Item> WOOD_ROTOR_BLADE = ITEMS.register("wood_rotor_blade", () -> new Item(new Item.Properties().setId(ITEMS.key("wood_rotor_blade"))));
     public static final RegistryObject<Item> WRENCH = ITEMS.register("wrench", () -> new net.ic2reborn.item.WrenchItem(new Item.Properties().setId(ITEMS.key("wrench")).durability(120), false));
