@@ -6,7 +6,9 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
-      "net.ic2reborn.test.EnergyGameTest"
+      "net.ic2reborn.test.EnergyGameTest",
+      "net.ic2reborn.test.WrenchGameTest",
+      "net.ic2reborn.test.LootGameTest"
     ]
   },
   "depends": {

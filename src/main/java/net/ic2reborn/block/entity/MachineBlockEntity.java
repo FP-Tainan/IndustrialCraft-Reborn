@@ -496,6 +496,15 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return (int) Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, value));
     }
 
+    /** Quebrar, desmontar ou explodir a máquina solta o inventário no chão. */
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (this.level != null) {
+            net.minecraft.world.Containers.dropContents(this.level, pos, this.inventory);
+        }
+    }
+
     @Override
     public Component getDisplayName() {
         return Component.translatable(this.getBlockState().getBlock().getDescriptionId());
