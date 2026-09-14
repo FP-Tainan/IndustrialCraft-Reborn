@@ -167,6 +167,11 @@ public class ElectricArmorItem extends ElectricItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
                                 Consumer<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, display, tooltip, flag);
+        if (ArmorEffects.isJetpack(stack)) {
+            tooltip.accept(ArmorEffects.jetpackModeText(ArmorEffects.hoverMode(stack)).withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.jetpack_mode_key", "Switch mode: %s",
+                    Component.keybind("key.ic2reborn.jetpack_mode")).withStyle(ChatFormatting.DARK_GRAY));
+        }
         if (this.slot == EquipmentSlot.HEAD && this.kind != Kind.QUANTUM || this.kind == Kind.QUANTUM && this.slot == EquipmentSlot.HEAD) {
             tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.nightvision_key",
                     "Night vision: %s", Component.keybind("key.ic2reborn.nightvision")).withStyle(ChatFormatting.DARK_GRAY));

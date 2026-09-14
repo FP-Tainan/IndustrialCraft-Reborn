@@ -118,6 +118,24 @@ public class ArmorGameTest {
         helper.succeed();
     }
 
+    /** A tecla do jetpack alterna o modo estável no peitoral vestido (e não mexe em peitoral comum). */
+    @GameTest(maxTicks = 20)
+    public void jetpackModeToggles(GameTestHelper helper) {
+        ServerPlayer player = survivor(helper);
+        ItemStack jetpack = charged(IC2AutoItems.JETPACK_ELECTRIC.get());
+        player.setItemSlot(EquipmentSlot.CHEST, jetpack);
+        net.ic2reborn.item.ArmorEffects.toggleJetpackMode(player);
+        if (!net.ic2reborn.item.ArmorEffects.hoverMode(player.getItemBySlot(EquipmentSlot.CHEST))) helper.fail("deveria entrar no modo estável");
+        net.ic2reborn.item.ArmorEffects.toggleJetpackMode(player);
+        if (net.ic2reborn.item.ArmorEffects.hoverMode(player.getItemBySlot(EquipmentSlot.CHEST))) helper.fail("deveria voltar ao voo livre");
+
+        ItemStack plain = new ItemStack(IC2AutoItems.BRONZE_CHESTPLATE.get());
+        player.setItemSlot(EquipmentSlot.CHEST, plain);
+        net.ic2reborn.item.ArmorEffects.toggleJetpackMode(player);
+        if (net.ic2reborn.item.ArmorEffects.hoverMode(plain)) helper.fail("peitoral de bronze não tem modo de jetpack");
+        helper.succeed();
+    }
+
     /** Os três barcos existem no mundo. */
     @GameTest(maxTicks = 20)
     public void boatsSpawn(GameTestHelper helper) {

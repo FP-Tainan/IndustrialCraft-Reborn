@@ -130,6 +130,10 @@ public class IC2Reborn implements ModInitializer {
                 net.ic2reborn.network.NightVisionTogglePayload.TYPE, net.ic2reborn.network.NightVisionTogglePayload.CODEC);
         net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(net.ic2reborn.network.NightVisionTogglePayload.TYPE,
                 (payload, context) -> net.ic2reborn.item.ArmorEffects.toggleNightVision(context.player()));
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.serverboundPlay().register(
+                net.ic2reborn.network.JetpackModePayload.TYPE, net.ic2reborn.network.JetpackModePayload.CODEC);
+        net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(net.ic2reborn.network.JetpackModePayload.TYPE,
+                (payload, context) -> net.ic2reborn.item.ArmorEffects.toggleJetpackMode(context.player()));
         addWorldgen();
         LOGGER.info("IC2 Reborn carregado!");
     }

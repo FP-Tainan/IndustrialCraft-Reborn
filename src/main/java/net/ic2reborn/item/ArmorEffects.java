@@ -65,7 +65,7 @@ public final class ArmorEffects {
                     }
                     case CHEST -> {
                         player.clearFire();
-                        jetpackServer(player, () -> EnergyItems.use(stack, JETPACK_ENERGY));
+                        jetpackServer(player, stack, () -> EnergyItems.use(stack, JETPACK_ENERGY));
                     }
                     case LEGS -> {
                         if (player.isSprinting() && (player.onGround() || player.isInWater()) && level.getGameTime() % 10 == 0) {
@@ -84,7 +84,7 @@ public final class ArmorEffects {
                     }
                 }
             }
-            case ELECTRIC_JETPACK -> jetpackServer(player, () -> EnergyItems.use(stack, JETPACK_ENERGY));
+            case ELECTRIC_JETPACK -> jetpackServer(player, stack, () -> EnergyItems.use(stack, JETPACK_ENERGY));
             default -> {
             }
         }
@@ -145,11 +145,47 @@ public final class ArmorEffects {
         }
     }
 
-    /** Voando (pulo segurado no ar): gasta o combustível e zera a queda. */
-    private static void jetpackServer(ServerPlayer player, java.util.function.BooleanSupplier drain) {
-        if (player.getLastClientInput().jump() && !player.onGround() && !player.getAbilities().flying && drain.getAsBoolean()) {
+    /**
+     * Voando no ar (pulo segurado, ou parado no modo estável): gasta o combustível e zera a queda.
+     * O movimento em si é feito no cliente ({@code ArmorClient}).
+     */
+    private static void jetpackServer(ServerPlayer player, ItemStack jetpack, java.util.function.BooleanSupplier drain) {
+        boolean flying = player.getLastClientInput().jump() || hoverMode(jetpack);
+        if (flying && !player.onGround() && !player.isInWater() && !player.getAbilities().flying && drain.getAsBoolean()) {
             player.resetFallDistance();
         }
+    }
+
+    /** Peitoral que voa: jetpack elétrico, jetpack a biogás ou peitoral quântico. */
+    public static boolean isJetpack(ItemStack stack) {
+        if (stack.getItem() instanceof ElectricArmorItem armor) {
+            return armor.kind() == ElectricArmorItem.Kind.ELECTRIC_JETPACK
+                    || armor.kind() == ElectricArmorItem.Kind.QUANTUM && armor.slot() == EquipmentSlot.CHEST;
+        }
+        return stack.getItem() instanceof UtilityArmorItem utility && utility.kind() == UtilityArmorItem.Kind.FUEL_JETPACK;
+    }
+
+    public static boolean hoverMode(ItemStack stack) {
+        return stack.has(net.ic2reborn.registry.IC2Components.JETPACK_HOVER.get());
+    }
+
+    /** Tecla do jetpack: alterna entre voo livre e modo estável no peitoral vestido. */
+    public static void toggleJetpackMode(ServerPlayer player) {
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (!isJetpack(chest)) return;
+        boolean hover = !hoverMode(chest);
+        if (hover) {
+            chest.set(net.ic2reborn.registry.IC2Components.JETPACK_HOVER.get(), net.minecraft.util.Unit.INSTANCE);
+        } else {
+            chest.remove(net.ic2reborn.registry.IC2Components.JETPACK_HOVER.get());
+        }
+        player.sendSystemMessage(jetpackModeText(hover), true);
+    }
+
+    public static net.minecraft.network.chat.MutableComponent jetpackModeText(boolean hover) {
+        return net.minecraft.network.chat.Component.translatableWithFallback("message.ic2reborn.jetpack.mode", "Jetpack: %s",
+                hover ? net.minecraft.network.chat.Component.translatableWithFallback("message.ic2reborn.jetpack.hover", "Hover mode")
+                        : net.minecraft.network.chat.Component.translatableWithFallback("message.ic2reborn.jetpack.free", "Free flight"));
     }
 
     // ── utilitárias ───────────────────────────────────────────────────────
@@ -192,7 +228,7 @@ public final class ArmorEffects {
                     UtilityArmorItem.chargeChest(player, EnergyUnits.fromCWh(0.5 * Math.min(3.0, distance / 5.0)));
                 }
             }
-            case FUEL_JETPACK -> jetpackServer(player, () -> {
+            case FUEL_JETPACK -> jetpackServer(player, stack, () -> {
                 int fuel = UtilityArmorItem.fuel(stack);
                 if (fuel <= 0) return false;
                 UtilityArmorItem.setFuel(stack, fuel - 1);

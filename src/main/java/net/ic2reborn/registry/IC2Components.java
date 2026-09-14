@@ -62,5 +62,12 @@ public final class IC2Components {
                     .networkSynchronized(net.minecraft.core.BlockPos.STREAM_CODEC)
                     .build());
 
+    /** Jetpack no modo estável (mantém a altura). */
+    public static final RegistryObject<DataComponentType<net.minecraft.util.Unit>> JETPACK_HOVER = COMPONENTS.register("jetpack_hover",
+            () -> DataComponentType.<net.minecraft.util.Unit>builder()
+                    .persistent(net.minecraft.util.Unit.CODEC)
+                    .networkSynchronized(net.minecraft.network.codec.StreamCodec.unit(net.minecraft.util.Unit.INSTANCE))
+                    .build());
+
     private IC2Components() {}
 }

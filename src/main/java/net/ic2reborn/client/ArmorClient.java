@@ -36,6 +36,7 @@ public final class ArmorClient {
     private static final long QUANTUM_JUMP = EnergyUnits.fromCWh(2_000);
 
     private static KeyMapping nightVision;
+    private static KeyMapping jetpackMode;
     private static float jumpCharge;
 
     private ArmorClient() {}
@@ -43,6 +44,8 @@ public final class ArmorClient {
     public static void init() {
         nightVision = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.ic2reborn.nightvision", InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_N, KeyMapping.Category.register(Identifier.fromNamespaceAndPath(IC2Reborn.MODID, "ic2reborn"))));
+        jetpackMode = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.ic2reborn.jetpack_mode", InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_H, KeyMapping.Category.register(Identifier.fromNamespaceAndPath(IC2Reborn.MODID, "ic2reborn_jetpack"))));
         ClientTickEvents.END_CLIENT_TICK.register(ArmorClient::tick);
 
         boat(IC2Entities.RUBBER_BOAT.get(), "rubber");
@@ -63,14 +66,27 @@ public final class ArmorClient {
         while (nightVision.consumeClick()) {
             ClientPlayNetworking.send(NightVisionTogglePayload.INSTANCE);
         }
+        while (jetpackMode.consumeClick()) {
+            ClientPlayNetworking.send(net.ic2reborn.network.JetpackModePayload.INSTANCE);
+        }
         if (player.getAbilities().flying || player.isSpectator()) return;
 
         // jetpack: pulo segurado sobe, com teto de velocidade conforme a potência
-        double power = jetpackPower(player.getItemBySlot(EquipmentSlot.CHEST));
-        if (power > 0.0 && minecraft.options.keyJump.isDown()) {
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        double power = jetpackPower(chest);
+        if (power > 0.0 && !player.isInWater()) {
             Vec3 motion = player.getDeltaMovement();
-            player.setDeltaMovement(motion.x, Math.min(motion.y + 0.14 * power, 0.5 * power), motion.z);
-            player.resetFallDistance();
+            boolean up = minecraft.options.keyJump.isDown();
+            if (ArmorEffects.hoverMode(chest) && !player.onGround()) {
+                // modo estável: pulo sobe, agachar desce devagar, solto fica parado na altura
+                double y = up ? Math.min(motion.y + 0.1 * power, 0.3 * power)
+                        : player.isShiftKeyDown() ? Math.max(motion.y - 0.05, -0.2) : 0.0;
+                player.setDeltaMovement(motion.x, y, motion.z);
+                player.resetFallDistance();
+            } else if (up) {
+                player.setDeltaMovement(motion.x, Math.min(motion.y + 0.14 * power, 0.5 * power), motion.z);
+                player.resetFallDistance();
+            }
         }
 
         // calças quânticas: correndo para a frente, empurrão extra

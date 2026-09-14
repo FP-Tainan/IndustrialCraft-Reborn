@@ -635,5 +635,11 @@
   "block.ic2reborn.foam": "Espuma de Construção",
   "block.ic2reborn.wall": "Parede de Espuma",
   "message.ic2reborn.tool.mode.single": "Único",
-  "tooltip.ic2reborn.foam": "Espuma de construção: %s / %s mB"
+  "tooltip.ic2reborn.foam": "Espuma de construção: %s / %s mB",
+  "key.ic2reborn.jetpack_mode": "Modo do Jetpack (voo livre / estável)",
+  "key.category.ic2reborn.ic2reborn_jetpack": "IndustrialCraft 2 - Jetpack",
+  "message.ic2reborn.jetpack.mode": "Jetpack: %s",
+  "message.ic2reborn.jetpack.hover": "Modo estável",
+  "message.ic2reborn.jetpack.free": "Voo livre",
+  "tooltip.ic2reborn.jetpack_mode_key": "Trocar modo: %s"
 }

@@ -135,6 +135,9 @@ public class UtilityArmorItem extends Item {
         if (this.kind == Kind.FUEL_JETPACK) {
             tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.jetpack_fuel", "Biogas: %s / %s mB",
                     fuel(stack), JETPACK_CAPACITY).withStyle(ChatFormatting.GRAY));
+            tooltip.accept(ArmorEffects.jetpackModeText(ArmorEffects.hoverMode(stack)).withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.jetpack_mode_key", "Switch mode: %s",
+                    Component.keybind("key.ic2reborn.jetpack_mode")).withStyle(ChatFormatting.DARK_GRAY));
         } else if (this.kind == Kind.CF_PACK) {
             tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.foam", "Construction foam: %s / %s mB",
                     fuel(stack), CF_PACK_CAPACITY).withStyle(ChatFormatting.GRAY));

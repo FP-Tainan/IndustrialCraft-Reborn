@@ -635,5 +635,11 @@
   "block.ic2reborn.foam": "Construction Foam",
   "block.ic2reborn.wall": "Construction Foam Wall",
   "message.ic2reborn.tool.mode.single": "Single",
-  "tooltip.ic2reborn.foam": "Construction foam: %s / %s mB"
+  "tooltip.ic2reborn.foam": "Construction foam: %s / %s mB",
+  "key.ic2reborn.jetpack_mode": "Jetpack Mode (free flight / hover)",
+  "key.category.ic2reborn.ic2reborn_jetpack": "IndustrialCraft 2 - Jetpack",
+  "message.ic2reborn.jetpack.mode": "Jetpack: %s",
+  "message.ic2reborn.jetpack.hover": "Hover mode",
+  "message.ic2reborn.jetpack.free": "Free flight",
+  "tooltip.ic2reborn.jetpack_mode_key": "Switch mode: %s"
 }
