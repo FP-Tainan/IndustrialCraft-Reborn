@@ -15,6 +15,17 @@ public class IC2Blocks {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(Registries.BLOCK, IC2Reborn.MODID);
 
+    /** Porta reforçada do IC2: abre só com redstone, como a de ferro, e aguenta explosões. */
+    public static final RegistryObject<net.minecraft.world.level.block.DoorBlock> REINFORCED_DOOR =
+            BLOCKS.register("reinforced_door", () -> new net.minecraft.world.level.block.DoorBlock(
+                    net.minecraft.world.level.block.state.properties.BlockSetType.IRON,
+                    BlockBehaviour.Properties.of()
+                            .setId(BLOCKS.key("reinforced_door"))
+                            .sound(SoundType.METAL)
+                            .strength(20.0f, 150.0f)
+                            .requiresCorrectToolForDrops()
+                            .noOcclusion()
+                            .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
     public static final RegistryObject<OreBlock> LEAD_ORE =
             BLOCKS.register("lead_ore", () -> new OreBlock(
                     BlockBehaviour.Properties.of()

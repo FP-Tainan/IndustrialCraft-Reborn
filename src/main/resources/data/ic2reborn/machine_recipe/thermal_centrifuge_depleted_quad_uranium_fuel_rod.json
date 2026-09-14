@@ -1,0 +1,10 @@
+{
+  "machine": "thermal_centrifuge",
+  "input": "ic2reborn:depleted_quad_uranium_fuel_rod",
+  "results": [
+    { "item": "ic2reborn:small_plutonium", "count": 4 },
+    { "item": "ic2reborn:uranium_238", "count": 16 },
+    { "item": "ic2reborn:dust_iron", "count": 7 }
+  ],
+  "min_heat": 4000
+}

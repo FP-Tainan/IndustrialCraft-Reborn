@@ -68,7 +68,9 @@ public class MachineMenu extends AbstractContainerMenu {
         this.hotbarStart = this.playerInventoryEnd;
         this.hotbarEnd = this.hotbarStart + HOTBAR_SIZE;
 
-        addPlayerInventory(playerInventory, this.layout.inventoryX() + 1, this.layout.inventoryY() + 1);
+        if (this.layout.hasInventory()) {
+            addPlayerInventory(playerInventory, this.layout.inventoryX() + 1, this.layout.inventoryY() + 1);
+        }
         // armazenamentos do IC2 (ContainerElectricBlock): armadura do jogador, para vestir e carregar
         if (guiType == MachineGuiType.BATBOX || guiType == MachineGuiType.CESU
                 || guiType == MachineGuiType.MFE || guiType == MachineGuiType.MFSU) {
@@ -92,6 +94,21 @@ public class MachineMenu extends AbstractContainerMenu {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return !def.output() && inv.canPlaceItem(this.getContainerSlot(), stack);
+            }
+
+            @Override
+            public boolean mayPickup(Player player) {
+                return !layout.isGhostSlot(this.getContainerSlot());
+            }
+
+            @Override
+            public int getMaxStackSize() {
+                return layout.isSingleSlot(this.getContainerSlot()) ? 1 : super.getMaxStackSize();
+            }
+
+            @Override
+            public int getMaxStackSize(ItemStack stack) {
+                return layout.isSingleSlot(this.getContainerSlot()) ? 1 : super.getMaxStackSize(stack);
             }
         });
     }
@@ -204,10 +221,24 @@ public class MachineMenu extends AbstractContainerMenu {
         return value(MachineBlockEntity.DATA_MODE);
     }
 
+    /** Filtros da triagem: clicar copia o item da mão (sem gastar) ou limpa o filtro. */
+    @Override
+    public void clicked(int slotIndex, int button, net.minecraft.world.inventory.ContainerInput input, Player player) {
+        if (slotIndex >= 0 && slotIndex < this.machineSlotCount && this.layout.isGhostSlot(slotIndex)) {
+            if (input == net.minecraft.world.inventory.ContainerInput.PICKUP || input == net.minecraft.world.inventory.ContainerInput.QUICK_MOVE) {
+                ItemStack carried = this.getCarried();
+                if (this.blockEntity == null || this.blockEntity.canConfigure(player)) {
+                    this.slots.get(slotIndex).set(carried.isEmpty() ? ItemStack.EMPTY : carried.copy());
+                }
+            }
+            return;
+        }
+        super.clicked(slotIndex, button, input, player);
+    }
     /** Botões da GUI (modos, trocar tanques) chegam aqui no servidor. */
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (this.blockEntity != null && this.blockEntity.handleMenuButton(id)) {
+        if (this.blockEntity != null && this.blockEntity.canConfigure(player) && this.blockEntity.handleMenuButton(id)) {
             return true;
         }
         return super.clickMenuButton(player, id);

@@ -6,7 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ic2reborn:bronze_tank"
+          "name": "ic2reborn:bronze_tank",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": ["ic2reborn:stored_fluid"]
+            }
+          ]
         }
       ],
       "conditions": [

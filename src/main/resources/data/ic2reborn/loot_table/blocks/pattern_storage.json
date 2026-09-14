@@ -6,7 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ic2reborn:pattern_storage"
+          "name": "ic2reborn:pattern_storage",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": ["ic2reborn:patterns"]
+            }
+          ]
         }
       ],
       "conditions": [

@@ -30,6 +30,8 @@ public class NanoSaberItem extends ElectricItem {
     /** IC2: 160.000 EU, 500 EU/t, nível 3. */
     private static final long CAPACITY = EnergyUnits.fromCWh(80_000);
     private static final long HIT_ENERGY = EnergyUnits.fromCWh(200);
+    /** IC2: esvaziar uma peça de armadura custa 2.000 EU ao sabre. */
+    private static final long ARMOR_DRAIN_COST = EnergyUnits.fromCWh(1_000);
     private static final long BREAK_ENERGY = EnergyUnits.fromCWh(40);
     private static final long ACTIVATE_ENERGY = EnergyUnits.fromCWh(8);
     /** Ligado na mão/armadura: 64 EU a cada 16 ticks; no inventário: 16 EU a cada 64 ticks. */
@@ -104,7 +106,19 @@ public class NanoSaberItem extends ElectricItem {
 
     @Override
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (isActive(stack)) drain(stack, HIT_ENERGY);
+        if (!isActive(stack)) return;
+        drain(stack, HIT_ENERGY);
+        // IC2: o sabre ligado descarrega a armadura nano (48.000 EU) e quântica (300.000 EU) de quem é atingido
+        for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
+            if (EnergyItems.getStored(stack) < ARMOR_DRAIN_COST) break;
+            ItemStack armor = target.getItemBySlot(slot);
+            if (!(armor.getItem() instanceof ElectricArmorItem piece)) continue;
+            String kind = piece.kind().name();
+            long amount = kind.startsWith("NANO") ? EnergyUnits.fromCWh(24_000) : kind.startsWith("QUANTUM") ? EnergyUnits.fromCWh(150_000) : 0;
+            if (amount <= 0) continue;
+            EnergyItems.discharge(armor, amount, Integer.MAX_VALUE, false);
+            drain(stack, ARMOR_DRAIN_COST);
+        }
     }
 
     @Override

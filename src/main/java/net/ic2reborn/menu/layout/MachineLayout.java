@@ -79,11 +79,15 @@ public final class MachineLayout {
     private final int inventoryX;
     private final int inventoryY;
     private final boolean showInventoryTitle;
+    private final boolean hasInventory;
     private final List<SlotDef> slots;
     private final List<GaugeDef> gauges;
     private final List<TankDef> tanks;
     private final List<ImageDef> images;
     private final List<TextDef> texts;
+    private final List<Integer> upgradeSlots;
+    private final List<Integer> ghostSlots;
+    private final List<Integer> singleSlots;
 
     private MachineLayout(Builder builder) {
         this.width = builder.width;
@@ -92,11 +96,15 @@ public final class MachineLayout {
         this.inventoryX = builder.inventoryX;
         this.inventoryY = builder.inventoryY;
         this.showInventoryTitle = builder.showInventoryTitle;
+        this.hasInventory = builder.hasInventory;
         this.slots = List.copyOf(builder.slots);
         this.gauges = List.copyOf(builder.gauges);
         this.tanks = List.copyOf(builder.tanks);
         this.images = List.copyOf(builder.images);
         this.texts = List.copyOf(builder.texts);
+        this.upgradeSlots = List.copyOf(builder.upgradeSlots);
+        this.ghostSlots = List.copyOf(builder.ghostSlots);
+        this.singleSlots = List.copyOf(builder.singleSlots);
     }
 
     public static Identifier gui(String path) {
@@ -113,12 +121,18 @@ public final class MachineLayout {
         return new Builder(176, height, gui(texture));
     }
 
+    /** GUI texturizada mais larga que o padrão (máquina de triagem). */
+    public static Builder textured(String texture, int width, int height) {
+        return new Builder(width, height, gui(texture));
+    }
     public int width() { return this.width; }
     public int height() { return this.height; }
     public @Nullable Identifier background() { return this.background; }
     public boolean isDynamic() { return this.background == null; }
     public int inventoryX() { return this.inventoryX; }
     public int inventoryY() { return this.inventoryY; }
+    /** Algumas GUIs do IC2 (caldeira) não mostram o inventário do jogador. */
+    public boolean hasInventory() { return this.hasInventory; }
     public boolean showInventoryTitle() { return this.showInventoryTitle; }
     public List<SlotDef> slots() { return this.slots; }
     public List<GaugeDef> gauges() { return this.gauges; }
@@ -126,6 +140,21 @@ public final class MachineLayout {
     public List<ImageDef> images() { return this.images; }
     public List<TextDef> texts() { return this.texts; }
 
+    /** Índices dos slots de upgrade (na ordem do layout). */
+    public List<Integer> upgradeSlots() { return this.upgradeSlots; }
+
+    public boolean isUpgradeSlot(int index) {
+        return this.upgradeSlots.contains(index);
+    }
+
+    /** Slots de filtro (fantasmas): guardam só a cópia de um item e nunca saem por canos. */
+    public boolean isGhostSlot(int index) {
+        return this.ghostSlots.contains(index);
+    }
+    /** Slots que aceitam só um item (grade do reator). */
+    public boolean isSingleSlot(int index) {
+        return this.singleSlots.contains(index);
+    }
     public int slotCount() {
         return this.slots.size();
     }
@@ -141,11 +170,15 @@ public final class MachineLayout {
         private int inventoryX;
         private int inventoryY;
         private boolean showInventoryTitle;
+        private boolean hasInventory = true;
         private final List<SlotDef> slots = new ArrayList<>();
         private final List<GaugeDef> gauges = new ArrayList<>();
         private final List<TankDef> tanks = new ArrayList<>();
         private final List<ImageDef> images = new ArrayList<>();
         private final List<TextDef> texts = new ArrayList<>();
+        private final List<Integer> upgradeSlots = new ArrayList<>();
+        private final List<Integer> ghostSlots = new ArrayList<>();
+        private final List<Integer> singleSlots = new ArrayList<>();
 
         private Builder(int width, int height, @Nullable Identifier background) {
             this.width = width;
@@ -163,6 +196,11 @@ public final class MachineLayout {
             return this;
         }
 
+        public Builder noInventory() {
+            this.hasInventory = false;
+            this.showInventoryTitle = false;
+            return this;
+        }
         public Builder noInventoryTitle() {
             this.showInventoryTitle = false;
             return this;
@@ -205,10 +243,29 @@ public final class MachineLayout {
 
         /** O IC2 desenha tantos slots quanto o InvSlotUpgrade da máquina tem. */
         public Builder upgrades(int x, int y, int count) {
+            for (int i = 0; i < count; i++) {
+                this.upgradeSlots.add(this.slots.size() + i);
+            }
             return grid(x, y, 1, count, false);
         }
 
         // ── slots em coordenadas de Slot (Container* do IC2) ─────────────
+        /** Um slot de upgrade solto, em coordenadas de Slot. */
+        public Builder upgradeAt(int slotX, int slotY) {
+            this.upgradeSlots.add(this.slots.size());
+            return slotAt(slotX, slotY);
+        }
+
+        /** Slot de filtro, em coordenadas de Slot. */
+        public Builder ghostAt(int slotX, int slotY) {
+            this.ghostSlots.add(this.slots.size());
+            return slotAt(slotX, slotY);
+        }
+        /** Slots [from, to) aceitam só um item. */
+        public Builder limitOne(int from, int to) {
+            for (int i = from; i < to; i++) this.singleSlots.add(i);
+            return this;
+        }
         public Builder slotAt(int slotX, int slotY) {
             return slot(slotX - 1, slotY - 1);
         }

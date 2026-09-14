@@ -30,7 +30,7 @@ public final class MachineLayouts {
 
             case IRON_FURNACE -> MachineLayout.dynamic(176, 166)
                     .slot(55, 16).largeOutput(111, 30).slot(55, 52)
-                    .gauge(56, 36, FUEL, NONE)
+                    .gauge(56, 36, FUEL, MachineLayout.GaugeSource.HEAT)
                     .progress(80, 35, PROGRESS_ARROW)
                     .build();
 
@@ -71,9 +71,10 @@ public final class MachineLayouts {
                     .slot(7, 52).output(25, 52)
                     // <fluidslot x="55" y="42"/>
                     .image("common.png", 55, 42, 103, 7, 18, 18, 256, 256)
+                    .plainTank(56, 43, 16, 16)
                     .progress(80, 35, PROGRESS_ARROW)
                     .text(tr("heat", "Heat:"), 14, 25)
-                    .gauge(15, 34, HEAT_CENTRIFUGE, NONE)
+                    .gauge(15, 34, HEAT_CENTRIFUGE, MachineLayout.GaugeSource.HEAT)
                     .build();
 
             case CENTRIFUGE -> MachineLayout.dynamic(176, 166)
@@ -107,14 +108,6 @@ public final class MachineLayouts {
                     .image("overlay/canner_arrow.png", 54, 35, 0, 0, 12, 18, 16, 32)
                     .progress(89, 36, PROGRESS_ARROW)
                     .noInventoryTitle()
-                    .build();
-
-            case MASS_FABRICATOR -> MachineLayout.dynamic(176, 166)
-                    .slot(114, 61).largeOutput(110, 18)
-                    .upgrades(151, 7)
-                    .energy(119, 46)
-                    .text(menu -> tr("mass_fabricator.energy", "Energy: %s%%", Math.round(menu.getProgressRatio() * 100)), 18, 22)
-                    .text(menu -> tr("mass_fabricator.scrap", "Scrap: %s%%", 0), 18, 34)
                     .build();
 
             case PERSONAL_CHEST -> MachineLayout.dynamic(176, 222)
@@ -220,38 +213,225 @@ public final class MachineLayouts {
                     .plainTank(11, 26, 24, 47).plainTank(105, 26, 24, 47)
                     .energy(138, 82)
                     .build();
+            // forno de coque: saída e progresso; escotilha: entrada; grelha: tanque de creosoto e células
+            case COKE_KILN -> MachineLayout.dynamic(176, 166)
+                    .output(88, 34)
+                    .gauge(70, 35, FUEL, MachineLayout.GaugeSource.PROGRESS)
+                    .build();
+            case COKE_KILN_HATCH -> MachineLayout.dynamic(176, 166)
+                    .slot(78, 34)
+                    .build();
+            case COKE_KILN_GRATE -> MachineLayout.dynamic(176, 166)
+                    .slot(52, 34).output(106, 34)
+                    .image("common.png", 78, 34, 103, 7, 18, 18, 256, 256)
+                    .plainTank(79, 35, 16, 16)
+                    .build();
+            // ── armazenamento e logística ─────────────────────────────────
+            // caixas (guidef wooden/iron/steel/iridium_storage_box.xml)
+            case WOODEN_STORAGE_BOX -> MachineLayout.dynamic(176, 166).grid(7, 16, 9, 3, false).build();
+            case IRON_STORAGE_BOX -> MachineLayout.dynamic(176, 202).grid(7, 16, 9, 5, false).build();
+            case STEEL_STORAGE_BOX -> MachineLayout.dynamic(176, 238).grid(7, 16, 9, 7, false).build();
+            case IRIDIUM_STORAGE_BOX -> MachineLayout.dynamic(338, 238).grid(7, 16, 18, 7, false).inventory(88, 155).build();
+            // tanque: recipiente 0 → 1 (esvazia ou enche) e upgrades 2–5
+            case TANK -> MachineLayout.dynamic(176, 166)
+                    .slot(52, 34).output(106, 34)
+                    .upgrades(151, 7)
+                    .tank(78, 14)
+                    .build();
+            // bomba (guidef pump.xml): recipiente 0 → 1, descarga 2, upgrades 3–6
+            case PUMP -> MachineLayout.dynamic(176, 166)
+                    .image("overlay/pump_arrow.png", 93, 36, 0, 0, 36, 13, 36, 13)
+                    .slot(98, 16).output(131, 33).slot(7, 43)
+                    .upgrades(151, 7)
+                    .energy(12, 28)
+                    .progress(36, 34, PROGRESS_DROP)
+                    .tank(70, 16)
+                    .build();
+            // buffer: duas grades 4×6 e um upgrade para cada
+            case ITEM_BUFFER -> MachineLayout.textured("guiitembuffer.png", 232)
+                    .gridAt(8, 18, 4, 6, false).gridAt(98, 18, 4, 6, false)
+                    .upgradeAt(35, 128).upgradeAt(125, 128)
+                    .build();
+            case SORTING_MACHINE -> sortingMachine();
+            // envasadora: descarga 0, esvaziar 1, encher 2, saída 3, upgrades 4–7
+            case FLUID_BOTTLER -> MachineLayout.textured("guibottler.png", 184)
+                    .slotAt(8, 53).slotAt(44, 35).slotAt(44, 72).outputAt(117, 53)
+                    .upgrades(151, 25)
+                    .energy(12, 35)
+                    .tank(78, 34)
+                    .build();
+            case FLUID_DISTRIBUTOR -> MachineLayout.textured("guifluiddistributor.png", 184)
+                    .slotAt(9, 54).outputAt(9, 72)
+                    .plainTank(29, 38, 55, 47)
+                    .text(menu -> tr("fluid_distributor.mode", "Mode:"), 112, 47, 0, 0, HEAT_TEXT_COLOR)
+                    .text(menu -> menu.getMachineMode() == 1 ? tr("fluid_distributor.distribute", "Distribute")
+                            : tr("fluid_distributor.concentrate", "Concentrate"), 95, 71, 0, 0, HEAT_TEXT_COLOR)
+                    .build();
+            // regulador: descarga 0, recipiente 1 → 2; botões ±1/10/100/1000 mB e por segundo/tick
+            case FLUID_REGULATOR -> MachineLayout.textured("guifluidregulator.png", 184)
+                    .slotAt(8, 57).slotAt(58, 53).outputAt(58, 71)
+                    .energy(12, 39)
+                    .tank(78, 34)
+                    .text(menu -> Component.literal((menu.getMachineMode() & 0xFFF) + " mB"), 105, 57, 0, 0, FLOW_TEXT_COLOR)
+                    .text(menu -> (menu.getMachineMode() >> 12) != 0 ? tr("fluid_regulator.per_tick", "/t")
+                            : tr("fluid_regulator.per_second", "/s"), 145, 57, 0, 0, FLOW_TEXT_COLOR)
+                    .build();
+            // condensador: descarga 0, célula 1 → 2, upgrade 3, ventoinhas 4–7
+            case CONDENSER -> MachineLayout.textured("guicondenser.png", 184)
+                    .slotAt(8, 44).slotAt(26, 73).outputAt(134, 73).upgradeAt(152, 73)
+                    .slotAt(26, 26).slotAt(26, 44).slotAt(134, 26).slotAt(134, 44)
+                    .energy(12, 26)
+                    .plainTank(46, 27, 84, 33).plainTank(46, 74, 84, 15)
+                    .progress(48, 64, PROGRESS_CONDENSER)
+                    .build();
+            // destilador solar: água 0 → 2, destilada 1 → 3, upgrades 4–5
+            case SOLAR_DISTILLER -> MachineLayout.textured("guisolardestiller.png", 184)
+                    .slotAt(17, 27).slotAt(136, 64).outputAt(17, 45).outputAt(136, 82)
+                    .upgradeAt(152, 8).upgradeAt(152, 26)
+                    .plainTank(37, 43, 53, 18).plainTank(115, 55, 17, 43)
+                    .build();
+            // ── cadeia de vapor ───────────────────────────────────────────
+            // caldeira (GuiSteamGenerator): sem inventário, botões de água e da válvula de pressão
+            case STEAM_GENERATOR -> MachineLayout.textured("guisteamgenerator.png", 220).noInventory()
+                    .plainTank(10, 155, 75, 47)
+                    .gauge(14, 71, HEAT_STEAM_GENERATOR, MachineLayout.GaugeSource.HEAT)
+                    .gauge(156, 62, CALCIFICATION_STEAM_GENERATOR, MachineLayout.GaugeSource.PROGRESS)
+                    .text(menu -> Component.literal((menu.getMachineMode() & 0x7FF) + " mB/t"), 91, 172, 59, 13, FLOW_TEXT_COLOR)
+                    .text(menu -> tr("steam_generator.heat_input", "Heat input: %s HU/t", menu.getPower()), 31, 133, 111, 13, FLOW_TEXT_COLOR)
+                    .text(menu -> Component.literal(((menu.getMachineMode() >> 11) & 0x1FF) + " bar"), 22, 35, 42, 13, FLOW_TEXT_COLOR)
+                    .text(menu -> Component.literal(menu.getEnergyCWh() + " mB/t"), 66, 25, 81, 13, FLOW_TEXT_COLOR)
+                    .text(menu -> steamOutputName((menu.getMachineMode() >> 20) & 7), 66, 45, 100, 13, FLOW_TEXT_COLOR)
+                    .build();
+            case STEAM_REPRESSURIZER -> MachineLayout.dynamic(176, 166)
+                    .image("guisteamrepressurizer.png", 0, 0, 0, 0, 176, 166, 256, 256)
+                    .plainTank(15, 19, 38, 47).plainTank(123, 19, 38, 47)
+                    .build();
+            // trocador de calor líquido: fluido quente 0 → 1, refrigerante 2 → 3, upgrades 4–6, condutores 7–16
+            case LIQUID_HEAT_EXCHANGER -> {
+                MachineLayout.Builder builder = MachineLayout.textured("guiheatsourcefluid.png", 204)
+                        .slotAt(8, 103).outputAt(26, 103).slotAt(134, 103).outputAt(152, 103)
+                        .upgradeAt(62, 103).upgradeAt(80, 103).upgradeAt(98, 103);
+                for (int i = 0; i < 10; i++) builder.slotAt(46 + (i % 5) * 17, i < 5 ? 50 : 72);
+                yield builder.plainTank(19, 47, 12, 44).plainTank(145, 47, 12, 44)
+                        .text(menu -> tr("heat_exchanger.emit", "Emitting %s / %s HU/t", menu.getHeat(), menu.getMaxHeat()), 20, 28, 138, 13, HEAT_TEXT_COLOR)
+                        .build();
+            }
+            // ── reator nuclear ────────────────────────────────────────────
+            case NUCLEAR_REACTOR -> nuclearReactor();
+            case REACTOR_CHAMBER, REACTOR_ACCESS_HATCH -> MachineLayout.dynamic(176, 166).build();
+            case REACTOR_FLUID_PORT -> MachineLayout.dynamic(176, 166).upgrades(79, 42, 1).build();
+            // injetor de refrigerante (guidef rci_rsh.xml): blocos 0–8, descarga 9, upgrades 10–13
+            case REACTOR_COOLANT_INJECTOR -> MachineLayout.dynamic(176, 166)
+                    .grid(61, 16, 3, 3, false)
+                    .slot(7, 34)
+                    .upgrades(151, 7)
+                    .energy(7, 55)
+                    .build();
+            // ── UU-matter ─────────────────────────────────────────────────
+            // fabricador (GuiMatter): amplificador 0, saída 1, célula 2, upgrades 3–6
+            case MASS_FABRICATOR -> MachineLayout.textured("guimatter.png", 166)
+                    .slotAt(72, 40).outputAt(125, 59).slotAt(125, 23)
+                    .upgradeAt(152, 8).upgradeAt(152, 26).upgradeAt(152, 44).upgradeAt(152, 62)
+                    .tank(96, 22)
+                    .text(menu -> tr("mass_fabricator.progress", "Progress:"), 8, 22)
+                    .text(menu -> Component.literal(Math.round(menu.getProgressRatio() * 100) + "%"), 18, 31)
+                    .text(menu -> tr("mass_fabricator.amplifier", "Amplifier:"), 8, 46)
+                    .text(menu -> Component.literal(String.valueOf(menu.getHeat())), 8, 58)
+                    .build();
+            // scanner (GuiScanner): descarga 0, item 1, memória de cristal 2
             case SCANNER -> MachineLayout.textured("guiscanner.png", 166)
                     .slotAt(8, 43).slotAt(55, 35).slotAt(152, 65)
                     .energy(12, 25)
+                    .imageIf(menu -> menu.getMachineMode() == 2 || menu.getMachineMode() == 6, "guiscanner.png", 102, 49, 176, 57, 12, 12, 256, 256)
+                    .imageIf(menu -> menu.getMachineMode() == 2 || menu.getMachineMode() == 6, "guiscanner.png", 143, 49, 176, 69, 24, 12, 256, 256)
+                    .text(menu -> scannerState(menu.getMachineMode()), 10, 69, 0, 0, 0xEBEE20)
+                    .text(menu -> menu.getMachineMode() == 1 ? Component.literal(Math.round(menu.getProgressRatio() * 100) + "%") : Component.empty(), 125, 69, 0, 0, FLOW_TEXT_COLOR)
+                    .text(menu -> menu.getHeat() > 0 ? Component.literal(uuText(menu.getMaxHeat())) : Component.empty(), 105, 25, 0, 0, 0xFFFFFF)
                     .build();
-
+            // replicador (GuiReplicator): descarga 0, saída 1, UU 2 → célula 3, upgrades 4–7
             case REPLICATOR -> MachineLayout.textured("guireplicator.png", 184)
-                    .slotAt(152, 83).outputAt(90, 59)
-                    .slotAt(8, 27).slotAt(8, 72)
-                    .gridAt(152, 8, 1, 4, false)
+                    .slotAt(152, 83).outputAt(90, 59).slotAt(8, 27).outputAt(8, 72)
+                    .upgradeAt(152, 8).upgradeAt(152, 26).upgradeAt(152, 44).upgradeAt(152, 62)
                     .energy(136, 84)
                     .tank(27, 30)
+                    .text(menu -> menu.getHeat() > 0 ? Component.literal(uuText(menu.getMaxHeat())) : tr("replicator.no_pattern", "No pattern"), 49, 36, 96, 16, FLOW_TEXT_COLOR)
                     .build();
-
-            case BATCH_CRAFTER -> MachineLayout.textured("guibatchcrafter.png", 206)
-                    .slotAt(8, 62)
-                    .gridAt(30, 17, 3, 3, false)
-                    .outputAt(124, 35)
-                    .gridAt(8, 84, 9, 1, false)
-                    .gridAt(8, 102, 9, 1, true)
-                    .gridAt(152, 8, 1, 4, false)
-                    .energy(12, 45)
-                    .progress(90, 35, PROGRESS_ARROW)
+            // armazenamento de moldes (GuiPatternStorage): memória de cristal 0
+            case PATTERN_STORAGE -> MachineLayout.textured("guipatternstorage.png", 166)
+                    .slotAt(18, 20)
+                    .text(menu -> Component.literal(((menu.getMachineMode() >> 16) == 0 ? 0 : (menu.getMachineMode() & 0xFFFF) + 1) + " / " + (menu.getMachineMode() >> 16)), 0, 30, 176, 0, 0x404040)
+                    .text(menu -> tr("pattern_storage.name", "Name:"), 10, 48, 0, 0, 0xFFFFFF)
+                    .text(menu -> tr("pattern_storage.uu", "UU-Matter:"), 10, 59, 0, 0, 0xFFFFFF)
+                    .text(menu -> patternName(menu.getHeat()), 80, 48, 0, 0, 0xFFFFFF)
+                    .text(menu -> menu.getHeat() > 0 ? Component.literal(uuText(menu.getMaxHeat())) : Component.empty(), 80, 59, 0, 0, 0xFFFFFF)
                     .build();
-
+            // ── utilidades ────────────────────────────────────────────────
+            case TESLA_COIL, LUMINATOR -> MachineLayout.dynamic(176, 166).build();
+            // carregador de chunks e magnetizador: descarga 0, upgrades 1–4
+            case CHUNK_LOADER -> MachineLayout.dynamic(176, 166)
+                    .slot(7, 43).upgrades(151, 7).energy(12, 28)
+                    .text(tr("chunk_loader.info", "Keeps this chunk loaded"), 36, 36)
+                    .build();
+            case MAGNETIZER -> MachineLayout.dynamic(176, 166)
+                    .slot(7, 43).upgrades(151, 7).energy(12, 28)
+                    .text(tr("magnetizer.info", "Magnetizes iron fences above"), 36, 36)
+                    .build();
+            // eletrolisador (guidef electrolyzer.xml): água 0 → recipiente 1, upgrades 2–5
+            case ELECTROLYZER -> MachineLayout.dynamic(176, 166)
+                    .slot(53, 34).output(111, 34).upgrades(151, 7)
+                    .energyBar(79, 38)
+                    .build();
+            // RTG (guidef rt_generator.xml): 6 pastilhas
+            case RT_GENERATOR -> MachineLayout.dynamic(176, 166)
+                    .grid(30, 25, 3, 2, false).limitOne(0, 6)
+                    .energyBar(115, 39)
+                    .build();
+            // ── automação ─────────────────────────────────────────────────
+            case TERRAFORMER -> MachineLayout.dynamic(176, 166).slot(79, 34).build();
+            case INDUSTRIAL_WORKBENCH -> MachineLayout.dynamic(176, 166).build();
+            // minerador avançado (GuiAdvMiner): descarga 0, scanner 1, upgrades 2–5, filtros 6–20
+            case ADVANCED_MINER -> {
+                MachineLayout.Builder builder = MachineLayout.textured("guiadvminer.png", 203)
+                        .slotAt(8, 80).slotAt(8, 26)
+                        .upgradeAt(152, 26).upgradeAt(152, 44).upgradeAt(152, 62).upgradeAt(152, 80);
+                for (int row = 0; row < 3; row++) {
+                    for (int col = 0; col < 5; col++) builder.ghostAt(36 + col * 18, 44 + row * 18);
+                }
+                yield builder.energy(12, 55)
+                        .text(menu -> (menu.getMachineMode() & 1) != 0 ? tr("advanced_miner.blacklist", "Blacklist") : tr("advanced_miner.whitelist", "Whitelist"),
+                                40, 31, 0, 0, FLOW_TEXT_COLOR)
+                        .text(menu -> menu.getHeat() == Integer.MIN_VALUE ? Component.empty() : tr("advanced_miner.layer", "Y: %s", menu.getHeat()),
+                                10, 105, 0, 0, FLOW_TEXT_COLOR)
+                        .build();
+            }
+            // fabricador em lote (GuiBatchCrafter): descarga 0, molde 1–9, saída 10, ingredientes 11–19, recipientes 20–28, upgrades 29–32
+            case BATCH_CRAFTER -> {
+                MachineLayout.Builder builder = MachineLayout.textured("guibatchcrafter.png", 206).slotAt(8, 62);
+                for (int y = 0; y < 3; y++) {
+                    for (int x = 0; x < 3; x++) builder.ghostAt(30 + x * 18, 17 + y * 18);
+                }
+                yield builder.outputAt(124, 35)
+                        .gridAt(8, 84, 9, 1, false)
+                        .gridAt(8, 102, 9, 1, true)
+                        .upgradeAt(152, 8).upgradeAt(152, 26).upgradeAt(152, 44).upgradeAt(152, 62)
+                        .energy(12, 45)
+                        .progress(90, 35, PROGRESS_ARROW)
+                        .build();
+            }
+            // Energy-O-Mat: pedido 0, upgrade 1, pagamento 2, carga 3
             case ENERGY_O_MAT -> MachineLayout.textured("guienergyomatopen.png", 166)
-                    .slotAt(24, 17).slotAt(24, 53).slotAt(60, 17).slotAt(60, 53)
+                    .ghostAt(24, 17).upgradeAt(24, 53).slotAt(60, 17).slotAt(60, 53)
+                    .text(menu -> tr("omat.offer", "Offer:"), 100, 60)
+                    .text(menu -> Component.literal(menu.getMachineMode() + " EU"), 100, 68)
                     .build();
-
+            // Trade-O-Mat: pedido 0, oferta 1, pagamento 2, saída 3
             case TRADE_O_MAT -> MachineLayout.textured("guitradeomatopen.png", 166)
-                    .slotAt(50, 19).slotAt(50, 53).slotAt(80, 19).outputAt(80, 53)
+                    .ghostAt(50, 19).ghostAt(50, 53).slotAt(80, 19).outputAt(80, 53)
+                    .text(menu -> tr("omat.want", "Want:"), 12, 23)
+                    .text(menu -> tr("omat.offer", "Offer:"), 12, 57)
+                    .text(menu -> tr("omat.trades", "Trades: %s", menu.getMachineMode()), 108, 28)
+                    .text(menu -> tr("omat.stock", "Stock: %s", menu.getHeat()), 108, 44)
                     .build();
-
             case WEIGHTED_ITEM_DISTRIBUTOR -> MachineLayout.textured("guiweighteditemdistributor.png", 211)
                     .gridAt(8, 108, 9, 1, false)
                     .build();
@@ -289,15 +469,18 @@ public final class MachineLayouts {
 
                     .build();
 
+            // turbina a vapor: upgrade 0, turbina 1
             case STEAM_KINETIC_GENERATOR -> MachineLayout.textured("guisteamkineticgenerator.png", 166)
-                    .slotAt(152, 26).slotAt(80, 26)
+                    .upgradeAt(152, 26).slotAt(80, 26)
+                    .text(menu -> steamKineticStatus(menu.getMachineMode(), menu.getProgress()), 8, 50, 160, 13, HEAT_TEXT_COLOR)
                     .build();
 
             case STIRLING_KINETIC_GENERATOR -> MachineLayout.textured("guistirlingkineticgenerator.png", 204)
                     .slotAt(8, 103).outputAt(26, 103)
                     .slotAt(134, 103).outputAt(152, 103)
-                    .gridAt(62, 103, 3, 1, false)
+                    .upgradeAt(62, 103).upgradeAt(80, 103).upgradeAt(98, 103)
                     .plainTank(19, 47, 12, 44).plainTank(145, 47, 12, 44)
+                    .text(menu -> tr("stirling_kinetic.buffer", "Stored: %s / %s KU", menu.getProgress(), menu.getMaxProgress()), 20, 28, 138, 13, HEAT_TEXT_COLOR)
                     .build();
 
             case WATER_KINETIC_GENERATOR -> MachineLayout.textured("guiwaterkineticgenerator.png", 166)
@@ -344,7 +527,7 @@ public final class MachineLayouts {
             case MFE -> energyStorage(120_000);
             case MFSU -> energyStorage(1_000_000);
 
-            case CHARGEPAD -> MachineLayout.textured("guichargepadblock.png", 161)
+            case CHARGEPAD, CHARGEPAD_CESU, CHARGEPAD_MFE, CHARGEPAD_MFSU -> MachineLayout.textured("guichargepadblock.png", 161)
                     .slotAt(56, 17).slotAt(56, 53)
                     .energyBar(79, 38)
                     .text(tr("storage.level", "Power Level:"), 79, 25)
@@ -395,6 +578,81 @@ public final class MachineLayouts {
     /** Cor dos textos das GUIs cinéticas do IC2 (2157374). */
     private static final int KINETIC_TEXT_COLOR = 0x20EB3E;
 
+    /** Triagem (GuiSortingMachine): descarga, 3 upgrades, buffer de 11 e 7 filtros por face (D, U, N, S, W, E). */
+    private static MachineLayout sortingMachine() {
+        MachineLayout.Builder builder = MachineLayout.textured("guisortingmachine.png", 212, 243)
+                .slotAt(188, 219)
+                .upgradeAt(188, 161).upgradeAt(188, 179).upgradeAt(188, 197)
+                .gridAt(8, 141, 11, 1, false)
+                .energy(174, 220);
+        for (int side = 0; side < 6; side++) {
+            for (int column = 0; column < 7; column++) {
+                builder.ghostAt(80 + column * 18, 19 + side * 20);
+            }
+        }
+        return builder.build();
+    }
+    private static Component steamOutputName(int output) {
+        return switch (output) {
+            case 3 -> fluidName(net.ic2reborn.fluid.IC2Fluids.STEAM.fluid());
+            case 4 -> fluidName(net.ic2reborn.fluid.IC2Fluids.SUPERHEATED_STEAM.fluid());
+            default -> Component.literal("-");
+        };
+    }
+
+    private static Component fluidName(net.minecraft.world.level.material.Fluid fluid) {
+        return net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes.getName(
+                net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant.of(fluid));
+    }
+
+    /** Status do gerador cinético a vapor: bits 1 sem turbina, 2 soltando vapor, 4 freado, 8 bloqueado. */
+    private static Component steamKineticStatus(int status, int ku) {
+        if ((status & 8) != 0) return tr("steam_kinetic.blocked", "Turbine blocked by water");
+        if ((status & 1) != 0) return tr("steam_kinetic.no_turbine", "No steam turbine");
+        if ((status & 2) != 0) return tr("steam_kinetic.venting", "Venting steam! %s KU/t", ku);
+        if ((status & 4) != 0) return tr("steam_kinetic.throttled", "Throttled by water: %s KU/t", ku);
+        return tr("steam_kinetic.output", "Output: %s KU/t", ku);
+    }
+    /** Reator nuclear (GuiNuclearReactor): grade 9×6, slots de refrigerante e calor; colunas sem câmara ficam tampadas. */
+    private static MachineLayout nuclearReactor() {
+        MachineLayout.Builder builder = MachineLayout.textured("guinuclearreactor.png", 212, 243)
+                .imageIf(menu -> (menu.getMachineMode() & 16) != 0, "guinuclearreactorfluid.png", 0, 0, 0, 0, 212, 243, 256, 256)
+                .inventory(25, 160);
+        for (int y = 0; y < 6; y++) {
+            for (int x = 0; x < 9; x++) {
+                int column = x;
+                builder.slotAt(26 + 18 * x, 25 + 18 * y);
+                builder.imageIf(menu -> (menu.getMachineMode() & 15) <= column, "guinuclearreactor.png",
+                        26 + 18 * x, 25 + 18 * y, 213, 1, 16, 16, 256, 256);
+            }
+        }
+        return builder.slotAt(8, 25).slotAt(188, 25).outputAt(8, 115).outputAt(188, 115)
+                .limitOne(0, 54)
+                .plainTank(10, 54, 12, 47).plainTank(190, 54, 12, 47)
+                .gauge(7, 136, HEAT_NUCLEAR_REACTOR, MachineLayout.GaugeSource.HEAT)
+                .text(menu -> (menu.getMachineMode() & 16) != 0
+                        ? tr("reactor.heat_output", "Heat output: %s HU/s", menu.getProgress())
+                        : tr("reactor.output", "Output: %s", EnergyUnits.formatPower(menu.getProgress())), 111, 139, 0, 0, HEAT_TEXT_COLOR)
+                .build();
+    }
+    private static final String[] SCANNER_STATES = {"idle", "scanning", "completed", "failed", "no_storage", "no_energy", "transfer_error", "already_recorded"};
+    private static final String[] SCANNER_STATE_FALLBACKS = {"Idle", "Scanning", "Scan complete", "Can't be scanned", "No pattern storage",
+            "Not enough energy", "Transfer error", "Already recorded"};
+
+    private static Component scannerState(int state) {
+        int index = Math.floorMod(state, SCANNER_STATES.length);
+        return tr("scanner." + SCANNER_STATES[index], SCANNER_STATE_FALLBACKS[index]);
+    }
+
+    /** Custo em unidades do IC2 (1 = pedregulho = 0,01 mB). */
+    private static String uuText(int units) {
+        return String.format(java.util.Locale.ROOT, "%.2f mB UU", units * net.ic2reborn.recipe.UuValues.MB_PER_UNIT);
+    }
+
+    private static Component patternName(int itemIdPlusOne) {
+        if (itemIdPlusOne <= 0) return Component.empty();
+        return new net.minecraft.world.item.ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.byId(itemIdPlusOne - 1)).getHoverName();
+    }
     private static Component tr(String key, String fallback, Object... args) {
         return Component.translatableWithFallback("gui.ic2reborn." + key, fallback, args);
     }

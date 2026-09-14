@@ -9,6 +9,7 @@ import net.craftenergy.content.item.EnergyItems;
 import net.craftenergy.fabric.CraftEnergyApi;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.SingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -61,6 +62,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -106,6 +108,19 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     public static final int BUTTON_CANNER_MODE = 10;
     public static final int BUTTON_SWAP_TANKS = 14;
     public static final int BUTTON_METAL_FORMER_MODE = 20;
+    /** Logística: rota padrão da triagem e prioridade dos distribuidores (+ direção), regulador e distribuidor de fluido. */
+    public static final int BUTTON_SORTING_DEFAULT = 30;
+    public static final int BUTTON_WEIGHTED_PRIORITY = 36;
+    public static final int BUTTON_REGULATOR = 40;
+    public static final int BUTTON_REGULATOR_MODE = 48;
+    public static final int BUTTON_FLUID_DISTRIBUTOR_MODE = 50;
+    /** Caldeira: 60–67 água (+1000, +100, +10, +1, −1000, −100, −10, −1), 70–75 válvula (+100, +10, +1, −100, −10, −1). */
+    public static final int BUTTON_STEAM_WATER = 60;
+    public static final int BUTTON_STEAM_PRESSURE = 70;
+    /** UU: scanner 80 apagar, 81 gravar; replicador 90/91 molde anterior/próximo, 93 parar, 94 um, 95 repetir; moldes 100/101 anterior/próximo, 102 exportar, 103 importar. */
+    public static final int BUTTON_UU = 80;
+    /** Automação: minerador avançado 110 reiniciar, 111 lista negra/branca, 112 toque suave; Energy-O-Mat 120–127 preço. */
+    public static final int BUTTON_AUTOMATION = 110;
 
     /** Modos do transformador do IC2. */
     public enum TransformerMode { REDSTONE, STEP_DOWN, STEP_UP }
@@ -175,7 +190,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case GENERATOR, SOLAR_GENERATOR, WIND_GENERATOR -> charge(0);
                 case WATER_GENERATOR -> charge(1);
                 case GEO_GENERATOR, SEMIFLUID_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, -1, 2, 0, 1);
-                case BATBOX, CESU, MFE, MFSU -> new Slots(-1, -1, NO_OUTPUTS, 1, 0, -1, -1);
+                case BATBOX, CESU, MFE, MFSU, CHARGEPAD, CHARGEPAD_CESU, CHARGEPAD_MFE, CHARGEPAD_MFSU -> new Slots(-1, -1, NO_OUTPUTS, 1, 0, -1, -1);
                 case ORE_WASHING_PLANT -> new Slots(0, -1, new int[]{1, 2, 3}, 10, -1, 8, 9);
                 case SOLID_CANNER -> new Slots(0, 1, new int[]{2}, 3, -1, -1, -1);
                 case CANNER -> new Slots(0, 7, new int[]{1}, 2, -1, -1, -1);
@@ -196,6 +211,33 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case CROP_HARVESTER -> new Slots(-1, -1, java.util.stream.IntStream.rangeClosed(1, 15).toArray(), 0, -1, -1, -1);
                 // cropmatron: descarga 0, fertilizante 1–7, herbicida 8→9, água 10→11, upgrades 12–15
                 case CROPMATRON -> new Slots(-1, -1, new int[]{9, 11}, 0, -1, 10, 11);
+                // fornalha de ferro: entrada 0, saída 1, combustível 2
+                case IRON_FURNACE -> new Slots(0, -1, new int[]{1}, -1, -1, -1, -1);
+                // alto-forno: entrada 0, saídas 1–2, upgrades 3–4, célula de ar 5→6
+                case BLAST_FURNACE -> new Slots(0, -1, new int[]{1, 2}, -1, -1, 5, 6);
+                case COKE_KILN -> new Slots(-1, -1, new int[]{0}, -1, -1, -1, -1);
+                case COKE_KILN_HATCH -> new Slots(0, -1, NO_OUTPUTS, -1, -1, -1, -1);
+                // grelha: célula vazia 0 → célula de creosoto 1
+                case COKE_KILN_GRATE -> new Slots(-1, -1, new int[]{1}, -1, -1, -1, -1);
+                // logística (LogisticsLogic): recipiente → saída, descarga e entrada de fluido automática
+                case TANK, FLUID_DISTRIBUTOR, WEIGHTED_FLUID_DISTRIBUTOR -> new Slots(-1, -1, new int[]{1}, -1, -1, -1, -1);
+                case PUMP -> new Slots(-1, -1, new int[]{1}, 2, -1, -1, -1);
+                case SORTING_MACHINE -> new Slots(-1, -1, NO_OUTPUTS, 0, -1, -1, -1);
+                case FLUID_BOTTLER -> new Slots(1, 2, new int[]{3}, 0, -1, -1, -1);
+                case FLUID_REGULATOR -> new Slots(-1, -1, new int[]{2}, 0, -1, 1, 2);
+                case CONDENSER -> new Slots(-1, -1, new int[]{2}, 0, -1, -1, -1);
+                case SOLAR_DISTILLER -> new Slots(-1, -1, new int[]{2, 3}, -1, -1, 0, 2);
+                // trocador de calor e Stirling cinético: fluido de entrada 0 → 1, fluido de saída 2 → 3
+                case LIQUID_HEAT_EXCHANGER, STIRLING_KINETIC_GENERATOR -> new Slots(-1, -1, new int[]{1, 3}, -1, -1, 0, 1);
+                // reator: grade 0–53, refrigerante 54 → 56, refrigerante quente 55 → 57; injetor: blocos 0–8, descarga 9
+                case NUCLEAR_REACTOR -> new Slots(-1, -1, new int[]{56, 57}, -1, -1, 54, 56);
+                case REACTOR_COOLANT_INJECTOR -> new Slots(-1, -1, NO_OUTPUTS, 9, -1, -1, -1);
+                // UU: fabricador (amplificador 0, saída 1), scanner (descarga 0, item 1), replicador (descarga 0, saída 1, UU 2 → 3)
+                case MASS_FABRICATOR -> new Slots(0, -1, new int[]{1}, -1, -1, -1, -1);
+                case SCANNER -> new Slots(1, -1, NO_OUTPUTS, 0, -1, -1, -1);
+                case REPLICATOR -> new Slots(-1, -1, new int[]{1, 3}, 0, -1, 2, 3);
+                case CHUNK_LOADER, MAGNETIZER -> new Slots(-1, -1, NO_OUTPUTS, 0, -1, -1, -1);
+                case ELECTROLYZER -> new Slots(-1, -1, new int[]{1}, -1, -1, 0, 1);
                 default -> role == MachineEnergyProfile.Role.PROCESSOR
                         ? new Slots(0, -1, new int[]{1}, 2, -1, -1, -1)
                         : new Slots(-1, -1, NO_OUTPUTS, -1, -1, -1, -1);
@@ -204,7 +246,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     }
 
     private final MachineGuiType guiType;
-    private final MachineEnergyProfile profile;
+    private final MachineEnergyProfile baseProfile;
+    /** Perfil em uso: o base com os upgrades instalados. */
+    private MachineEnergyProfile profile;
     private final Slots slots;
     private final String recipeKey;
     private final SimpleContainer inventory;
@@ -222,6 +266,21 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     /** Minerador: tubos, broca e scanner (IC2: TileEntityMiner). */
     private final @Nullable MinerLogic miner;
     private final @Nullable CropMachineLogic cropLogic;
+    /** Tanques, bomba, buffers, triagem, distribuidores, envasadora, regulador, condensador e destilador. */
+    private final @Nullable LogisticsLogic logistics;
+    /** Caldeira, repressurizador e geradores cinéticos a vapor e Stirling. */
+    private final @Nullable SteamLogic steam;
+    /** Reator nuclear, porta de fluidos e injetores de refrigerante. */
+    private final @Nullable ReactorLogic reactor;
+    /** Fabricador de massa, scanner, replicador e armazenamento de moldes. */
+    private final @Nullable UuLogic uu;
+    /** Placas de carga, Tesla, carregador de chunks, eletrolisador, magnetizador, luminária, RTG e baú pessoal. */
+    private final @Nullable UtilityLogic utility;
+    /** Terraformador, minerador avançado, fabricador em lote e O-Mats. */
+    private final @Nullable AutomationLogic automation;
+    private long lastEnergy;
+    private @Nullable MachineBlockEntity cachedCore;
+    private long cachedCoreTime = -1;
 
     // calor (fermentador e geradores de calor)
     private int heatBuffer;
@@ -288,25 +347,16 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     public MachineBlockEntity(BlockPos pos, BlockState state) {
         super(IC2BlockEntities.MACHINE.get(), pos, state);
         this.guiType = MachineGuiType.fromBlockId(BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath());
-        this.profile = MachineEnergyProfile.of(this.guiType);
+        this.baseProfile = MachineEnergyProfile.of(this.guiType);
+        this.profile = this.baseProfile;
         this.slots = Slots.of(this.guiType, this.profile.role());
         this.recipeKey = this.guiType.name().toLowerCase(Locale.ROOT);
         this.maxProgress = this.profile.operationTicks();
-        this.maxHeat = this.guiType == MachineGuiType.INDUCTION_FURNACE ? INDUCTION_MAX_HEAT : CENTRIFUGE_MAX_HEAT;
+        this.maxHeat = this.guiType == MachineGuiType.INDUCTION_FURNACE ? INDUCTION_MAX_HEAT
+                : this.guiType == MachineGuiType.BLAST_FURNACE ? BLAST_FURNACE_MAX_HEAT : CENTRIFUGE_MAX_HEAT;
 
         MachineLayout layout = this.guiType.layout();
-        this.inventory = new SimpleContainer(layout.slotCount()) {
-            @Override
-            public void setChanged() {
-                super.setChanged();
-                MachineBlockEntity.this.setChanged();
-            }
-
-            @Override
-            public boolean canPlaceItem(int slot, ItemStack stack) {
-                return !layout.isOutputSlot(slot);
-            }
-        };
+        this.inventory = new MachineInventory(layout);
 
         MachineTank mainTank = null;
         MachineTank secondTank = null;
@@ -335,6 +385,92 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 mainTank = new MachineTank(10 * FluidConstants.BUCKET);
                 input = exposed = insertOnly(mainTank, fluid -> heatFuel(fluid) != null);
             }
+            case BLAST_FURNACE -> {
+                mainTank = new MachineTank(8 * FluidConstants.BUCKET);
+                input = exposed = insertOnly(mainTank, fluid -> fluid == IC2Fluids.AIR.fluid());
+            }
+            case COKE_KILN_GRATE -> {
+                mainTank = new MachineTank(64 * FluidConstants.BUCKET);
+                exposed = FilteringStorage.extractOnlyOf(mainTank);
+            }
+            case TANK -> {
+                mainTank = new MachineTank(tankBuckets(state) * FluidConstants.BUCKET);
+                input = exposed = mainTank;
+            }
+            case PUMP -> {
+                mainTank = new MachineTank(8 * FluidConstants.BUCKET);
+                exposed = FilteringStorage.extractOnlyOf(mainTank);
+            }
+            case FLUID_BOTTLER -> {
+                mainTank = new MachineTank(8 * FluidConstants.BUCKET);
+                input = exposed = mainTank;
+            }
+            case FLUID_DISTRIBUTOR, WEIGHTED_FLUID_DISTRIBUTOR -> {
+                mainTank = new MachineTank(FluidConstants.BUCKET);
+                input = exposed = insertOnly(mainTank, fluid -> true);
+            }
+            case FLUID_REGULATOR -> {
+                mainTank = new MachineTank(10 * FluidConstants.BUCKET);
+                input = exposed = insertOnly(mainTank, fluid -> true);
+            }
+            case CONDENSER -> {
+                mainTank = new MachineTank(100 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(FluidConstants.BUCKET);
+                input = insertOnly(mainTank, fluid -> fluid == IC2Fluids.STEAM.fluid() || fluid == IC2Fluids.SUPERHEATED_STEAM.fluid());
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            case SOLAR_DISTILLER -> {
+                mainTank = new MachineTank(10 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(10 * FluidConstants.BUCKET);
+                input = insertOnly(mainTank, fluid -> fluid == Fluids.WATER);
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            case STEAM_GENERATOR -> {
+                mainTank = new MachineTank(10 * FluidConstants.BUCKET);
+                input = exposed = insertOnly(mainTank, fluid -> fluid == Fluids.WATER || fluid == IC2Fluids.DISTILLED_WATER.fluid());
+            }
+            case STEAM_REPRESSURIZER -> {
+                mainTank = new MachineTank(10 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(10 * FluidConstants.BUCKET);
+                input = insertOnly(mainTank, fluid -> fluid == IC2Fluids.STEAM.fluid() || fluid == IC2Fluids.SUPERHEATED_STEAM.fluid());
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            case STEAM_KINETIC_GENERATOR -> {
+                mainTank = new MachineTank(21 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(FluidConstants.BUCKET);
+                input = insertOnly(mainTank, fluid -> fluid == IC2Fluids.STEAM.fluid() || fluid == IC2Fluids.SUPERHEATED_STEAM.fluid());
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            case LIQUID_HEAT_EXCHANGER -> {
+                mainTank = new MachineTank(2 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(2 * FluidConstants.BUCKET);
+                input = insertOnly(mainTank, fluid -> cooledFluid(fluid) != null);
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            case STIRLING_KINETIC_GENERATOR -> {
+                mainTank = new MachineTank(2 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(2 * FluidConstants.BUCKET);
+                input = insertOnly(mainTank, SteamLogic::heatable);
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            case NUCLEAR_REACTOR -> {
+                mainTank = new MachineTank(10 * FluidConstants.BUCKET);
+                secondTank = new MachineTank(10 * FluidConstants.BUCKET);
+                input = insertOnly(mainTank, SteamLogic::heatable);
+                exposed = new CombinedStorage<>(List.of(input, FilteringStorage.extractOnlyOf(secondTank)));
+            }
+            case MASS_FABRICATOR -> {
+                mainTank = new MachineTank(8 * FluidConstants.BUCKET);
+                exposed = FilteringStorage.extractOnlyOf(mainTank);
+            }
+            case REPLICATOR -> {
+                mainTank = new MachineTank(16 * FluidConstants.BUCKET);
+                input = exposed = insertOnly(mainTank, fluid -> fluid == IC2Fluids.UU_MATTER.fluid());
+            }
+            case ELECTROLYZER -> {
+                mainTank = new MachineTank(8 * FluidConstants.BUCKET);
+                input = exposed = insertOnly(mainTank, fluid -> fluid == Fluids.WATER);
+            }
             case CROPMATRON -> {
                 mainTank = new MachineTank(2 * FluidConstants.BUCKET);
                 secondTank = new MachineTank(2 * FluidConstants.BUCKET);
@@ -358,12 +494,18 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.miner = this.guiType == MachineGuiType.MINER ? new MinerLogic(this) : null;
         this.cropLogic = this.guiType == MachineGuiType.CROP_HARVESTER || this.guiType == MachineGuiType.CROPMATRON
                 ? new CropMachineLogic(this, this.guiType == MachineGuiType.CROP_HARVESTER) : null;
+        this.logistics = LogisticsLogic.create(this, this.guiType);
+        this.steam = SteamLogic.create(this, this.guiType);
+        this.reactor = ReactorLogic.create(this, this.guiType);
+        this.uu = UuLogic.create(this, this.guiType);
+        this.utility = UtilityLogic.create(this, this.guiType);
+        this.automation = AutomationLogic.create(this, this.guiType);
 
         this.energyNode = switch (this.profile.role()) {
             case GENERATOR -> new GeneratorNode();
             case STORAGE -> new StorageInput();
             case PROCESSOR -> new ProcessorNode();
-            case TRANSFORMER, HEAT, KINETIC, NONE -> null;
+            case TRANSFORMER, HEAT, KINETIC, LOGISTICS, NONE -> null;
         };
         this.storageOutput = this.profile.role() == MachineEnergyProfile.Role.STORAGE ? new StorageOutput() : null;
 
@@ -382,6 +524,64 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 };
     }
 
+    /** Inventário da máquina; os filtros da triagem não entram nem saem por canos e funis. */
+    private final class MachineInventory extends SimpleContainer implements net.minecraft.world.WorldlyContainer {
+        private final MachineLayout layout;
+        private final int[] faceSlots;
+
+        MachineInventory(MachineLayout layout) {
+            super(layout.slotCount());
+            this.layout = layout;
+            this.faceSlots = java.util.stream.IntStream.range(0, layout.slotCount()).filter(slot -> !layout.isGhostSlot(slot)).toArray();
+        }
+
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            MachineBlockEntity.this.setChanged();
+        }
+
+        @Override
+        public boolean canPlaceItem(int slot, ItemStack stack) {
+            if (this.layout.isGhostSlot(slot)) return false;
+            if (this.layout.isUpgradeSlot(slot)) return stack.getItem() instanceof net.ic2reborn.item.UpgradeItem;
+            if (MachineBlockEntity.this.logistics != null && !MachineBlockEntity.this.logistics.canPlace(slot, stack)) return false;
+            if (MachineBlockEntity.this.steam != null && !MachineBlockEntity.this.steam.canPlace(slot, stack)) return false;
+            if (MachineBlockEntity.this.reactor != null && !MachineBlockEntity.this.reactor.canPlace(slot, stack)) return false;
+            if (MachineBlockEntity.this.uu != null && !MachineBlockEntity.this.uu.canPlace(slot, stack)) return false;
+            if (MachineBlockEntity.this.utility != null && !MachineBlockEntity.this.utility.canPlace(slot, stack)) return false;
+            if (MachineBlockEntity.this.automation != null && !MachineBlockEntity.this.automation.canPlace(slot, stack)) return false;
+            if (MachineBlockEntity.this.guiType == MachineGuiType.LIQUID_HEAT_EXCHANGER && slot >= LHE_CONDUCTOR_START) {
+                return stack.is(IC2AutoItems.HEAT_CONDUCTOR.get());
+            }
+            return !this.layout.isOutputSlot(slot);
+        }
+
+        @Override
+        public int[] getSlotsForFace(Direction side) {
+            return this.faceSlots;
+        }
+
+        @Override
+        public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction side) {
+            return canPlaceItem(slot, stack);
+        }
+
+        @Override
+        public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+            return !this.layout.isGhostSlot(slot);
+        }
+    }
+
+    /** Capacidade dos tanques do IC2, em baldes. */
+    private static long tankBuckets(BlockState state) {
+        return switch (BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath()) {
+            case "bronze_tank", "iron_tank" -> 32;
+            case "steel_tank" -> 128;
+            case "iridium_tank" -> 1_024;
+            default -> 24;
+        };
+    }
     /** Visão do tanque que só aceita entrada dos fluidos permitidos. */
     private static Storage<FluidVariant> insertOnly(Storage<FluidVariant> tank, Predicate<Fluid> accepts) {
         return new FilteringStorage<>(tank) {
@@ -422,7 +622,139 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     /** Tanques para canos e outros mods (entrada filtrada; na enlatadora também a saída), ou null. */
     public @Nullable Storage<FluidVariant> getFluidStorage(@Nullable Direction side) {
-        return this.exposedFluids;
+        switch (this.guiType) {
+            case NUCLEAR_REACTOR -> {
+                return this.reactor != null && this.reactor.isFluidCooledCore() ? this.exposedFluids : null;
+            }
+            case REACTOR_ACCESS_HATCH, REACTOR_FLUID_PORT -> {
+                MachineBlockEntity core = reactorCore();
+                return core == null ? null : core.exposedFluids;
+            }
+            default -> {
+                return this.exposedFluids;
+            }
+        }
+    }
+
+    /** Inventário que canos e funis enxergam: câmaras e a escotilha dão acesso à grade do reator. */
+    public SimpleContainer exposedInventory() {
+        if (this.guiType == MachineGuiType.PERSONAL_CHEST) return new SimpleContainer(0);
+        if (this.guiType == MachineGuiType.REACTOR_CHAMBER || this.guiType == MachineGuiType.REACTOR_ACCESS_HATCH) {
+            MachineBlockEntity core = reactorCore();
+            if (core != null) return core.inventory;
+        }
+        return this.inventory;
+    }
+
+    /** GUI aberta ao clicar: câmaras e escotilha abrem a do reator. */
+    public @Nullable net.minecraft.world.MenuProvider menuProvider() {
+        if (this.guiType == MachineGuiType.TESLA_COIL || this.guiType == MachineGuiType.LUMINATOR) return null;
+        if (this.guiType == MachineGuiType.TERRAFORMER) return null;
+        if (this.guiType == MachineGuiType.INDUSTRIAL_WORKBENCH && this.level != null) {
+            BlockPos pos = this.worldPosition;
+            net.minecraft.world.inventory.ContainerLevelAccess access = net.minecraft.world.inventory.ContainerLevelAccess.create(this.level, pos);
+            return new net.minecraft.world.SimpleMenuProvider((id, inventory, player) -> new net.minecraft.world.inventory.CraftingMenu(id, inventory, access) {
+                @Override
+                public boolean stillValid(Player viewer) {
+                    return !MachineBlockEntity.this.isRemoved()
+                            && viewer.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
+                }
+            }, getDisplayName());
+        }
+        if (this.guiType == MachineGuiType.REACTOR_CHAMBER || this.guiType == MachineGuiType.REACTOR_ACCESS_HATCH) {
+            return reactorCore();
+        }
+        return this;
+    }
+
+    /**
+     * Núcleo do reator desta peça: o próprio reator; o vizinho de uma câmara ou injetor (o injetor também
+     * serve encostado numa câmara); ou, para escotilha e porta de fluidos, o reator a fluido no centro da casca.
+     */
+    public @Nullable MachineBlockEntity reactorCore() {
+        if (this.guiType == MachineGuiType.NUCLEAR_REACTOR) return this;
+        if (this.level == null) return null;
+        long time = this.level.getGameTime();
+        if (time == this.cachedCoreTime && (this.cachedCore == null || !this.cachedCore.isRemoved())) return this.cachedCore;
+        this.cachedCoreTime = time;
+        this.cachedCore = null;
+        switch (this.guiType) {
+            case REACTOR_CHAMBER, REACTOR_COOLANT_INJECTOR -> {
+                for (Direction direction : Direction.values()) {
+                    if (!(this.level.getBlockEntity(this.worldPosition.relative(direction)) instanceof MachineBlockEntity other)) continue;
+                    if (other.guiType == MachineGuiType.NUCLEAR_REACTOR) {
+                        this.cachedCore = other;
+                        break;
+                    }
+                    if (this.guiType == MachineGuiType.REACTOR_COOLANT_INJECTOR && other.guiType == MachineGuiType.REACTOR_CHAMBER) {
+                        MachineBlockEntity core = other.reactorCore();
+                        if (core != null) {
+                            this.cachedCore = core;
+                            break;
+                        }
+                    }
+                }
+            }
+            case REACTOR_ACCESS_HATCH, REACTOR_FLUID_PORT -> {
+                for (BlockPos pos : BlockPos.betweenClosed(this.worldPosition.offset(-2, -2, -2), this.worldPosition.offset(2, 2, 2))) {
+                    if (this.level.getBlockEntity(pos) instanceof MachineBlockEntity other && other.guiType == MachineGuiType.NUCLEAR_REACTOR
+                            && other.reactor != null && other.reactor.isFluidCooledCore()) {
+                        this.cachedCore = other;
+                        break;
+                    }
+                }
+            }
+            default -> {
+            }
+        }
+        return this.cachedCore;
+    }
+
+    /** Clique no bloco antes da GUI: a luminária liga/desliga; o baú pessoal só abre para o dono. */
+    public boolean handleUse(Player player) {
+        if (this.automation != null && this.automation.handleUse(player)) return true;
+        if (this.utility == null) return false;
+        if (player.getMainHandItem().getItem() instanceof net.ic2reborn.item.WrenchItem && this.guiType != MachineGuiType.PERSONAL_CHEST) return false;
+        return this.utility.handleUse(player);
+    }
+
+    public void onPlacedBy(net.minecraft.world.entity.LivingEntity placer) {
+        if (this.utility != null) this.utility.onPlacedBy(placer);
+        if (this.automation != null) this.automation.onPlacedBy(placer);
+    }
+
+    /** O baú pessoal só pode ser quebrado pelo dono. */
+    public boolean canBeBrokenBy(Player player) {
+        return (this.utility == null || this.utility.isOwner(player)) && (this.automation == null || this.automation.isOwner(player));
+    }
+
+    /** Só o dono muda pedido, oferta e preço dos O-Mats. */
+    public boolean canConfigure(Player player) {
+        return this.automation == null || this.automation.isOwner(player);
+    }
+    @Nullable UuLogic uuLogic() {
+        return this.uu;
+    }
+
+    /** Fabricador de massa: energia no fim do tick anterior (a sucata amplifica o que entrou desde então). */
+    long lastEnergySnapshot() {
+        return this.lastEnergy;
+    }
+
+    void snapshotEnergy() {
+        this.lastEnergy = this.energy;
+    }
+
+    /** Armazenamento de moldes: grava um molde (testes e scanner). */
+    public boolean addPattern(net.minecraft.world.item.Item item) {
+        return this.uu != null && this.guiType == MachineGuiType.PATTERN_STORAGE && this.uu.addPattern(item);
+    }
+    @Nullable ReactorLogic reactorLogic() {
+        return this.reactor;
+    }
+
+    void addGeneratedEnergy(long power) {
+        produce(power);
     }
 
     /** Tanque 0 (principal) ou 1 (saída da enlatadora), ou null se a máquina não tem. */
@@ -459,6 +791,10 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     /** Botões da GUI: modos do transformador, da enlatadora e do conformador, e troca de tanques. */
     public boolean handleMenuButton(int id) {
         if (this.transformer != null) return setTransformerMode(id);
+        if (this.logistics != null) return this.logistics.handleButton(id);
+        if (this.steam != null) return this.steam.handleButton(id);
+        if (this.uu != null) return this.uu.handleButton(id);
+        if (this.automation != null) return this.automation.handleButton(id);
 
         if (this.guiType == MachineGuiType.METAL_FORMER && id == BUTTON_METAL_FORMER_MODE) {
             this.metalFormerMode = (this.metalFormerMode + 1) % METAL_FORMER_RECIPES.length;
@@ -564,6 +900,23 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return this.getBlockState().getValue(MachineBlock.FACING);
     }
 
+    // ── acesso da lógica de logística ─────────────────────────────────────
+    Direction facing() {
+        return front();
+    }
+
+    @Nullable MachineTank mainTank() {
+        return this.tank;
+    }
+
+    @Nullable MachineTank secondTank() {
+        return this.outputTank;
+    }
+
+    void setProgressDisplay(int progress, int maxProgress) {
+        this.progress = progress;
+        this.maxProgress = maxProgress;
+    }
     // ── tick ──────────────────────────────────────────────────────────────
     public static void serverTick(Level level, BlockPos pos, BlockState state, MachineBlockEntity machine) {
         machine.tickServer(level);
@@ -574,7 +927,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.lastFlow = this.flowThisTick;
         this.flowThisTick = 0;
 
-        boolean changed = handleEnergyItems();
+        boolean changed = tickUpgrades(level);
+        changed |= handleEnergyItems();
         if (this.tankInput != null && this.slots.fluidIn() >= 0) {
             changed |= MachineFluids.drainIntoTank(this.inventory, this.slots.fluidIn(), this.slots.fluidOut(), this.tankInput);
         }
@@ -587,6 +941,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case WIND_GENERATOR -> tickWind(level);
                 case GEO_GENERATOR -> tickGeo();
                 case KINETIC_GENERATOR -> tickKineticGenerator(level);
+                case STIRLING_GENERATOR -> tickStirlingGenerator(level);
+                case NUCLEAR_REACTOR -> this.reactor != null && this.reactor.tick(level);
+                case RT_GENERATOR -> this.utility != null && this.utility.tick(level);
                 case SEMIFLUID_GENERATOR -> tickSemifluid();
                 default -> tickGenerator(level);
             };
@@ -595,6 +952,11 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case ELECTRIC_HEAT_GENERATOR -> tickElectricHeat();
                 case MINER -> this.miner != null && this.miner.tick(level);
                 case CROP_HARVESTER, CROPMATRON -> this.cropLogic != null && this.cropLogic.tick(level);
+                case PUMP, SORTING_MACHINE, FLUID_BOTTLER, FLUID_REGULATOR, CONDENSER -> this.logistics != null && this.logistics.tick(level);
+                case REACTOR_COOLANT_INJECTOR -> this.reactor != null && this.reactor.tick(level);
+                case MASS_FABRICATOR, SCANNER, REPLICATOR -> this.uu != null && this.uu.tick(level);
+                case TESLA_COIL, CHUNK_LOADER, ELECTROLYZER, MAGNETIZER, LUMINATOR -> this.utility != null && this.utility.tick(level);
+                case TERRAFORMER, ADVANCED_MINER, BATCH_CRAFTER, ENERGY_O_MAT -> this.automation != null && this.automation.tick(level);
                 case INDUCTION_FURNACE -> tickInduction(level);
                 case CENTRIFUGE -> tickCentrifugeHeat(level) | tickProcessor(level);
                 default -> tickProcessor(level);
@@ -602,9 +964,14 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case KINETIC -> tickKineticSource(level);
             case HEAT -> tickHeatMachine(level);
             case TRANSFORMER -> tickTransformer(level);
-            case STORAGE, NONE -> false;
+            case LOGISTICS -> (this.logistics != null && this.logistics.tick(level)) | (this.reactor != null && this.reactor.tick(level))
+                    | (this.automation != null && this.automation.tick(level));
+            case STORAGE -> this.utility != null && this.utility.tick(level);
+            case NONE -> false;
         };
         if (changed) setChanged();
+        // o reator pode ter derretido neste tick
+        if (this.isRemoved() || level.getBlockEntity(this.worldPosition) != this) return;
 
         boolean working = switch (this.profile.role()) {
             case GENERATOR -> this.energy > energyBefore;
@@ -612,7 +979,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case KINETIC -> this.kineticWorking;
             case HEAT -> this.heatWorking;
             case TRANSFORMER -> this.transformer != null && this.transformer.mode() == BufferedTransformer.Mode.STEP_UP;
-            case STORAGE, NONE -> false;
+            case LOGISTICS -> (this.logistics != null && this.logistics.working()) || (this.automation != null && this.automation.working());
+            case STORAGE -> this.utility != null && this.utility.working();
+            case NONE -> false;
         };
         updateActive(level, working);
     }
@@ -979,7 +1348,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     public boolean isKineticSource() {
         return switch (this.guiType) {
-            case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR, MANUAL_KINETIC_GENERATOR, ELECTRIC_KINETIC_GENERATOR -> true;
+            case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR, MANUAL_KINETIC_GENERATOR, ELECTRIC_KINETIC_GENERATOR,
+                 STEAM_KINETIC_GENERATOR, STIRLING_KINETIC_GENERATOR -> true;
             default -> false;
         };
     }
@@ -993,6 +1363,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR -> side.getOpposite() == front() ? Math.min(request, this.kuOutput) : 0;
             case MANUAL_KINETIC_GENERATOR -> takeKinetic(Math.min(request, this.kineticStore), simulate);
             case ELECTRIC_KINETIC_GENERATOR -> side == front() ? takeKinetic(Math.min(request, Math.min(maxMotorKu(), this.kineticStore)), simulate) : 0;
+            case STEAM_KINETIC_GENERATOR, STIRLING_KINETIC_GENERATOR -> this.steam != null ? this.steam.drawKinetic(side, request, simulate) : 0;
             default -> 0;
         };
     }
@@ -1002,6 +1373,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR -> side.getOpposite() == front() ? this.kuOutput : 0;
             case MANUAL_KINETIC_GENERATOR -> KINETIC_BUFFER;
             case ELECTRIC_KINETIC_GENERATOR -> side == front() ? maxMotorKu() : 0;
+            case STEAM_KINETIC_GENERATOR, STIRLING_KINETIC_GENERATOR -> this.steam != null ? this.steam.kineticBandwidth(side) : 0;
             default -> 0;
         };
     }
@@ -1051,6 +1423,11 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 this.manualClicks = 0;
                 this.kineticWorking = this.kineticStore > 0;
                 yield false;
+            }
+            case STEAM_KINETIC_GENERATOR, STIRLING_KINETIC_GENERATOR -> {
+                boolean changed = this.steam != null && this.steam.tick(level);
+                this.kineticWorking = this.steam != null && this.steam.working();
+                yield changed;
             }
             default -> false;
         };
@@ -1249,6 +1626,52 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return drawn > 0;
     }
 
+    /** Gerador Stirling do IC2: puxa calor da fonte na frente e rende 0,5 EU por HU (250 CW). */
+    private static final long CW_PER_HU = 250;
+
+    private boolean tickStirlingGenerator(Level level) {
+        Direction facing = front();
+        if (!(level.getBlockEntity(this.worldPosition.relative(facing)) instanceof MachineBlockEntity source)
+                || !source.isHeatSource()) {
+            this.progress = 0;
+            this.maxProgress = 0;
+            return false;
+        }
+        Direction side = facing.getOpposite();
+        int available = source.drawHeat(side, source.maxHeatEmitted(), true);
+        int request = (int) Math.min(available, (this.profile.capacity() - this.energy) / CW_PER_HU);
+        int drawn = request > 0 ? source.drawHeat(side, request, false) : 0;
+        this.energy += drawn * CW_PER_HU;
+        this.progress = clampToInt(drawn * CW_PER_HU);
+        this.maxProgress = clampToInt(source.maxHeatEmitted() * CW_PER_HU);
+        return drawn > 0;
+    }
+
+    /** Trocador de calor líquido do IC2: primeiro slot dos 10 condutores de calor. */
+    private static final int LHE_CONDUCTOR_START = 7;
+    /** 1 mB de refrigerante quente (ou lava) esfriando rende 20 HU. */
+    private static final int LHE_HU_PER_MB = 20;
+
+    private static @Nullable Fluid cooledFluid(Fluid hot) {
+        if (hot == IC2Fluids.HOT_COOLANT.fluid()) return IC2Fluids.COOLANT.fluid();
+        if (hot == Fluids.LAVA) return IC2Fluids.PAHOEHOE_LAVA.fluid();
+        return null;
+    }
+
+    /** Esfria fluido quente até juntar {@code needed} HU no estoque (ou acabar o fluido/espaço). */
+    private void exchangeHeat(int needed) {
+        if (this.tank == null || this.outputTank == null || this.tank.isResourceBlank()) return;
+        Fluid cooled = cooledFluid(this.tank.variant.getFluid());
+        if (cooled == null) return;
+        FluidVariant out = FluidVariant.of(cooled);
+        long mb = (needed + LHE_HU_PER_MB - 1) / LHE_HU_PER_MB;
+        long perMb = FluidConstants.BUCKET / 1_000;
+        mb = Math.min(mb, Math.min(this.tank.amount, this.outputTank.capacity() - this.outputTank.amount) / perMb);
+        if (mb <= 0 || !this.outputTank.canFill(out, mb * perMb)) return;
+        this.tank.consume(mb * perMb);
+        this.outputTank.fill(out, mb * perMb);
+        this.heatStore += mb * LHE_HU_PER_MB;
+    }
     // ── calor (IC2: IHeatSource) ──────────────────────────────────────────
     /** Fermentador (general.ini do IC2): 4.000 HU por ciclo, 20 mB de biomassa → 400 mB de biogás, 500 mB de biomassa por fertilizante. */
     private static final int FERMENTER_HEAT_PER_RUN = 4_000;
@@ -1279,7 +1702,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     public boolean isHeatSource() {
         return switch (this.guiType) {
-            case SOLID_HEAT_GENERATOR, FLUID_HEAT_GENERATOR, ELECTRIC_HEAT_GENERATOR, RT_HEAT_GENERATOR -> true;
+            case SOLID_HEAT_GENERATOR, FLUID_HEAT_GENERATOR, ELECTRIC_HEAT_GENERATOR, RT_HEAT_GENERATOR, LIQUID_HEAT_EXCHANGER -> true;
             default -> false;
         };
     }
@@ -1293,6 +1716,13 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 yield fuel == null ? 0 : fuel.heat();
             }
             case ELECTRIC_HEAT_GENERATOR -> countItems(COIL_SLOTS, IC2AutoItems.COIL.get()) * COIL_HEAT;
+            case LIQUID_HEAT_EXCHANGER -> {
+                int conductors = 0;
+                for (int slot = LHE_CONDUCTOR_START; slot < LHE_CONDUCTOR_START + 10 && slot < this.inventory.getContainerSize(); slot++) {
+                    if (this.inventory.getItem(slot).is(IC2AutoItems.HEAT_CONDUCTOR.get())) conductors++;
+                }
+                yield conductors * COIL_HEAT;
+            }
             case RT_HEAT_GENERATOR -> {
                 int pellets = countItems(RT_SLOTS, IC2AutoItems.RTG_PELLET.get());
                 yield pellets == 0 ? 0 : (1 << (pellets - 1)) * RT_HEAT_BASE;
@@ -1325,13 +1755,29 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     }
 
     private boolean tickHeatMachine(Level level) {
-        return this.guiType == MachineGuiType.FERMENTER ? tickFermenter(level) : tickHeatSource(level);
+        return switch (this.guiType) {
+            case FERMENTER -> tickFermenter(level);
+            case IRON_FURNACE -> tickIronFurnace(level);
+            case BLAST_FURNACE -> tickBlastFurnace(level);
+            case COKE_KILN -> tickCokeKiln(level);
+            case COKE_KILN_GRATE -> this.tank != null && MachineFluids.fillFromTank(this.inventory, 0, 1, this.tank);
+            case COKE_KILN_HATCH -> false;
+            case STEAM_GENERATOR, STEAM_REPRESSURIZER -> {
+                boolean changed = this.steam != null && this.steam.tick(level);
+                this.heatWorking = this.steam != null && this.steam.working();
+                yield changed;
+            }
+            default -> tickHeatSource(level);
+        };
     }
 
     /** Geradores de calor sem eletricidade: completam o buffer até o máximo por tick. */
     private boolean tickHeatSource(Level level) {
         boolean changed = false;
         boolean solid = this.guiType == MachineGuiType.SOLID_HEAT_GENERATOR;
+        if (this.guiType == MachineGuiType.LIQUID_HEAT_EXCHANGER && this.outputTank != null) {
+            changed |= MachineFluids.fillFromTank(this.inventory, 2, 3, this.outputTank);
+        }
         if (solid && this.fuel <= 0 && this.heatBuffer == 0) {
             changed = gainSolidFuel(level);
         }
@@ -1379,6 +1825,12 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 yield fuel.heat();
             }
             case RT_HEAT_GENERATOR -> Math.min(max, maxHeatEmitted());
+            case LIQUID_HEAT_EXCHANGER -> {
+                if (this.heatStore < max) exchangeHeat((int) (max - this.heatStore));
+                int taken = (int) Math.min(max, this.heatStore);
+                this.heatStore -= taken;
+                yield taken;
+            }
             case ELECTRIC_HEAT_GENERATOR -> {
                 int amount = (int) Math.min(max, this.energy / ENERGY_PER_HU);
                 this.energy -= amount * ENERGY_PER_HU;
@@ -1443,6 +1895,292 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         return true;
     }
 
+    // ── upgrades ──────────────────────────────────────────────────────────
+    public MachineEnergyProfile getEnergyProfile() {
+        return this.profile;
+    }
+
+    /** Aplica os upgrades instalados: perfil de energia, ejetores e puxadores (IC2: InvSlotUpgrade.tick). */
+    private boolean tickUpgrades(Level level) {
+        List<Integer> upgradeSlots = this.guiType.layout().upgradeSlots();
+        if (upgradeSlots.isEmpty()) return false;
+        int overclockers = 0;
+        int transformers = 0;
+        int storage = 0;
+        boolean changed = false;
+        for (int slot : upgradeSlots) {
+            if (slot >= this.inventory.getContainerSize()) continue;
+            ItemStack stack = this.inventory.getItem(slot);
+            if (!(stack.getItem() instanceof net.ic2reborn.item.UpgradeItem upgrade)) continue;
+            int count = stack.getCount();
+            switch (upgrade.kind()) {
+                case OVERCLOCKER -> overclockers += count;
+                case TRANSFORMER -> transformers += count;
+                case ENERGY_STORAGE -> storage += count;
+                case EJECTOR -> changed |= moveItems(level, stack, count, true);
+                case PULLING -> changed |= moveItems(level, stack, count, false);
+                case FLUID_EJECTOR -> changed |= moveFluids(level, stack, count, true);
+                case FLUID_PULLING -> changed |= moveFluids(level, stack, count, false);
+                default -> {
+                }
+            }
+        }
+        this.profile = this.baseProfile.role() == MachineEnergyProfile.Role.PROCESSOR
+                ? this.baseProfile.upgraded(Math.min(overclockers, 16), Math.min(transformers, 4), storage)
+                : this.baseProfile;
+        if (this.maxProgress != this.profile.operationTicks() && this.baseProfile.operationTicks() > 0
+                && this.guiType != MachineGuiType.INDUCTION_FURNACE) {
+            this.maxProgress = this.profile.operationTicks();
+        }
+        if (this.energy > this.profile.capacity() && this.profile.capacity() > 0) this.energy = this.profile.capacity();
+        return changed;
+    }
+
+    /** Sinal de redstone vizinho, invertido se houver o upgrade inversor. */
+    private boolean redstonePowered(Level level) {
+        boolean powered = level.hasNeighborSignal(this.worldPosition);
+        for (int slot : this.guiType.layout().upgradeSlots()) {
+            if (slot < this.inventory.getContainerSize() && this.inventory.getItem(slot).getItem() instanceof net.ic2reborn.item.UpgradeItem upgrade
+                    && upgrade.kind() == net.ic2reborn.item.UpgradeItem.Kind.REDSTONE_INVERTER) {
+                return !powered;
+            }
+        }
+        return powered;
+    }
+
+    private static long upgradeRate(int count) {
+        return (long) Math.pow(4.0, Math.min(4, Math.max(0, count - 1)));
+    }
+
+    /** Ejetor: tira das saídas para os vizinhos; puxador: traz dos vizinhos para as entradas. */
+    private boolean moveItems(Level level, ItemStack upgrade, int count, boolean eject) {
+        var own = net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage.of(this.inventory, null);
+        List<net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant>> parts = new ArrayList<>();
+        int[] custom = this.logistics != null ? (eject ? this.logistics.ejectSlots() : this.logistics.pullSlots())
+                : this.automation != null ? (eject ? this.automation.ejectSlots() : this.automation.pullSlots()) : null;
+        if (custom != null) {
+            for (int slot : custom) parts.add(own.getSlot(slot));
+        } else if (eject) {
+            for (int slot : this.slots.outputs()) parts.add(own.getSlot(slot));
+        } else {
+            if (this.slots.input() >= 0) parts.add(own.getSlot(this.slots.input()));
+            if (this.slots.secondary() >= 0) parts.add(own.getSlot(this.slots.secondary()));
+        }
+        if (parts.isEmpty()) return false;
+        Storage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> mine = new CombinedStorage<>(parts);
+        Direction only = upgrade.get(net.ic2reborn.registry.IC2Components.UPGRADE_DIRECTION.get());
+        boolean moved = false;
+        for (Direction direction : only != null ? new Direction[]{only} : Direction.values()) {
+            BlockPos pos = this.worldPosition.relative(direction);
+            Storage<net.fabricmc.fabric.api.transfer.v1.item.ItemVariant> other =
+                    net.fabricmc.fabric.api.transfer.v1.item.ItemStorage.SIDED.find(level, pos, direction.getOpposite());
+            if (other == null) continue;
+            long done = eject
+                    ? net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil.move(mine, other, variant -> true, upgradeRate(count), null)
+                    : net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil.move(other, mine, variant -> true, upgradeRate(count), null);
+            moved |= done > 0;
+        }
+        return moved;
+    }
+
+    /** Ejetor de fluido: esvazia o tanque de saída nos vizinhos; puxador: enche a entrada. 50 mB × 4^(n−1) por tick. */
+    private boolean moveFluids(Level level, ItemStack upgrade, int count, boolean eject) {
+        Storage<FluidVariant> mine = eject ? this.outputTank : this.tankInput;
+        if (mine == null) return false;
+        long amount = 50L * upgradeRate(count) * FluidConstants.BUCKET / 1000;
+        Direction only = upgrade.get(net.ic2reborn.registry.IC2Components.UPGRADE_DIRECTION.get());
+        boolean moved = false;
+        for (Direction direction : only != null ? new Direction[]{only} : Direction.values()) {
+            Storage<FluidVariant> other = FluidStorage.SIDED.find(level, this.worldPosition.relative(direction), direction.getOpposite());
+            if (other == null) continue;
+            long done = eject
+                    ? net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil.move(mine, other, variant -> true, amount, null)
+                    : net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil.move(other, mine, variant -> true, amount, null);
+            moved |= done > 0;
+        }
+        return moved;
+    }
+    // ── metalurgia ────────────────────────────────────────────────────────
+    private static final int IRON_FURNACE_TICKS = 160;
+    private static final int IRON_FURNACE_INPUT = 0;
+    private static final int IRON_FURNACE_FUEL = 2;
+    private static final int BLAST_FURNACE_MAX_HEAT = 50_000;
+    private static final int BLAST_FURNACE_TICKS = 6_000;
+    private static final int COKE_KILN_TICKS = 1_800;
+
+    /** Fornalha de ferro do IC2: queima combustível e derrete as receitas de fornalha em 160 ticks. */
+    private boolean tickIronFurnace(Level level) {
+        boolean changed = false;
+        ItemStack input = this.inventory.getItem(IRON_FURNACE_INPUT);
+        ItemStack result = smeltingResult(level, input);
+        boolean canOperate = !result.isEmpty() && insertResults(List.of(result), true);
+        if (this.fuel <= 0 && canOperate) {
+            ItemStack fuelStack = this.inventory.getItem(IRON_FURNACE_FUEL);
+            int burn = fuelStack.isEmpty() ? 0 : level.fuelValues().burnDuration(fuelStack);
+            if (burn > 0) {
+                this.fuel = burn;
+                this.totalFuel = burn;
+                if (fuelStack.getItem() == Items.LAVA_BUCKET) {
+                    this.inventory.setItem(IRON_FURNACE_FUEL, new ItemStack(Items.BUCKET));
+                } else {
+                    fuelStack.shrink(1);
+                    this.inventory.setItem(IRON_FURNACE_FUEL, fuelStack);
+                }
+                changed = true;
+            }
+        }
+        if (this.fuel > 0 && canOperate) {
+            if (++this.progress >= IRON_FURNACE_TICKS) {
+                this.progress = 0;
+                input.shrink(1);
+                this.inventory.setItem(IRON_FURNACE_INPUT, input);
+                insertResults(List.of(result), false);
+            }
+            changed = true;
+        } else if (this.progress != 0) {
+            this.progress = 0;
+            changed = true;
+        }
+        if (this.fuel > 0) {
+            this.fuel--;
+            changed = true;
+        }
+        this.maxProgress = IRON_FURNACE_TICKS;
+        this.heatWorking = this.fuel > 0;
+        return changed;
+    }
+
+    private static ItemStack smeltingResult(Level level, ItemStack input) {
+        if (input.isEmpty() || !(level instanceof ServerLevel server)) return ItemStack.EMPTY;
+        net.minecraft.world.item.crafting.SingleRecipeInput recipeInput = new net.minecraft.world.item.crafting.SingleRecipeInput(input.copyWithCount(1));
+        return server.recipeAccess().getRecipeFor(net.minecraft.world.item.crafting.RecipeType.SMELTING, recipeInput, server)
+                .map(holder -> holder.value().assemble(recipeInput))
+                .orElse(ItemStack.EMPTY);
+    }
+
+    /**
+     * Alto-forno do IC2: puxa calor da fonte na frente até 50.000 HU (esfria 1 HU/t sem calor) e,
+     * quente, transforma ferro em aço + escória gastando 1 mB de ar comprimido por tick (6.000 ticks).
+     */
+    private boolean tickBlastFurnace(Level level) {
+        boolean changed = false;
+        ItemStack input = this.inventory.getItem(0);
+        java.util.Optional<net.ic2reborn.recipe.MachineRecipes.Compiled> recipe = input.isEmpty()
+                ? java.util.Optional.empty() : net.ic2reborn.recipe.MachineRecipes.INSTANCE.find("blast_furnace", input);
+        List<ItemStack> results = recipe.map(net.ic2reborn.recipe.MachineRecipes.Compiled::createResults).orElse(List.of());
+        boolean hasWork = recipe.isPresent() && input.getCount() >= recipe.get().inputCount() && insertResults(results, true);
+
+        int gained = 0;
+        if ((hasWork || this.progress > 0 || redstonePowered(level)) && this.heat < BLAST_FURNACE_MAX_HEAT) {
+            Direction facing = front();
+            if (level.getBlockEntity(this.worldPosition.relative(facing)) instanceof MachineBlockEntity source && source.isHeatSource()) {
+                gained = source.drawHeat(facing.getOpposite(), BLAST_FURNACE_MAX_HEAT - this.heat + 100, false);
+                this.heat = Math.min(BLAST_FURNACE_MAX_HEAT, this.heat + gained);
+            }
+        }
+        if (gained == 0 && this.heat > 0 && this.heat < BLAST_FURNACE_MAX_HEAT) this.heat--;
+        if (gained > 0) changed = true;
+
+        this.maxProgress = BLAST_FURNACE_TICKS;
+        this.heatWorking = false;
+        if (hasWork && this.heat >= BLAST_FURNACE_MAX_HEAT) {
+            this.heatWorking = true;
+            long air = FluidConstants.BUCKET / 1000;
+            if (this.tank != null && !this.tank.isResourceBlank() && this.tank.variant.getFluid() == IC2Fluids.AIR.fluid() && this.tank.amount >= air) {
+                this.tank.consume(air);
+                this.progress++;
+                if (this.progress >= BLAST_FURNACE_TICKS) {
+                    this.progress = 0;
+                    input.shrink(recipe.get().inputCount());
+                    this.inventory.setItem(0, input);
+                    insertResults(results, false);
+                }
+            }
+            // quente e com trabalho, só esfria se ficar sem fonte
+            changed = true;
+        } else if (!hasWork && this.progress != 0) {
+            this.progress = 0;
+            changed = true;
+        }
+        return changed;
+    }
+
+    /**
+     * Forno de coque do IC2 (multibloco 3×3×3 de tijolos refratários): a cada segundo, com a estrutura
+     * certa, carvão vira coque (+500 mB de creosoto) e tronco vira carvão vegetal (+250 mB) em 90 s.
+     */
+    private boolean tickCokeKiln(Level level) {
+        if ((level.getGameTime() + this.worldPosition.asLong()) % 20 != 0) return false;
+        this.maxProgress = COKE_KILN_TICKS;
+        this.heatWorking = false;
+        BlockPos center = this.worldPosition.relative(front().getOpposite());
+        MachineBlockEntity hatch = kilnPart(level, center.above(), MachineGuiType.COKE_KILN_HATCH);
+        MachineBlockEntity grate = kilnPart(level, center.below(), MachineGuiType.COKE_KILN_GRATE);
+        if (hatch == null || grate == null || grate.tank == null || !cokeKilnFormed()) return resetKiln();
+
+        ItemStack input = hatch.inventory.getItem(0);
+        ItemStack output;
+        int creosote;
+        if (input.is(net.minecraft.tags.ItemTags.LOGS)) {
+            output = new ItemStack(Items.CHARCOAL);
+            creosote = 250;
+        } else if (input.is(Items.COAL)) {
+            output = new ItemStack(net.ic2reborn.registry.IC2Items.COKE.get());
+            creosote = 500;
+        } else {
+            return resetKiln();
+        }
+        FluidVariant fluid = FluidVariant.of(IC2Fluids.CREOSOTE.fluid());
+        long droplets = creosote * FluidConstants.BUCKET / 1000;
+        if (!insertResults(List.of(output), true) || !grate.tank.canFill(fluid, droplets)) return resetKiln();
+
+        this.heatWorking = true;
+        this.progress += 20;
+        if (this.progress >= COKE_KILN_TICKS) {
+            this.progress = 0;
+            input.shrink(1);
+            hatch.inventory.setItem(0, input);
+            insertResults(List.of(output), false);
+            grate.tank.fill(fluid, droplets);
+            grate.setChanged();
+        }
+        return true;
+    }
+
+    private boolean resetKiln() {
+        if (this.progress == 0) return false;
+        this.progress = 0;
+        return true;
+    }
+
+    private static @Nullable MachineBlockEntity kilnPart(Level level, BlockPos pos, MachineGuiType type) {
+        return level.getBlockEntity(pos) instanceof MachineBlockEntity machine && machine.guiType == type ? machine : null;
+    }
+
+    /**
+     * Estrutura do forno de coque: embaixo 3×3 de tijolos com a grelha no meio; no meio 3×3 oco com
+     * este controlador no centro de um dos lados; em cima 3×3 com a escotilha no meio.
+     */
+    public boolean cokeKilnFormed() {
+        if (this.level == null || this.guiType != MachineGuiType.COKE_KILN) return false;
+        BlockPos center = this.worldPosition.relative(front().getOpposite());
+        net.minecraft.world.level.block.Block bricks = net.ic2reborn.registry.IC2AutoBlocks.REFRACTORY_BRICKS.get();
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    BlockPos pos = center.offset(dx, dy, dz);
+                    if (dx == 0 && dz == 0) {
+                        if (dy == -1 && kilnPart(this.level, pos, MachineGuiType.COKE_KILN_GRATE) == null) return false;
+                        if (dy == 0 && !this.level.getBlockState(pos).isAir()) return false;
+                        if (dy == 1 && kilnPart(this.level, pos, MachineGuiType.COKE_KILN_HATCH) == null) return false;
+                    } else if (!pos.equals(this.worldPosition) && !this.level.getBlockState(pos).is(bricks)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
     // ── máquinas de processamento ─────────────────────────────────────────
     /** Máquina padrão do IC2: gasta a potência por tick e completa a operação no fim da duração. */
     private boolean tickProcessor(Level level) {
@@ -1654,7 +2392,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     // ── tanque ────────────────────────────────────────────────────────────
     /** Tanque de um fluido por vez. A máquina mexe direto; de fora só pelas visões filtradas. */
-    private final class MachineTank extends SingleFluidStorage {
+    final class MachineTank extends SingleFluidStorage {
         private final long capacity;
 
         MachineTank(long capacity) {
@@ -1671,6 +2409,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             MachineBlockEntity.this.setChanged();
         }
 
+        long capacity() {
+            return this.capacity;
+        }
         void consume(long droplets) {
             this.amount = Math.max(0, this.amount - droplets);
             if (this.amount == 0) this.variant = FluidVariant.blank();
@@ -1774,6 +2515,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         @Override
         public long powerDemand() {
             long intake = guiType == MachineGuiType.MINER ? MinerLogic.MAX_INTAKE : profile.maxIntake();
+            if (automation != null) intake = Math.min(intake, automation.demandLimit());
             return Math.max(0, Math.min(intake, profile.capacity() - energy));
         }
 
@@ -1793,6 +2535,22 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     // ── GUI ───────────────────────────────────────────────────────────────
     private int logicalValue(int field) {
+        if (this.automation != null) {
+            Integer value = this.automation.dataValue(field);
+            if (value != null) return value;
+        }
+        if (this.uu != null) {
+            Integer value = this.uu.dataValue(field);
+            if (value != null) return value;
+        }
+        if (this.reactor != null) {
+            Integer value = this.reactor.dataValue(field);
+            if (value != null) return value;
+        }
+        if (this.steam != null) {
+            Integer value = this.steam.dataValue(field);
+            if (value != null) return value;
+        }
         if (field >= DATA_FLUID && field < DATA_FLUID + 2 * DATA_PER_TANK) {
             MachineTank fluidTank = (field - DATA_FLUID) / DATA_PER_TANK == 0 ? this.tank : this.outputTank;
             if (fluidTank == null) return 0;
@@ -1810,8 +2568,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case DATA_POWER -> clampToInt(this.lastFlow);
             case DATA_VOLTAGE -> this.profile.voltage();
             case DATA_MODE -> machineMode();
-            case DATA_HEAT -> isHeatSource() ? this.transmitHeat : this.guiType == MachineGuiType.FERMENTER ? this.heatBuffer : this.heat;
-            case DATA_MAX_HEAT -> isHeatSource() ? maxHeatEmitted() : this.guiType == MachineGuiType.FERMENTER ? FERMENTER_HEAT_PER_RUN : this.maxHeat;
+            case DATA_HEAT -> this.guiType == MachineGuiType.IRON_FURNACE ? this.fuel : isHeatSource() ? this.transmitHeat : this.guiType == MachineGuiType.FERMENTER ? this.heatBuffer : this.heat;
+            case DATA_MAX_HEAT -> this.guiType == MachineGuiType.IRON_FURNACE ? this.totalFuel : isHeatSource() ? maxHeatEmitted() : this.guiType == MachineGuiType.FERMENTER ? FERMENTER_HEAT_PER_RUN : this.maxHeat;
             default -> 0;
         };
     }
@@ -1822,7 +2580,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             case METAL_FORMER -> this.metalFormerMode;
             case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR -> kineticStatus();
             case BLOCK_CUTTER -> this.bladeTooWeak ? 1 : 0;
-            default -> this.cannerMode.ordinal();
+            default -> this.logistics != null ? this.logistics.mode() : this.cannerMode.ordinal();
         };
     }
 
@@ -1834,9 +2592,18 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     @Override
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);
-        if (this.level != null) {
+        if (this.utility != null && this.level != null) this.utility.onRemoved(this.level);
+        if (this.level != null && !isStorageBox()) {
             Containers.dropContents(this.level, pos, this.inventory);
         }
+    }
+
+    /** Caixas de armazenamento guardam o conteúdo no item quando quebradas. */
+    private boolean isStorageBox() {
+        return switch (this.guiType) {
+            case WOODEN_STORAGE_BOX, IRON_STORAGE_BOX, STEEL_STORAGE_BOX, IRIDIUM_STORAGE_BOX -> true;
+            default -> false;
+        };
     }
 
     @Override
@@ -1864,6 +2631,21 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.profile.role() == MachineEnergyProfile.Role.STORAGE && this.energy > 0) {
             components.set(net.craftenergy.content.CEComponents.STORED_ENERGY.get(), (long) (this.energy * STORAGE_ENERGY_RETAINED));
         }
+        if (isStorageBox()) {
+            List<ItemStack> items = new ArrayList<>();
+            for (int slot = 0; slot < this.inventory.getContainerSize(); slot++) {
+                items.add(this.inventory.getItem(slot).copy());
+            }
+            components.set(net.minecraft.core.component.DataComponents.CONTAINER,
+                    net.minecraft.world.item.component.ItemContainerContents.fromItems(items));
+        }
+        if (this.uu != null && this.guiType == MachineGuiType.PATTERN_STORAGE && !this.uu.patterns().isEmpty()) {
+            components.set(net.ic2reborn.registry.IC2Components.PATTERNS.get(), List.copyOf(this.uu.patterns()));
+        }
+        if (this.guiType == MachineGuiType.TANK && this.tank != null && this.tank.amount > 0) {
+            components.set(net.ic2reborn.registry.IC2Components.STORED_FLUID.get(),
+                    new net.ic2reborn.fluid.StoredFluid(this.tank.variant, this.tank.amount));
+        }
     }
 
     @Override
@@ -1872,6 +2654,23 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         Long stored = components.get(net.craftenergy.content.CEComponents.STORED_ENERGY.get());
         if (stored != null && this.profile.role() == MachineEnergyProfile.Role.STORAGE) {
             this.energy = Math.max(0, Math.min(this.profile.capacity(), stored));
+        }
+        net.minecraft.world.item.component.ItemContainerContents contents = components.get(net.minecraft.core.component.DataComponents.CONTAINER);
+        if (contents != null && isStorageBox()) {
+            net.minecraft.core.NonNullList<ItemStack> items = net.minecraft.core.NonNullList.withSize(this.inventory.getContainerSize(), ItemStack.EMPTY);
+            contents.copyInto(items);
+            for (int slot = 0; slot < items.size(); slot++) {
+                this.inventory.setItem(slot, items.get(slot));
+            }
+        }
+        List<net.minecraft.world.item.Item> storedPatterns = components.get(net.ic2reborn.registry.IC2Components.PATTERNS.get());
+        if (storedPatterns != null && this.uu != null) {
+            storedPatterns.forEach(this.uu::addPattern);
+        }
+        net.ic2reborn.fluid.StoredFluid fluid = components.get(net.ic2reborn.registry.IC2Components.STORED_FLUID.get());
+        if (fluid != null && this.tank != null && this.guiType == MachineGuiType.TANK) {
+            this.tank.variant = fluid.variant();
+            this.tank.amount = Math.min(this.tank.capacity(), fluid.amount());
         }
     }
 
@@ -1898,6 +2697,24 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         output.putInt("Heat", this.heat);
         if (this.miner != null) {
             this.miner.write(output);
+        }
+        if (this.logistics != null) {
+            this.logistics.write(output);
+        }
+        if (this.steam != null) {
+            this.steam.write(output);
+        }
+        if (this.reactor != null) {
+            this.reactor.write(output);
+        }
+        if (this.uu != null) {
+            this.uu.write(output);
+        }
+        if (this.utility != null) {
+            this.utility.write(output);
+        }
+        if (this.automation != null) {
+            this.automation.write(output);
         }
         output.putInt("HeatBuffer", this.heatBuffer);
         output.putLong("HeatStore", this.heatStore);
@@ -1943,6 +2760,24 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.heat = Math.max(0, input.getIntOr("Heat", 0));
         if (this.miner != null) {
             this.miner.read(input);
+        }
+        if (this.logistics != null) {
+            this.logistics.read(input);
+        }
+        if (this.steam != null) {
+            this.steam.read(input);
+        }
+        if (this.reactor != null) {
+            this.reactor.read(input);
+        }
+        if (this.uu != null) {
+            this.uu.read(input);
+        }
+        if (this.utility != null) {
+            this.utility.read(input);
+        }
+        if (this.automation != null) {
+            this.automation.read(input);
         }
         this.heatBuffer = Math.max(0, input.getIntOr("HeatBuffer", 0));
         this.heatStore = Math.max(0, input.getLongOr("HeatStore", 0));

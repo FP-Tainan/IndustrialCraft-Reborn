@@ -52,6 +52,7 @@ public final class ArmorClient {
         boat(IC2Entities.CARBON_BOAT.get(), "carbon");
         boat(IC2Entities.ELECTRIC_BOAT.get(), "electric");
         EntityRendererRegistry.register(IC2Entities.DYNAMITE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
+        EntityRendererRegistry.register(IC2Entities.ITNT.get(), net.minecraft.client.renderer.entity.TntRenderer::new);
     }
 
     private static <T extends net.ic2reborn.entity.IC2Boat> void boat(EntityType<T> type, String name) {

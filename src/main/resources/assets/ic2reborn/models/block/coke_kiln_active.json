@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "ic2reborn:block/coke_kiln_active",
+    "side": "ic2reborn:block/refractory_bricks",
+    "top": "ic2reborn:block/refractory_bricks",
+    "particle": "ic2reborn:block/refractory_bricks"
+  }
+}

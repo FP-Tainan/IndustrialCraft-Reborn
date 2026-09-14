@@ -24,7 +24,15 @@
       "net.ic2reborn.test.UtilityItemsGameTest",
       "net.ic2reborn.test.ArmorGameTest",
       "net.ic2reborn.test.ExplosivesAndTeleporterGameTest",
-      "net.ic2reborn.test.FoamGameTest"
+      "net.ic2reborn.test.FoamGameTest",
+      "net.ic2reborn.test.MetallurgyGameTest",
+      "net.ic2reborn.test.UpgradesGameTest",
+      "net.ic2reborn.test.LogisticsGameTest",
+      "net.ic2reborn.test.SteamGameTest",
+      "net.ic2reborn.test.ReactorGameTest",
+      "net.ic2reborn.test.UuMatterGameTest",
+      "net.ic2reborn.test.UtilityGameTest",
+      "net.ic2reborn.test.AutomationGameTest"
     ]
   },
   "depends": {

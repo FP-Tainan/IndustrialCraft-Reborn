@@ -13,6 +13,25 @@ public class IC2ClientSetup implements ClientModInitializer {
         MenuScreens.register(IC2Menus.METER.get(), net.ic2reborn.client.screen.MeterScreen::new);
         MenuScreens.register(IC2Menus.BOX.get(), net.ic2reborn.client.screen.BoxScreen::new);
         ArmorClient.init();
+        MagnetizerClient.init();
+        // estrutura do forno de coque (IC2: addInformation)
+        // tanque quebrado: fluido guardado no item
+        net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+            net.ic2reborn.fluid.StoredFluid stored = stack.get(net.ic2reborn.registry.IC2Components.STORED_FLUID.get());
+            if (stored != null && !stored.variant().isBlank()) {
+                lines.add(net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes.getName(stored.variant()).copy()
+                        .append(": " + stored.amount() * 1000 / net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET + " mB")
+                        .withStyle(net.minecraft.ChatFormatting.GRAY));
+            }
+        });
+        net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+            if (stack.is(net.ic2reborn.registry.IC2AutoItems.COKE_KILN.get())) {
+                for (int line = 1; line <= 3; line++) {
+                    lines.add(net.minecraft.network.chat.Component.translatable("tooltip.ic2reborn.coke_kiln." + line)
+                            .withStyle(net.minecraft.ChatFormatting.GRAY));
+                }
+            }
+        });
 
         // armazenamentos desmontados mostram a energia guardada no item
         net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {

@@ -17,7 +17,8 @@ import net.ic2reborn.menu.MachineGuiType;
  */
 public record MachineEnergyProfile(Role role, int voltage, long power, long capacity, int operationTicks,
                                    int highVoltage, double efficiency) {
-    public enum Role { NONE, GENERATOR, STORAGE, PROCESSOR, TRANSFORMER, HEAT, KINETIC }
+    /** LOGISTICS: sem eletricidade, mas com tick (tanques, buffers, distribuidores). */
+    public enum Role { NONE, GENERATOR, STORAGE, PROCESSOR, TRANSFORMER, HEAT, KINETIC, LOGISTICS }
 
     public static final MachineEnergyProfile NONE = new MachineEnergyProfile(Role.NONE, 0, 0, 0, 0, 0, 0.0);
 
@@ -65,6 +66,47 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
 
             // IC2: 10.000 EU guardados; 1 CWh por posição olhada, 20 CWh por item colhido, 10 CWh por cuidado
             case CROP_HARVESTER, CROPMATRON -> new MachineEnergyProfile(Role.PROCESSOR, 220, 2_000, EnergyUnits.fromCWh(10_000), 0, 0, 0.0);
+            // metalurgia sem eletricidade: combustível (fornalha de ferro), calor (alto-forno) e o forno de coque
+            case IRON_FURNACE, BLAST_FURNACE, COKE_KILN, COKE_KILN_HATCH, COKE_KILN_GRATE -> new MachineEnergyProfile(Role.HEAT, 0, 0, 0, 0, 0, 0.0);
+            // armazenamento e logística (LogisticsLogic)
+            case TANK, ITEM_BUFFER, WEIGHTED_ITEM_DISTRIBUTOR, WEIGHTED_FLUID_DISTRIBUTOR, FLUID_DISTRIBUTOR, SOLAR_DISTILLER -> new MachineEnergyProfile(Role.LOGISTICS, 0, 0, 0, 0, 0, 0.0);
+            // IC2: bomba 1 EU/t por 20 ticks; envasadora 2 EU/t por 100 ticks
+            case PUMP -> processor(220, 500, 20);
+            case FLUID_BOTTLER -> processor(220, 1_000, 100);
+            // IC2: triagem nível 2 (20 EU por item), regulador nível 4 (10 EU por operação), condensador nível 3 (2 EU/t por ventoinha)
+            case SORTING_MACHINE -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 20_000, 1_000_000, 0, 0, 0.0);
+            case FLUID_REGULATOR -> new MachineEnergyProfile(Role.PROCESSOR, 13_800, 5_000, 200_000, 0, 0, 0.0);
+            case CONDENSER -> new MachineEnergyProfile(Role.PROCESSOR, 2_400, 4_000, 400_000, 0, 0, 0.0);
+            // vapor e Stirling: calor e KU sem eletricidade; o gerador Stirling rende 0,5 EU por HU
+            case STEAM_GENERATOR, STEAM_REPRESSURIZER, LIQUID_HEAT_EXCHANGER -> new MachineEnergyProfile(Role.HEAT, 0, 0, 0, 0, 0, 0.0);
+            case STEAM_KINETIC_GENERATOR, STIRLING_KINETIC_GENERATOR -> new MachineEnergyProfile(Role.KINETIC, 0, 0, 0, 0, 0, 0.0);
+            case STIRLING_GENERATOR -> simple(Role.GENERATOR, 1_000, 50_000, 500_000);
+            // reator nuclear: gerador de 13.800 MV (1 de produção = 5 EU/t); porta de fluidos com tick; injetores (IC2: 48.000 EU, nível 2)
+            case NUCLEAR_REACTOR -> simple(Role.GENERATOR, 13_800, 50_000_000, 100_000_000);
+            case REACTOR_FLUID_PORT -> new MachineEnergyProfile(Role.LOGISTICS, 0, 0, 0, 0, 0, 0.0);
+            case REACTOR_COOLANT_INJECTOR -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 20_000, 24_000_000, 0, 0, 0.0);
+            // UU-matter (IC2): fabricador nível 3 com 1.000.000 EU por mB; scanner 256 EU/t por 3.300 ticks; replicador 512 EU/t
+            case MASS_FABRICATOR -> new MachineEnergyProfile(Role.PROCESSOR, 2_400, 256_000, 500_000_000, 0, 0, 0.0);
+            case SCANNER -> new MachineEnergyProfile(Role.PROCESSOR, 13_800, 128_000, 256_000_000, 3_300, 0, 0.0);
+            case REPLICATOR -> new MachineEnergyProfile(Role.PROCESSOR, 13_800, 256_000, 1_000_000_000, 1_000, 0, 0.0);
+            // placas de carga: os mesmos armazenamentos do BatBox ao MFSU
+            case CHARGEPAD -> simple(Role.STORAGE, 220, 4_400, EnergyUnits.fromCWh(20_000));
+            case CHARGEPAD_CESU -> simple(Role.STORAGE, 1_000, 20_000, EnergyUnits.fromCWh(150_000));
+            case CHARGEPAD_MFE -> simple(Role.STORAGE, 2_400, 120_000, EnergyUnits.fromCWh(2_000_000));
+            case CHARGEPAD_MFSU -> simple(Role.STORAGE, 13_800, 1_000_000, EnergyUnits.fromCWh(20_000_000));
+            // utilidades (IC2): Tesla 10.000 EU nível 2; carregador de chunks 2.500 EU; eletrolisador 32 EU/t; magnetizador; luminária; RTG até 32 EU/t
+            case TESLA_COIL -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 20_000, 5_000_000, 0, 0, 0.0);
+            case CHUNK_LOADER -> new MachineEnergyProfile(Role.PROCESSOR, 220, 1_000, 1_250_000, 0, 0, 0.0);
+            case ELECTROLYZER -> new MachineEnergyProfile(Role.PROCESSOR, 1_000, 16_000, 16_000_000, 20, 0, 0.0);
+            case MAGNETIZER -> new MachineEnergyProfile(Role.PROCESSOR, 220, 2_000, 50_000, 0, 0, 0.0);
+            case LUMINATOR -> new MachineEnergyProfile(Role.PROCESSOR, 220, 250, 5_000, 0, 0, 0.0);
+            case RT_GENERATOR -> simple(Role.GENERATOR, 220, 16_000, 10_000_000);
+            // automação (IC2): terraformador nível 4; minerador avançado 4.000.000 EU; fabricador em lote 2 EU/t por 40 ticks; O-Mats
+            case TERRAFORMER -> new MachineEnergyProfile(Role.PROCESSOR, 13_800, 1_000_000, 50_000_000, 0, 0, 0.0);
+            case ADVANCED_MINER -> new MachineEnergyProfile(Role.PROCESSOR, 2_400, 512_000, 2_000_000_000L, 0, 0, 0.0);
+            case BATCH_CRAFTER -> new MachineEnergyProfile(Role.PROCESSOR, 220, 1_000, 10_000_000, 40, 0, 0.0);
+            case ENERGY_O_MAT -> new MachineEnergyProfile(Role.PROCESSOR, 13_800, 1_000_000, 10_000_000, 0, 0, 0.0);
+            case TRADE_O_MAT -> new MachineEnergyProfile(Role.LOGISTICS, 0, 0, 0, 0, 0, 0.0);
             case LV_TRANSFORMER -> transformer(220, 1_000, 20_000, 0.97);
             case MV_TRANSFORMER -> transformer(1_000, 2_400, 120_000, 0.975);
             case HV_TRANSFORMER -> transformer(2_400, 13_800, 1_000_000, 0.98);
@@ -84,6 +126,28 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
 
     private static MachineEnergyProfile transformer(int lowVoltage, int highVoltage, long power, double efficiency) {
         return new MachineEnergyProfile(Role.TRANSFORMER, lowVoltage, power, 0, 0, highVoltage, efficiency);
+    }
+
+    /**
+     * Perfil com upgrades do IC2: cada overclocker deixa a operação 30% mais curta e o consumo 60%
+     * maior; cada transformador sobe um nível de tensão; cada armazenamento soma 10.000 EU (5.000 CWh).
+     */
+    public MachineEnergyProfile upgraded(int overclockers, int transformers, int storageUpgrades) {
+        if (overclockers <= 0 && transformers <= 0 && storageUpgrades <= 0) return this;
+        int ticks = this.operationTicks <= 0 ? this.operationTicks
+                : Math.max(1, (int) Math.round(this.operationTicks * Math.pow(0.7, overclockers)));
+        long newPower = Math.round(this.power * Math.pow(1.6, overclockers));
+        int newVoltage = this.voltage;
+        for (int i = 0; i < transformers; i++) newVoltage = nextVoltage(newVoltage);
+        long newCapacity = Math.max(this.capacity, newPower * Math.max(1, ticks)) + EnergyUnits.fromCWh(5_000L * storageUpgrades);
+        return new MachineEnergyProfile(this.role, newVoltage, newPower, newCapacity, ticks, this.highVoltage, this.efficiency);
+    }
+
+    private static int nextVoltage(int voltage) {
+        if (voltage < 1_000) return 1_000;
+        if (voltage < 2_400) return 2_400;
+        if (voltage < 13_800) return 13_800;
+        return 69_000;
     }
 
     /** Quanto uma máquina de processamento puxa da rede por tick: o dobro do consumo, para encher o buffer sem pico de corrente. */

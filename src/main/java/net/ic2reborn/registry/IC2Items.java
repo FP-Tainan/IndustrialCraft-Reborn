@@ -72,6 +72,15 @@ public class IC2Items {
     /** Parede de espuma (colocada cinza-clara). */
     public static final RegistryObject<BlockItem> WALL = ITEMS.register("wall",
             () -> new BlockItem(IC2Blocks.WALL.get(), new Item.Properties().setId(ITEMS.key("wall")).useBlockDescriptionPrefix()));
+    /** Coque do forno de coque (combustível forte). */
+    public static final RegistryObject<Item> COKE = simple("coke");
+    // barras de combustível esgotadas (vão para a centrífuga térmica)
+    public static final RegistryObject<Item> DEPLETED_URANIUM_FUEL_ROD = simple("depleted_uranium_fuel_rod");
+    public static final RegistryObject<Item> DEPLETED_DUAL_URANIUM_FUEL_ROD = simple("depleted_dual_uranium_fuel_rod");
+    public static final RegistryObject<Item> DEPLETED_QUAD_URANIUM_FUEL_ROD = simple("depleted_quad_uranium_fuel_rod");
+    public static final RegistryObject<Item> DEPLETED_MOX_FUEL_ROD = simple("depleted_mox_fuel_rod");
+    public static final RegistryObject<Item> DEPLETED_DUAL_MOX_FUEL_ROD = simple("depleted_dual_mox_fuel_rod");
+    public static final RegistryObject<Item> DEPLETED_QUAD_MOX_FUEL_ROD = simple("depleted_quad_mox_fuel_rod");
     private static RegistryObject<Item> simple(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties().setId(ITEMS.key(name))));
     }

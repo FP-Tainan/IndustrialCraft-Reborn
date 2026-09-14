@@ -52,7 +52,7 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(IC2Items.ASHES.get());
                         for (var item : java.util.List.of(IC2Items.TERRA_WART, IC2Items.OIL_BERRY, IC2Items.MILK_WART,
                                 IC2Items.BOBS_YER_UNCLE_RANKS_BERRY, IC2Items.HOPS, IC2Items.WEED,
-                                IC2Items.DUST_SMALL_DIAMOND, IC2Items.DUST_ENDER_PEARL, IC2Items.HYDRATION_CELL, IC2Items.WALL)) {
+                                IC2Items.DUST_SMALL_DIAMOND, IC2Items.DUST_ENDER_PEARL, IC2Items.HYDRATION_CELL, IC2Items.WALL, IC2Items.COKE)) {
                             output.accept(item.get());
                         }
                         output.accept(IC2Items.OD_SCANNER.get());
@@ -94,7 +94,7 @@ public class IC2Reborn implements ModInitializer {
         TABS.register();
 
         ItemStorage.SIDED.registerForBlockEntity(
-                (machine, side) -> ContainerStorage.of(machine.getInventory(), side),
+                (machine, side) -> ContainerStorage.of(machine.exposedInventory(), side),
                 IC2BlockEntities.MACHINE.get());
 
         // geradores, armazenamentos e máquinas entram na rede do Craft Energy
@@ -134,6 +134,8 @@ public class IC2Reborn implements ModInitializer {
                 net.ic2reborn.network.JetpackModePayload.TYPE, net.ic2reborn.network.JetpackModePayload.CODEC);
         net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(net.ic2reborn.network.JetpackModePayload.TYPE,
                 (payload, context) -> net.ic2reborn.item.ArmorEffects.toggleJetpackMode(context.player()));
+        // coque queima o dobro do carvão
+        net.fabricmc.fabric.api.registry.FuelValueEvents.BUILD.register((builder, context) -> builder.add(IC2Items.COKE.get(), 3_200));
         addWorldgen();
         LOGGER.info("IC2 Reborn carregado!");
     }

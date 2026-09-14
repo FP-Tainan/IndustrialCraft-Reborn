@@ -69,5 +69,38 @@ public final class IC2Components {
                     .networkSynchronized(net.minecraft.network.codec.StreamCodec.unit(net.minecraft.util.Unit.INSTANCE))
                     .build());
 
+    /** Face escolhida para o ejetor/puxador (sem o componente: todos os lados). */
+    public static final RegistryObject<DataComponentType<net.minecraft.core.Direction>> UPGRADE_DIRECTION = COMPONENTS.register("upgrade_direction",
+            () -> DataComponentType.<net.minecraft.core.Direction>builder()
+                    .persistent(net.minecraft.core.Direction.CODEC)
+                    .networkSynchronized(net.minecraft.core.Direction.STREAM_CODEC)
+                    .build());
+
+    /** Fluido guardado no item do tanque quebrado. */
+    public static final RegistryObject<DataComponentType<net.ic2reborn.fluid.StoredFluid>> STORED_FLUID = COMPONENTS.register("stored_fluid",
+            () -> DataComponentType.<net.ic2reborn.fluid.StoredFluid>builder()
+                    .persistent(net.ic2reborn.fluid.StoredFluid.CODEC)
+                    .networkSynchronized(net.ic2reborn.fluid.StoredFluid.STREAM_CODEC)
+                    .build());
+    /** Desgaste (ou calor guardado) de um componente do reator. */
+    public static final RegistryObject<DataComponentType<Integer>> REACTOR_DAMAGE = COMPONENTS.register("reactor_damage",
+            () -> DataComponentType.<Integer>builder()
+                    .persistent(com.mojang.serialization.Codec.INT)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT)
+                    .build());
+    /** Molde gravado na memória de cristal. */
+    public static final RegistryObject<DataComponentType<net.minecraft.world.item.Item>> PATTERN = COMPONENTS.register("pattern",
+            () -> DataComponentType.<net.minecraft.world.item.Item>builder()
+                    .persistent(net.minecraft.core.registries.BuiltInRegistries.ITEM.byNameCodec())
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.registry(net.minecraft.core.registries.Registries.ITEM))
+                    .build());
+
+    /** Moldes do armazenamento de moldes quebrado. */
+    public static final RegistryObject<DataComponentType<java.util.List<net.minecraft.world.item.Item>>> PATTERNS = COMPONENTS.register("patterns",
+            () -> DataComponentType.<java.util.List<net.minecraft.world.item.Item>>builder()
+                    .persistent(net.minecraft.core.registries.BuiltInRegistries.ITEM.byNameCodec().listOf())
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.registry(net.minecraft.core.registries.Registries.ITEM)
+                            .apply(net.minecraft.network.codec.ByteBufCodecs.list()))
+                    .build());
     private IC2Components() {}
 }

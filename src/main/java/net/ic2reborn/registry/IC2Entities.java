@@ -23,6 +23,15 @@ public final class IC2Entities {
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .build(ENTITY_TYPES.key("dynamite")));
+    public static final RegistryObject<EntityType<net.ic2reborn.entity.ItntEntity>> ITNT = ENTITY_TYPES.register("itnt",
+            () -> EntityType.Builder.<net.ic2reborn.entity.ItntEntity>of(net.ic2reborn.entity.ItntEntity::new, MobCategory.MISC)
+                    .noLootTable()
+                    .fireImmune()
+                    .sized(0.98F, 0.98F)
+                    .eyeHeight(0.15F)
+                    .clientTrackingRange(10)
+                    .updateInterval(10)
+                    .build(ENTITY_TYPES.key("itnt")));
     private IC2Entities() {}
 
     private static RegistryObject<EntityType<IC2Boat>> boat(String name, IC2Boat.Kind kind, boolean fireImmune) {

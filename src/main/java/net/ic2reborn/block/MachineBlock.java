@@ -55,11 +55,13 @@ public class MachineBlock extends Block implements EntityBlock {
     @Override
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof MachineBlockEntity machine) return machine.menuProvider();
         return blockEntity instanceof MenuProvider provider ? provider : null;
     }
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (level.getBlockEntity(pos) instanceof MachineBlockEntity machine && machine.handleUse(player)) return InteractionResult.SUCCESS;
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             MenuProvider provider = state.getMenuProvider(level, pos);
             if (provider != null) {
@@ -74,6 +76,7 @@ public class MachineBlock extends Block implements EntityBlock {
                                              Player player, InteractionHand hand, BlockHitResult hit) {
         if (stack.getItem() instanceof net.ic2reborn.item.MeterItem || stack.getItem() instanceof net.ic2reborn.item.WindMeterItem) return InteractionResult.PASS;
         // com a chave inglesa na mão, quem age é o item (girar/desmontar), não a GUI
+        if (level.getBlockEntity(pos) instanceof MachineBlockEntity machine && machine.handleUse(player)) return InteractionResult.SUCCESS;
         if (stack.getItem() instanceof net.ic2reborn.item.WrenchItem) {
             return InteractionResult.PASS;
         }
@@ -86,6 +89,20 @@ public class MachineBlock extends Block implements EntityBlock {
         return InteractionResult.SUCCESS;
     }
 
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable net.minecraft.world.entity.LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (!level.isClientSide() && placer != null && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
+            machine.onPlacedBy(placer);
+        }
+    }
+
+    /** Baú pessoal: quem não é o dono não consegue quebrar. */
+    @Override
+    protected float getDestroyProgress(BlockState state, Player player, net.minecraft.world.level.BlockGetter level, BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof MachineBlockEntity machine && !machine.canBeBrokenBy(player)) return 0.0F;
+        return super.getDestroyProgress(state, player, level, pos);
+    }
     /** Só máquinas que já participam da rede elétrica precisam de tick no servidor. */
     @Override
     public <T extends BlockEntity> net.minecraft.world.level.block.entity.BlockEntityTicker<T> getTicker(

@@ -32,6 +32,10 @@ public enum GaugeStyle {
     PROGRESS_BLOCK_CUTTER(176, 15, 46, 17, Orientation.RIGHT, 0, 0, 46, 17, 55, 33, "guiblockcutter.png"),
     PROGRESS_CANNER(233, 0, 23, 14, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guicanner.png"),
     HEAT_FERMENTER(177, 10, 40, 3, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guifermenter.png"),
+    PROGRESS_CONDENSER(1, 185, 82, 7, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guicondenser.png"),
+    HEAT_STEAM_GENERATOR(177, 1, 7, 76, Orientation.UP, 0, 0, 0, 0, 0, 0, "guisteamgenerator.png"),
+    CALCIFICATION_STEAM_GENERATOR(187, 1, 7, 58, Orientation.UP, 0, 0, 0, 0, 0, 0, "guisteamgenerator.png"),
+    HEAT_NUCLEAR_REACTOR(0, 243, 100, 13, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guinuclearreactor.png"),
     PROGRESS_FERMENTER(177, 1, 40, 7, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guifermenter.png");
 
     public enum Orientation {

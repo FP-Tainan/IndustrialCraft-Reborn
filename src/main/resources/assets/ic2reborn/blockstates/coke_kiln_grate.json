@@ -1,7 +1,12 @@
 {
   "variants": {
-    "": {
-      "model": "ic2reborn:block/coke_kiln_grate"
-    }
+    "active=false,facing=north": { "model": "ic2reborn:block/coke_kiln_grate" },
+    "active=false,facing=east": { "model": "ic2reborn:block/coke_kiln_grate", "y": 90 },
+    "active=false,facing=south": { "model": "ic2reborn:block/coke_kiln_grate", "y": 180 },
+    "active=false,facing=west": { "model": "ic2reborn:block/coke_kiln_grate", "y": 270 },
+    "active=true,facing=north": { "model": "ic2reborn:block/coke_kiln_grate" },
+    "active=true,facing=east": { "model": "ic2reborn:block/coke_kiln_grate", "y": 90 },
+    "active=true,facing=south": { "model": "ic2reborn:block/coke_kiln_grate", "y": 180 },
+    "active=true,facing=west": { "model": "ic2reborn:block/coke_kiln_grate", "y": 270 }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "machine": "thermal_centrifuge",
+  "input": "ic2reborn:depleted_mox_fuel_rod",
+  "results": [
+    { "item": "ic2reborn:small_plutonium", "count": 1 },
+    { "item": "ic2reborn:plutonium", "count": 3 },
+    { "item": "ic2reborn:dust_iron", "count": 1 }
+  ],
+  "min_heat": 5000
+}

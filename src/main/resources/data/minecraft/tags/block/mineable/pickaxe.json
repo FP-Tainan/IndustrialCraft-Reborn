@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "ic2reborn:reinforced_door",
     "ic2reborn:wall",
     "ic2reborn:compressor",
     "ic2reborn:deepslate_lead_ore",
