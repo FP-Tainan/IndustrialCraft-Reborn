@@ -3,11 +3,17 @@
   "id": "ic2reborn",
   "version": "${version}",
   "name": "IndustrialCraft 2 Reborn",
-  "description": "Port não-oficial do IndustrialCraft 2 para versões modernas do Minecraft.\nMódulo 1: Natureza — Árvore de borracha, resina, minérios IC2.\nFeito com autorização do dev original.",
+  "description": "Port não-oficial do IndustrialCraft 2 para versões modernas do Minecraft: máquinas, geradores, reator nuclear, sistema cinético e de calor, UU-matter, cultivo e ferramentas elétricas, com o sistema de energia Craft Energy.\nFeito com autorização do dev original.\n\nCriador: Tainan Fermino Peres\nGitHub: https://github.com/FP-Tainan/IndustrialCraft-Reborn",
   "authors": [
     "Tainan Fermino Peres"
   ],
+  "contact": {
+    "homepage": "https://github.com/FP-Tainan/IndustrialCraft-Reborn",
+    "sources": "https://github.com/FP-Tainan/IndustrialCraft-Reborn",
+    "issues": "https://github.com/FP-Tainan/IndustrialCraft-Reborn/issues"
+  },
   "license": "Fan Port - Fiel ao IC2 original",
+  "icon": "assets/ic2reborn/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
