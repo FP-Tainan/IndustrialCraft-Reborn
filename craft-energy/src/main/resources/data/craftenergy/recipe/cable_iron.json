@@ -1,3 +1,0 @@
-{ "type": "minecraft:crafting_shapeless", "category": "misc",
-  "ingredients": [ "craftenergy:plate_iron", "craftenergy:cutter" ],
-  "result": { "count": 4, "id": "craftenergy:cable_iron" } }

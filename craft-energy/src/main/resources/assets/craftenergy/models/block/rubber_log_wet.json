@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end":   "craftenergy:block/rubber_wood_wet_bottomtop",
-    "side":  "craftenergy:block/rubber_wood_wet_leftrightback",
-    "north": "craftenergy:block/rubber_wood_wet_front"
-  }
-}

@@ -8,6 +8,18 @@ Unofficial IndustrialCraft conversion for Minecraft Java 26.1.2, fan-made to kee
 Este projeto foi criado por carinho ao mod original, que marcou muitas jogatinas com amigos. O objetivo é manter a experiência viva em versões mais recentes do Minecraft.
 This project was created out of appreciation for the original mod, which was part of many great moments with friends. The goal is to keep the experience alive on newer Minecraft versions.
 
+## Como compilar / Building
+
+O sistema de energia fica no repositório [CraftEnergy](https://github.com/FP-Tainan/CraftEnergy), usado aqui como submódulo em `craft-energy`.
+The energy system lives in the [CraftEnergy](https://github.com/FP-Tainan/CraftEnergy) repository, used here as a submodule in `craft-energy`.
+
+```bash
+git clone --recurse-submodules https://github.com/FP-Tainan/IndustrialCraft-Reborn.git
+./gradlew build
+```
+
+Em um clone já existente / In an existing clone: `git submodule update --init`.
+
 ## Aviso / Disclaimer
 
 Este projeto não é afiliado ao autor original do IndustrialCraft.

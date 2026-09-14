@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "craftenergy:block/tin_block",
-    "particle": "craftenergy:block/tin_block"
-  }
-}

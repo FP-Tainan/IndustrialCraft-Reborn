@@ -1,0 +1,3 @@
+[submodule "craft-energy"]
+	path = craft-energy
+	url = https://github.com/FP-Tainan/CraftEnergy.git

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "craftenergy:block/rubber_wood_bottomtop",
-    "side": "craftenergy:block/rubber_wood_sides",
-    "particle": "craftenergy:block/rubber_wood_sides"
-  }
-}
