@@ -60,7 +60,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
                         ? Component.translatableWithFallback("gui.ic2reborn.tank.empty", "Empty")
                         : net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes.getName(
                                 net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant.of(fluid)).copy()
-                                .append(": " + this.menu.getFluidAmount(tank.index()) + " / " + this.menu.getFluidCapacity(tank.index()) + " mB");
+                                .append(": " + this.menu.getFluidAmount(tank.index()) + " / " + this.menu.getFluidCapacity(tank.index()) + " CL");
                 graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(line), mouseX, mouseY);
             }
         }
@@ -455,7 +455,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         }
         if (type == net.ic2reborn.menu.MachineGuiType.NUCLEAR_REACTOR && this.isHovering(7, 136, 100, 13, mouseX, mouseY)) {
             graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(Component.translatableWithFallback(
-                    "gui.ic2reborn.reactor.heat", "Heat: %s / %s", this.menu.getHeat(), this.menu.getMaxHeat())), mouseX, mouseY);
+                    "gui.ic2reborn.reactor.heat", "Core heat: %s / %s MMEV", this.menu.getHeat(), this.menu.getMaxHeat())), mouseX, mouseY);
         }
         if (type == net.ic2reborn.menu.MachineGuiType.STEAM_GENERATOR) {
             if (this.isHovering(13, 70, 9, 78, mouseX, mouseY)) {

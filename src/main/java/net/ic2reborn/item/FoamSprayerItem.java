@@ -149,7 +149,7 @@ public class FoamSprayerItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
                                 Consumer<Component> tooltip, TooltipFlag flag) {
-        tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.foam", "Construction foam: %s / %s mB", foam(stack), CAPACITY)
+        tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.foam", "Construction foam: %s / %s CL", foam(stack), CAPACITY)
                 .withStyle(ChatFormatting.GRAY));
         tooltip.accept(Component.translatableWithFallback("message.ic2reborn.tool.mode", "Mode: %s", modeName(single(stack)))
                 .withStyle(ChatFormatting.DARK_GRAY));

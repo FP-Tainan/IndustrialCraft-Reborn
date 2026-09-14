@@ -362,7 +362,7 @@ public class ReactorComponentItem extends Item {
                                 Consumer<Component> tooltip, TooltipFlag flag) {
         if (this.maxDamage <= 0) return;
         if (storesHeat() || this.kind == Kind.CONDENSATOR) {
-            tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.reactor.heat", "Heat: %s / %s",
+            tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.reactor.heat", "Heat: %s / %s MMEV",
                     damage(stack), this.maxDamage).withStyle(ChatFormatting.GRAY));
         } else {
             tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.reactor.durability", "Durability: %s / %s",

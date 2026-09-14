@@ -22,7 +22,7 @@ public class IC2Blocks {
                     BlockBehaviour.Properties.of()
                             .setId(BLOCKS.key("reinforced_door"))
                             .sound(SoundType.METAL)
-                            .strength(20.0f, 150.0f)
+                            .strength(20.0f, 2000.0f)
                             .requiresCorrectToolForDrops()
                             .noOcclusion()
                             .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));

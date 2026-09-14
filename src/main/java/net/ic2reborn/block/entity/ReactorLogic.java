@@ -101,6 +101,8 @@ final class ReactorLogic implements Reactor {
             case MachineBlockEntity.DATA_HEAT -> this.heat;
             case MachineBlockEntity.DATA_MAX_HEAT -> this.maxHeat;
             case MachineBlockEntity.DATA_PROGRESS -> this.fluidCooled ? this.emitHeat : Math.round(this.output * CW_PER_OUTPUT);
+            // pulsos de fissão do ciclo, em décimos de MMEV
+            case MachineBlockEntity.DATA_MAX_PROGRESS -> Math.round(this.output * 10);
             default -> null;
         };
     }

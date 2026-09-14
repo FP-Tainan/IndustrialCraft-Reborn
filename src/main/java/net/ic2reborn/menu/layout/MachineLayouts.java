@@ -154,7 +154,7 @@ public final class MachineLayouts {
                     .image("guisolidheatgenerator.png", 48, 45, 47, 44, 81, 36, 256, 256)
                     .slot(80, 45).output(113, 45)
                     .progress(81, 29, FUEL)
-                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " HU"), 48, 66, 79, 13, HEAT_TEXT_COLOR)
+                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " CCº"), 48, 66, 79, 13, HEAT_TEXT_COLOR)
                     .noInventoryTitle()
                     .build();
 
@@ -272,7 +272,7 @@ public final class MachineLayouts {
                     .slotAt(8, 57).slotAt(58, 53).outputAt(58, 71)
                     .energy(12, 39)
                     .tank(78, 34)
-                    .text(menu -> Component.literal((menu.getMachineMode() & 0xFFF) + " mB"), 105, 57, 0, 0, FLOW_TEXT_COLOR)
+                    .text(menu -> Component.literal((menu.getMachineMode() & 0xFFF) + " CL"), 105, 57, 0, 0, FLOW_TEXT_COLOR)
                     .text(menu -> (menu.getMachineMode() >> 12) != 0 ? tr("fluid_regulator.per_tick", "/t")
                             : tr("fluid_regulator.per_second", "/s"), 145, 57, 0, 0, FLOW_TEXT_COLOR)
                     .build();
@@ -296,10 +296,10 @@ public final class MachineLayouts {
                     .plainTank(10, 155, 75, 47)
                     .gauge(14, 71, HEAT_STEAM_GENERATOR, MachineLayout.GaugeSource.HEAT)
                     .gauge(156, 62, CALCIFICATION_STEAM_GENERATOR, MachineLayout.GaugeSource.PROGRESS)
-                    .text(menu -> Component.literal((menu.getMachineMode() & 0x7FF) + " mB/t"), 91, 172, 59, 13, FLOW_TEXT_COLOR)
-                    .text(menu -> tr("steam_generator.heat_input", "Heat input: %s HU/t", menu.getPower()), 31, 133, 111, 13, FLOW_TEXT_COLOR)
+                    .text(menu -> Component.literal((menu.getMachineMode() & 0x7FF) + " CL/t"), 91, 172, 59, 13, FLOW_TEXT_COLOR)
+                    .text(menu -> tr("steam_generator.heat_input", "Heat input: %s CCº/t", menu.getPower()), 31, 133, 111, 13, FLOW_TEXT_COLOR)
                     .text(menu -> Component.literal(((menu.getMachineMode() >> 11) & 0x1FF) + " bar"), 22, 35, 42, 13, FLOW_TEXT_COLOR)
-                    .text(menu -> Component.literal(menu.getEnergyCWh() + " mB/t"), 66, 25, 81, 13, FLOW_TEXT_COLOR)
+                    .text(menu -> Component.literal(menu.getEnergyCWh() + " CL/t"), 66, 25, 81, 13, FLOW_TEXT_COLOR)
                     .text(menu -> steamOutputName((menu.getMachineMode() >> 20) & 7), 66, 45, 100, 13, FLOW_TEXT_COLOR)
                     .build();
             case STEAM_REPRESSURIZER -> MachineLayout.dynamic(176, 166)
@@ -313,7 +313,7 @@ public final class MachineLayouts {
                         .upgradeAt(62, 103).upgradeAt(80, 103).upgradeAt(98, 103);
                 for (int i = 0; i < 10; i++) builder.slotAt(46 + (i % 5) * 17, i < 5 ? 50 : 72);
                 yield builder.plainTank(19, 47, 12, 44).plainTank(145, 47, 12, 44)
-                        .text(menu -> tr("heat_exchanger.emit", "Emitting %s / %s HU/t", menu.getHeat(), menu.getMaxHeat()), 20, 28, 138, 13, HEAT_TEXT_COLOR)
+                        .text(menu -> tr("heat_exchanger.emit", "Emitting %s / %s CCº/t", menu.getHeat(), menu.getMaxHeat()), 20, 28, 138, 13, HEAT_TEXT_COLOR)
                         .build();
             }
             // ── reator nuclear ────────────────────────────────────────────
@@ -388,7 +388,11 @@ public final class MachineLayouts {
                     .build();
             // ── automação ─────────────────────────────────────────────────
             case TERRAFORMER -> MachineLayout.dynamic(176, 166).slot(79, 34).build();
-            case INDUSTRIAL_WORKBENCH -> MachineLayout.dynamic(176, 166).build();
+            // bancada industrial: grade 0–8, estoque 9–26, martelo 27 e entrada 28, alicate 29 e entrada 30 (a tela é a IndustrialWorkbenchScreen)
+            case INDUSTRIAL_WORKBENCH -> MachineLayout.textured("guiindustrialworkbench.png", 228)
+                    .gridAt(30, 43, 3, 3, false).gridAt(8, 106, 9, 2, false)
+                    .slotAt(7, 17).slotAt(25, 17).slotAt(91, 17).slotAt(109, 17)
+                    .build();
             // minerador avançado (GuiAdvMiner): descarga 0, scanner 1, upgrades 2–5, filtros 6–20
             case ADVANCED_MINER -> {
                 MachineLayout.Builder builder = MachineLayout.textured("guiadvminer.png", 203)
@@ -444,27 +448,27 @@ public final class MachineLayouts {
             case FLUID_HEAT_GENERATOR -> MachineLayout.textured("guifluidheatgenerator.png", 166)
                     .slotAt(27, 21).outputAt(27, 54)
                     .tank(70, 20)
-                    .text(menu -> Component.translatableWithFallback("gui.ic2reborn.heat_generator.emit", "Emit: %s HU", menu.getHeat()), 96, 33, 0, 0, HEAT_TEXT_COLOR)
-                    .text(menu -> Component.translatableWithFallback("gui.ic2reborn.heat_generator.max_emit", "Max: %s HU", menu.getMaxHeat()), 96, 52, 0, 0, HEAT_TEXT_COLOR)
+                    .text(menu -> Component.translatableWithFallback("gui.ic2reborn.heat_generator.emit", "Emit: %s CCº", menu.getHeat()), 96, 33, 0, 0, HEAT_TEXT_COLOR)
+                    .text(menu -> Component.translatableWithFallback("gui.ic2reborn.heat_generator.max_emit", "Max: %s CCº", menu.getMaxHeat()), 96, 52, 0, 0, HEAT_TEXT_COLOR)
                     .build();
 
             case ELECTRIC_HEAT_GENERATOR -> MachineLayout.textured("guielectricheatgenerator.png", 166)
                     .gridAt(44, 27, 5, 2, false)
                     .slotAt(8, 62)
                     .energy(12, 44)
-                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " HU"), 34, 66, 109, 13, HEAT_TEXT_COLOR)
+                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " CCº"), 34, 66, 109, 13, HEAT_TEXT_COLOR)
                     .build();
 
             case RT_HEAT_GENERATOR -> MachineLayout.textured("guirtheatgenerator.png", 166)
                     .gridAt(62, 27, 3, 2, false)
-                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " HU"), 49, 66, 79, 13, HEAT_TEXT_COLOR)
+                    .text(menu -> Component.literal(menu.getHeat() + " / " + menu.getMaxHeat() + " CCº"), 49, 66, 79, 13, HEAT_TEXT_COLOR)
                     .build();
 
             case ELECTRIC_KINETIC_GENERATOR -> MachineLayout.textured("guielectrickineticgenerator.png", 166)
                     .gridAt(44, 27, 5, 2, false)
                     .slotAt(8, 62)
                     .energy(12, 44)
-                    .text(menu -> Component.literal(menu.getProgress() + " KU · " + menu.getMaxProgress() + " KU/t"),
+                    .text(menu -> Component.literal(menu.getProgress() + " CKGF·M · " + menu.getMaxProgress() + " CKGF·M/t"),
                             34, 66, 109, 13, HEAT_TEXT_COLOR)
 
                     .build();
@@ -480,7 +484,7 @@ public final class MachineLayouts {
                     .slotAt(134, 103).outputAt(152, 103)
                     .upgradeAt(62, 103).upgradeAt(80, 103).upgradeAt(98, 103)
                     .plainTank(19, 47, 12, 44).plainTank(145, 47, 12, 44)
-                    .text(menu -> tr("stirling_kinetic.buffer", "Stored: %s / %s KU", menu.getProgress(), menu.getMaxProgress()), 20, 28, 138, 13, HEAT_TEXT_COLOR)
+                    .text(menu -> tr("stirling_kinetic.buffer", "Stored: %s / %s CKGF·M", menu.getProgress(), menu.getMaxProgress()), 20, 28, 138, 13, HEAT_TEXT_COLOR)
                     .build();
 
             case WATER_KINETIC_GENERATOR -> MachineLayout.textured("guiwaterkineticgenerator.png", 166)
@@ -489,7 +493,7 @@ public final class MachineLayouts {
                         case 0 -> tr("water_kinetic.wrong_biome", "Not in ocean or river");
                         case 1 -> tr("water_kinetic.rotor_missing", "No rotor");
                         case 2 -> tr("water_kinetic.rotor_space", "Rotor not under water");
-                        default -> tr("kinetic.output", "Output: %s KU/t", menu.getProgress());
+                        default -> tr("kinetic.output", "Output: %s CKGF·M/t", menu.getProgress());
                     }, 17, 48, 143, 13, KINETIC_TEXT_COLOR)
                     .text(menu -> switch (menu.getMachineMode()) {
                         case 0 -> tr("water_kinetic.wrong_biome_hint", "Place it in water there");
@@ -507,7 +511,7 @@ public final class MachineLayouts {
                         case 0 -> tr("wind_kinetic.rotor_missing", "No rotor");
                         case 1 -> tr("wind_kinetic.rotor_space", "No room for the rotor");
                         case 2 -> tr("wind_kinetic.wind_weak", "Wind too weak");
-                        default -> tr("kinetic.output", "Output: %s KU/t", menu.getProgress());
+                        default -> tr("kinetic.output", "Output: %s CKGF·M/t", menu.getProgress());
                     }, 17, 48, 143, 13, KINETIC_TEXT_COLOR)
                     .text(menu -> switch (menu.getMachineMode()) {
                         case 1 -> tr("wind_kinetic.rotor_space_hint", "%s free blocks around", menu.getMaxHeat());
@@ -609,9 +613,9 @@ public final class MachineLayouts {
     private static Component steamKineticStatus(int status, int ku) {
         if ((status & 8) != 0) return tr("steam_kinetic.blocked", "Turbine blocked by water");
         if ((status & 1) != 0) return tr("steam_kinetic.no_turbine", "No steam turbine");
-        if ((status & 2) != 0) return tr("steam_kinetic.venting", "Venting steam! %s KU/t", ku);
-        if ((status & 4) != 0) return tr("steam_kinetic.throttled", "Throttled by water: %s KU/t", ku);
-        return tr("steam_kinetic.output", "Output: %s KU/t", ku);
+        if ((status & 2) != 0) return tr("steam_kinetic.venting", "Venting steam! %s CKGF·M/t", ku);
+        if ((status & 4) != 0) return tr("steam_kinetic.throttled", "Throttled by water: %s CKGF·M/t", ku);
+        return tr("steam_kinetic.output", "Output: %s CKGF·M/t", ku);
     }
     /** Reator nuclear (GuiNuclearReactor): grade 9×6, slots de refrigerante e calor; colunas sem câmara ficam tampadas. */
     private static MachineLayout nuclearReactor() {
@@ -631,8 +635,9 @@ public final class MachineLayouts {
                 .plainTank(10, 54, 12, 47).plainTank(190, 54, 12, 47)
                 .gauge(7, 136, HEAT_NUCLEAR_REACTOR, MachineLayout.GaugeSource.HEAT)
                 .text(menu -> (menu.getMachineMode() & 16) != 0
-                        ? tr("reactor.heat_output", "Heat output: %s HU/s", menu.getProgress())
-                        : tr("reactor.output", "Output: %s", EnergyUnits.formatPower(menu.getProgress())), 111, 139, 0, 0, HEAT_TEXT_COLOR)
+                        ? tr("reactor.heat_output", "Heat output: %s CCº/s", menu.getProgress())
+                        : tr("reactor.output", "Output: %s · Fission: %s MMEV", EnergyUnits.formatPower(menu.getProgress()),
+                                String.format(java.util.Locale.ROOT, "%.1f", menu.getMaxProgress() / 10.0)), 111, 139, 0, 0, HEAT_TEXT_COLOR)
                 .build();
     }
     private static final String[] SCANNER_STATES = {"idle", "scanning", "completed", "failed", "no_storage", "no_energy", "transfer_error", "already_recorded"};
@@ -646,7 +651,7 @@ public final class MachineLayouts {
 
     /** Custo em unidades do IC2 (1 = pedregulho = 0,01 mB). */
     private static String uuText(int units) {
-        return String.format(java.util.Locale.ROOT, "%.2f mB UU", units * net.ic2reborn.recipe.UuValues.MB_PER_UNIT);
+        return String.format(java.util.Locale.ROOT, "%.2f CL UU", units * net.ic2reborn.recipe.UuValues.MB_PER_UNIT);
     }
 
     private static Component patternName(int itemIdPlusOne) {

@@ -133,13 +133,13 @@ public class UtilityArmorItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
                                 Consumer<Component> tooltip, TooltipFlag flag) {
         if (this.kind == Kind.FUEL_JETPACK) {
-            tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.jetpack_fuel", "Biogas: %s / %s mB",
+            tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.jetpack_fuel", "Biogas: %s / %s CL",
                     fuel(stack), JETPACK_CAPACITY).withStyle(ChatFormatting.GRAY));
             tooltip.accept(ArmorEffects.jetpackModeText(ArmorEffects.hoverMode(stack)).withStyle(ChatFormatting.GRAY));
             tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.jetpack_mode_key", "Switch mode: %s",
                     Component.keybind("key.ic2reborn.jetpack_mode")).withStyle(ChatFormatting.DARK_GRAY));
         } else if (this.kind == Kind.CF_PACK) {
-            tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.foam", "Construction foam: %s / %s mB",
+            tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.foam", "Construction foam: %s / %s CL",
                     fuel(stack), CF_PACK_CAPACITY).withStyle(ChatFormatting.GRAY));
         } else if (this.kind == Kind.SOLAR_HELMET || this.kind == Kind.STATIC_BOOTS) {
             tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn." + this.kind.name().toLowerCase(Locale.ROOT),

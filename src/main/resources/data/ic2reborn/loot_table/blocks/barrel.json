@@ -6,7 +6,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ic2reborn:barrel"
+          "name": "ic2reborn:barrel",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": ["ic2reborn:booze"]
+            }
+          ]
         }
       ],
       "conditions": [

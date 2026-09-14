@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [ { "when": "brew", "model": { "type": "minecraft:model", "model": "ic2reborn:item/booze_mug_brew" } },{ "when": "youngster", "model": { "type": "minecraft:model", "model": "ic2reborn:item/booze_mug_youngster" } },{ "when": "beer", "model": { "type": "minecraft:model", "model": "ic2reborn:item/booze_mug_beer" } },{ "when": "ale", "model": { "type": "minecraft:model", "model": "ic2reborn:item/booze_mug_ale" } },{ "when": "dragon_blood", "model": { "type": "minecraft:model", "model": "ic2reborn:item/booze_mug_dragon_blood" } },{ "when": "black_stuff", "model": { "type": "minecraft:model", "model": "ic2reborn:item/booze_mug_black_stuff" } },{ "when": "rum", "model": { "type": "minecraft:model", "model": "ic2reborn:item/booze_mug_rum" } } ],
+    "fallback": { "type": "minecraft:model", "model": "ic2reborn:item/booze_mug_beer" }
+  }
+}

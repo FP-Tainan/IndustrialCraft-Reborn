@@ -1,7 +1,12 @@
 {
   "variants": {
-    "": {
-      "model": "ic2reborn:block/barrel"
-    }
+    "facing=north,tapped=false": { "model": "ic2reborn:block/barrel" },
+    "facing=east,tapped=false": { "model": "ic2reborn:block/barrel" },
+    "facing=south,tapped=false": { "model": "ic2reborn:block/barrel" },
+    "facing=west,tapped=false": { "model": "ic2reborn:block/barrel" },
+    "facing=north,tapped=true": { "model": "ic2reborn:block/barrel_tap" },
+    "facing=east,tapped=true": { "model": "ic2reborn:block/barrel_tap", "y": 90 },
+    "facing=south,tapped=true": { "model": "ic2reborn:block/barrel_tap", "y": 180 },
+    "facing=west,tapped=true": { "model": "ic2reborn:block/barrel_tap", "y": 270 }
   }
 }

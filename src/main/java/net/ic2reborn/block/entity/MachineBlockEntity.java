@@ -653,13 +653,24 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.guiType == MachineGuiType.INDUSTRIAL_WORKBENCH && this.level != null) {
             BlockPos pos = this.worldPosition;
             net.minecraft.world.inventory.ContainerLevelAccess access = net.minecraft.world.inventory.ContainerLevelAccess.create(this.level, pos);
-            return new net.minecraft.world.SimpleMenuProvider((id, inventory, player) -> new net.minecraft.world.inventory.CraftingMenu(id, inventory, access) {
+            SimpleContainer contents = this.inventory;
+            Component name = getDisplayName();
+            return new ExtendedMenuProvider<BlockPos>() {
                 @Override
-                public boolean stillValid(Player viewer) {
-                    return !MachineBlockEntity.this.isRemoved()
-                            && viewer.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
+                public BlockPos getScreenOpeningData(ServerPlayer player) {
+                    return pos;
                 }
-            }, getDisplayName());
+
+                @Override
+                public Component getDisplayName() {
+                    return name;
+                }
+
+                @Override
+                public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+                    return new net.ic2reborn.menu.IndustrialWorkbenchMenu(id, inventory, contents, access);
+                }
+            };
         }
         if (this.guiType == MachineGuiType.REACTOR_CHAMBER || this.guiType == MachineGuiType.REACTOR_ACCESS_HATCH) {
             return reactorCore();
@@ -731,6 +742,77 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     /** Só o dono muda pedido, oferta e preço dos O-Mats. */
     public boolean canConfigure(Player player) {
         return this.automation == null || this.automation.isOwner(player);
+    }
+    // ── multímetro ────────────────────────────────────────────────────────
+    /** Leitura do multímetro: elétrica (MV, RA, CW), calor (CCº), torque (CKGF·M), reator (MMEV) e fluido (CL). */
+    public void multimeterReading(List<Double> values, List<String> units) {
+        if (this.guiType == MachineGuiType.NUCLEAR_REACTOR) {
+            values.add((double) logicalValue(DATA_HEAT));
+            units.add("MMEV");
+        }
+        if (this.energyNode != null || this.storageOutput != null) {
+            net.ic2reborn.item.MultimeterItem.electric(values, units, this.profile.voltage(), Math.abs(this.lastFlow));
+        }
+        if (isHeatSource()) {
+            values.add((double) this.transmitHeat);
+            units.add("CCº/t");
+        }
+        if (isKineticSource()) {
+            int torque = switch (this.guiType) {
+                case WIND_KINETIC_GENERATOR, WATER_KINETIC_GENERATOR -> this.kuOutput;
+                case STEAM_KINETIC_GENERATOR, STIRLING_KINETIC_GENERATOR -> logicalValue(DATA_PROGRESS);
+                default -> (int) this.kineticStore;
+            };
+            values.add((double) torque);
+            units.add("CKGF·M/t");
+        }
+        if (this.tank != null && !this.tank.isResourceBlank()) {
+            values.add(this.tank.amount * 1000.0 / FluidConstants.BUCKET);
+            units.add("CL");
+        }
+    }
+
+    // ── rotor visível ─────────────────────────────────────────────────────
+    private int syncedTorque = -1;
+    private @Nullable Item syncedRotor;
+
+    /** Rotor desenhado na frente dos geradores eólico e de água (cliente). */
+    public net.ic2reborn.item.RotorItem displayedRotor() {
+        if (this.guiType != MachineGuiType.WIND_KINETIC_GENERATOR && this.guiType != MachineGuiType.WATER_KINETIC_GENERATOR) return null;
+        return this.inventory.getItem(0).getItem() instanceof net.ic2reborn.item.RotorItem rotor ? rotor : null;
+    }
+
+    public int displayedKineticOutput() {
+        return this.kuOutput;
+    }
+
+    public Direction facingDirection() {
+        return front();
+    }
+
+    /** Manda ao cliente o rotor e a velocidade quando mudam, para a animação. */
+    private void syncRotor(Level level) {
+        if (this.guiType != MachineGuiType.WIND_KINETIC_GENERATOR && this.guiType != MachineGuiType.WATER_KINETIC_GENERATOR) return;
+        Item rotor = this.inventory.getItem(0).getItem();
+        int torque = this.rotorActive ? this.kuOutput : 0;
+        if (rotor != this.syncedRotor || (torque > 0) != (this.syncedTorque > 0) || Math.abs(torque - this.syncedTorque) > 8) {
+            this.syncedRotor = rotor;
+            this.syncedTorque = torque;
+            level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
+    }
+
+    @Override
+    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+        if (this.guiType == MachineGuiType.WIND_KINETIC_GENERATOR || this.guiType == MachineGuiType.WATER_KINETIC_GENERATOR) {
+            return saveCustomOnly(registries);
+        }
+        return super.getUpdateTag(registries);
+    }
+
+    @Override
+    public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
     @Nullable UuLogic uuLogic() {
         return this.uu;
@@ -972,6 +1054,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (changed) setChanged();
         // o reator pode ter derretido neste tick
         if (this.isRemoved() || level.getBlockEntity(this.worldPosition) != this) return;
+        syncRotor(level);
 
         boolean working = switch (this.profile.role()) {
             case GENERATOR -> this.energy > energyBefore;
@@ -2716,6 +2799,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.automation != null) {
             this.automation.write(output);
         }
+        output.putInt("KuOutput", this.rotorActive ? this.kuOutput : 0);
         output.putInt("HeatBuffer", this.heatBuffer);
         output.putLong("HeatStore", this.heatStore);
         output.putLong("KineticStore", this.kineticStore);
@@ -2779,6 +2863,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         if (this.automation != null) {
             this.automation.read(input);
         }
+        this.kuOutput = Math.max(0, input.getIntOr("KuOutput", 0));
         this.heatBuffer = Math.max(0, input.getIntOr("HeatBuffer", 0));
         this.heatStore = Math.max(0, input.getLongOr("HeatStore", 0));
         this.kineticStore = Math.max(0, input.getLongOr("KineticStore", 0));

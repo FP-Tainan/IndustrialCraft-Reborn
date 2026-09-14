@@ -12,15 +12,23 @@ public class IC2ClientSetup implements ClientModInitializer {
         MenuScreens.register(IC2Menus.CROPNALYZER.get(), net.ic2reborn.client.screen.CropnalyzerScreen::new);
         MenuScreens.register(IC2Menus.METER.get(), net.ic2reborn.client.screen.MeterScreen::new);
         MenuScreens.register(IC2Menus.BOX.get(), net.ic2reborn.client.screen.BoxScreen::new);
+        MenuScreens.register(IC2Menus.INDUSTRIAL_WORKBENCH.get(), net.ic2reborn.client.screen.IndustrialWorkbenchScreen::new);
         ArmorClient.init();
         MagnetizerClient.init();
+        MultimeterClient.init();
+        net.ic2reborn.item.GuideBookItem.opener = () -> {
+            net.minecraft.client.gui.screens.Screen guide = new net.ic2reborn.client.screen.GuideBookScreen();
+            net.minecraft.client.Minecraft.getInstance().setScreenAndShow(guide);
+        };
+        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(
+                net.ic2reborn.registry.IC2BlockEntities.MACHINE.get(), RotorRenderer::new);
         // estrutura do forno de coque (IC2: addInformation)
         // tanque quebrado: fluido guardado no item
         net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
             net.ic2reborn.fluid.StoredFluid stored = stack.get(net.ic2reborn.registry.IC2Components.STORED_FLUID.get());
             if (stored != null && !stored.variant().isBlank()) {
                 lines.add(net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes.getName(stored.variant()).copy()
-                        .append(": " + stored.amount() * 1000 / net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET + " mB")
+                        .append(": " + stored.amount() * 1000 / net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants.BUCKET + " CL")
                         .withStyle(net.minecraft.ChatFormatting.GRAY));
             }
         });

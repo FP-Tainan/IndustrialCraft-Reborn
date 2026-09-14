@@ -29,6 +29,10 @@ public class IC2Menus {
             MENUS.register("meter", () -> new ExtendedMenuType<net.ic2reborn.menu.MeterMenu, net.minecraft.core.BlockPos>(
                     net.ic2reborn.menu.MeterMenu::new, net.minecraft.core.BlockPos.STREAM_CODEC));
 
+    /** Bancada industrial: grade, estoque e as combinações de martelo e alicate. */
+    public static final RegistryObject<ExtendedMenuType<net.ic2reborn.menu.IndustrialWorkbenchMenu, net.minecraft.core.BlockPos>> INDUSTRIAL_WORKBENCH =
+            MENUS.register("industrial_workbench", () -> new ExtendedMenuType<net.ic2reborn.menu.IndustrialWorkbenchMenu, net.minecraft.core.BlockPos>(
+                    net.ic2reborn.menu.IndustrialWorkbenchMenu::new, net.minecraft.core.BlockPos.STREAM_CODEC));
     /** Caixa de ferramentas e caixa de contenção. */
     public static final RegistryObject<ExtendedMenuType<net.ic2reborn.menu.BoxMenu, net.ic2reborn.menu.BoxMenu.OpenData>> BOX =
             MENUS.register("box", () -> new ExtendedMenuType<net.ic2reborn.menu.BoxMenu, net.ic2reborn.menu.BoxMenu.OpenData>(

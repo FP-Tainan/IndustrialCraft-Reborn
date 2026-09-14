@@ -102,5 +102,11 @@ public final class IC2Components {
                     .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.registry(net.minecraft.core.registries.Registries.ITEM)
                             .apply(net.minecraft.network.codec.ByteBufCodecs.list()))
                     .build());
+    /** Conteúdo do barril e da caneca de bebida (valor empacotado como no IC2). */
+    public static final RegistryObject<DataComponentType<Integer>> BOOZE = COMPONENTS.register("booze",
+            () -> DataComponentType.<Integer>builder()
+                    .persistent(com.mojang.serialization.Codec.INT)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT)
+                    .build());
     private IC2Components() {}
 }
