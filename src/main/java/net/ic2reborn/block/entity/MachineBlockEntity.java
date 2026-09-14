@@ -86,7 +86,7 @@ import java.util.function.Predicate;
  * o nível de tensão. Máquinas com fluido têm tanques expostos pelo Transfer API do Fabric e um
  * slot que esvazia baldes e células neles. Enquanto trabalha, a máquina fica {@link MachineBlock#ACTIVE}.
  */
-public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvider<MachineGuiType> {
+public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvider<MachineGuiType>, net.craftenergy.api.MultimeterReadable {
     /** Campos lógicos sincronizados com a GUI; cada um viaja como dois valores de 16 bits. */
     public static final int DATA_ENERGY = 0;          // CWh guardados
     public static final int DATA_CAPACITY = 1;        // CWh de capacidade
@@ -745,13 +745,14 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     }
     // ── multímetro ────────────────────────────────────────────────────────
     /** Leitura do multímetro: elétrica (MV, RA, CW), calor (CCº), torque (CKGF·M), reator (MMEV) e fluido (CL). */
+    @Override
     public void multimeterReading(List<Double> values, List<String> units) {
         if (this.guiType == MachineGuiType.NUCLEAR_REACTOR) {
             values.add((double) logicalValue(DATA_HEAT));
             units.add("MMEV");
         }
         if (this.energyNode != null || this.storageOutput != null) {
-            net.ic2reborn.item.MultimeterItem.electric(values, units, this.profile.voltage(), Math.abs(this.lastFlow));
+            net.craftenergy.api.MultimeterReadable.electric(values, units, this.profile.voltage(), Math.abs(this.lastFlow));
         }
         if (isHeatSource()) {
             values.add((double) this.transmitHeat);

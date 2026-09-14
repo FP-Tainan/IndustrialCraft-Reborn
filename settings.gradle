@@ -12,3 +12,5 @@ pluginManagement {
 rootProject.name = 'ic2reborn'
 
 include 'craft-energy'
+// Craft Energy fica na pasta irmã: C:\Projetos\craft-energy
+project(':craft-energy').projectDir = file('../craft-energy')

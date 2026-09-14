@@ -59,7 +59,7 @@ public class IC2Reborn implements ModInitializer {
                         output.accept(((net.craftenergy.content.item.ElectricItem) IC2Items.OD_SCANNER.get()).charged());
                         for (var item : java.util.List.of(IC2Items.PLATE_OBSIDIAN, IC2Items.COIN, IC2Items.FUEL_ROD, IC2Items.SLAG,
                                 IC2Items.DUST_CLAY, IC2Items.CRUSHED_URANIUM, IC2Items.PURIFIED_URANIUM,
-                                IC2Items.MULTIMETER, IC2Items.GUIDE_BOOK,
+                                IC2Items.GUIDE_BOOK,
                                 IC2Items.DEPLETED_URANIUM_FUEL_ROD, IC2Items.DEPLETED_DUAL_URANIUM_FUEL_ROD, IC2Items.DEPLETED_QUAD_URANIUM_FUEL_ROD,
                                 IC2Items.DEPLETED_MOX_FUEL_ROD, IC2Items.DEPLETED_DUAL_MOX_FUEL_ROD, IC2Items.DEPLETED_QUAD_MOX_FUEL_ROD)) {
                             output.accept(item.get());
@@ -138,10 +138,6 @@ public class IC2Reborn implements ModInitializer {
         net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.registerGlobalReceiver(net.ic2reborn.network.JetpackModePayload.TYPE,
                 (payload, context) -> net.ic2reborn.item.ArmorEffects.toggleJetpackMode(context.player()));
         // coque queima o dobro do carvão
-        // multímetro: leituras enviadas ao cliente que está segurando o aparelho
-        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.clientboundPlay().register(
-                net.ic2reborn.network.MultimeterReadingPayload.TYPE, net.ic2reborn.network.MultimeterReadingPayload.CODEC);
-        net.ic2reborn.item.MultimeterItem.init();
         // livro guia na primeira entrada
         net.ic2reborn.item.GuideBookItem.init();
         net.fabricmc.fabric.api.registry.FuelValueEvents.BUILD.register((builder, context) -> builder.add(IC2Items.COKE.get(), 3_200));

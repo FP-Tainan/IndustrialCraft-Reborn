@@ -32,7 +32,7 @@ public class GuideBookScreen extends Screen {
             {"crops", "ic2reborn:crop_stick"},
             {"tools", "ic2reborn:nano_saber"},
             {"utilities", "ic2reborn:tesla_coil"},
-            {"multimeter", "ic2reborn:multimeter"},
+            {"multimeter", "craftenergy:multimeter"},
     };
     private static final int WIDTH = 330;
     private static final int HEIGHT = 200;

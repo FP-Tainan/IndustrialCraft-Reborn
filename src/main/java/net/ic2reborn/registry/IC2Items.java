@@ -81,9 +81,6 @@ public class IC2Items {
     public static final RegistryObject<Item> DEPLETED_MOX_FUEL_ROD = simple("depleted_mox_fuel_rod");
     public static final RegistryObject<Item> DEPLETED_DUAL_MOX_FUEL_ROD = simple("depleted_dual_mox_fuel_rod");
     public static final RegistryObject<Item> DEPLETED_QUAD_MOX_FUEL_ROD = simple("depleted_quad_mox_fuel_rod");
-    /** Multímetro: mostra MV, RA e CW sobre cabos e máquinas. */
-    public static final RegistryObject<Item> MULTIMETER = ITEMS.register("multimeter",
-            () -> new net.ic2reborn.item.MultimeterItem(new Item.Properties().setId(ITEMS.key("multimeter"))));
     /** Caneca de cerveja ou rum tirada do barril. */
     public static final RegistryObject<Item> BOOZE_MUG = ITEMS.register("booze_mug",
             () -> new net.ic2reborn.item.BoozeMugItem(new Item.Properties().setId(ITEMS.key("booze_mug"))));

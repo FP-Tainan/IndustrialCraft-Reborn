@@ -742,8 +742,6 @@
   "gui.ic2reborn.omat.offer": "Oferece:",
   "gui.ic2reborn.omat.trades": "Trocas: %s",
   "gui.ic2reborn.omat.stock": "Estoque: %s",
-  "item.ic2reborn.multimeter": "Multímetro",
-  "tooltip.ic2reborn.multimeter": "Segure (ou coloque no slot do escudo) e olhe para cabos e máquinas",
   "item.ic2reborn.booze_mug": "Caneca de Bebida",
   "item.ic2reborn.booze_mug.name": "%3$s %1$s%2$s",
   "item.ic2reborn.booze_mug.rum": "Rum",

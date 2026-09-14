@@ -15,7 +15,6 @@ public class IC2ClientSetup implements ClientModInitializer {
         MenuScreens.register(IC2Menus.INDUSTRIAL_WORKBENCH.get(), net.ic2reborn.client.screen.IndustrialWorkbenchScreen::new);
         ArmorClient.init();
         MagnetizerClient.init();
-        MultimeterClient.init();
         net.ic2reborn.item.GuideBookItem.opener = () -> {
             net.minecraft.client.gui.screens.Screen guide = new net.ic2reborn.client.screen.GuideBookScreen();
             net.minecraft.client.Minecraft.getInstance().setScreenAndShow(guide);

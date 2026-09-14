@@ -1,7 +1,7 @@
 package net.ic2reborn.test;
 
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.ic2reborn.item.MultimeterItem;
+import net.craftenergy.content.item.MultimeterItem;
 import net.ic2reborn.registry.IC2AutoBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;

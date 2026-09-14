@@ -10,15 +10,15 @@ This project was created out of appreciation for the original mod, which was par
 
 ## Como compilar / Building
 
-O sistema de energia fica no repositório [CraftEnergy](https://github.com/FP-Tainan/CraftEnergy), usado aqui como submódulo em `craft-energy`.
-The energy system lives in the [CraftEnergy](https://github.com/FP-Tainan/CraftEnergy) repository, used here as a submodule in `craft-energy`.
+O sistema de energia fica no repositório [CraftEnergy](https://github.com/FP-Tainan/CraftEnergy), que precisa estar clonado na pasta ao lado, com o nome `craft-energy`.
+The energy system lives in the [CraftEnergy](https://github.com/FP-Tainan/CraftEnergy) repository, which must be cloned next to this one, named `craft-energy`.
 
 ```bash
-git clone --recurse-submodules https://github.com/FP-Tainan/IndustrialCraft-Reborn.git
+git clone https://github.com/FP-Tainan/CraftEnergy.git craft-energy
+git clone https://github.com/FP-Tainan/IndustrialCraft-Reborn.git ic2-reborn
+cd ic2-reborn
 ./gradlew build
 ```
-
-Em um clone já existente / In an existing clone: `git submodule update --init`.
 
 ## Aviso / Disclaimer
 
