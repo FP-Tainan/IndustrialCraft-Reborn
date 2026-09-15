@@ -1,0 +1,7 @@
+{
+  "machine": "molecular_transformer",
+  "input": "minecraft:wither_skeleton_skull",
+  "result": "minecraft:nether_star",
+  "result_count": 1,
+  "energy": 125000000
+}

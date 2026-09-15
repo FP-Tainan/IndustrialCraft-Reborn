@@ -51,6 +51,26 @@ public enum MachineGuiType {
     REPLICATOR("replicator"),
     PATTERN_STORAGE("pattern_storage"),
 
+    // ── Advanced Machines (aquecem para acelerar) ───────────────────────
+    ROTARY_MACERATOR("rotary_macerator"),
+    SINGULARITY_COMPRESSOR("singularity_compressor"),
+    CENTRIFUGE_EXTRACTOR("centrifuge_extractor"),
+    COMPACTING_RECYCLER("compacting_recycler"),
+    LIQUESCENT_EXTRUDER("liquescent_extruder"),
+    IMPELLERIZED_ROLLER("impellerized_roller"),
+    WATER_JET_CUTTER("water_jet_cutter"),
+    THERMAL_WASHER("thermal_washer"),
+    /** Prometida nas traduções do Advanced Machines (Vacuum Canner), mas nunca feita no addon. */
+    VACUUM_CANNER("vacuum_canner"),
+
+    // ── Advanced Solar Panels ────────────────────────────────────────────
+    ADVANCED_SOLAR_PANEL("advanced_solar_panel"),
+    HYBRID_SOLAR_PANEL("hybrid_solar_panel"),
+    ULTIMATE_SOLAR_PANEL("ultimate_solar_panel"),
+    QUANTUM_SOLAR_PANEL("quantum_solar_panel"),
+    QUANTUM_GENERATOR("quantum_generator"),
+    MOLECULAR_TRANSFORMER("molecular_transformer"),
+
     // ── utilidades ───────────────────────────────────────────────────────
     TESLA_COIL("tesla_coil"),
     CHUNK_LOADER("chunk_loader"),
@@ -143,6 +163,20 @@ public enum MachineGuiType {
             this.layout = MachineLayouts.create(this);
         }
         return this.layout;
+    }
+
+    /** Máquinas do Advanced Machines: a velocidade vem do aquecimento, não de overclockers. */
+    public boolean isAdvancedMachine() {
+        return switch (this) {
+            case ROTARY_MACERATOR, SINGULARITY_COMPRESSOR, CENTRIFUGE_EXTRACTOR, COMPACTING_RECYCLER,
+                 LIQUESCENT_EXTRUDER, IMPELLERIZED_ROLLER, WATER_JET_CUTTER, THERMAL_WASHER, VACUUM_CANNER -> true;
+            default -> false;
+        };
+    }
+
+    /** Painéis do Advanced Solar Panels (avançado, híbrido, supremo e quântico). */
+    public boolean isAdvancedSolarPanel() {
+        return this == ADVANCED_SOLAR_PANEL || this == HYBRID_SOLAR_PANEL || this == ULTIMATE_SOLAR_PANEL || this == QUANTUM_SOLAR_PANEL;
     }
 
     /**

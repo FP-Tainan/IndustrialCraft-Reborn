@@ -89,12 +89,38 @@ public class MachineBlock extends Block implements EntityBlock {
         return InteractionResult.SUCCESS;
     }
 
+    /** Triturador rotativo quente solta fumaça por cima (TileEntityRotaryMacerator). */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, net.minecraft.util.RandomSource random) {
+        if (!state.getValue(ACTIVE) || random.nextInt(8) != 0
+                || state.getBlock() != net.ic2reborn.registry.IC2AutoBlocks.ROTARY_MACERATOR.get()) return;
+        for (int i = 0; i < 4; i++) {
+            level.addParticle(net.minecraft.core.particles.ParticleTypes.SMOKE,
+                    pos.getX() + 0.5 + (random.nextFloat() - 0.5) * 0.6, pos.getY() + 1.0 + (random.nextFloat() - 0.5) * 0.2,
+                    pos.getZ() + 0.5 + (random.nextFloat() - 0.5) * 0.6, 0.0, 0.0, 0.0);
+        }
+    }
+
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @org.jetbrains.annotations.Nullable net.minecraft.world.entity.LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
         if (!level.isClientSide() && placer != null && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
             machine.onPlacedBy(placer);
         }
+    }
+
+    private static final net.minecraft.world.phys.shapes.VoxelShape TANK_SHAPE = Block.box(2, 0, 2, 14, 16, 14);
+
+    /** Tanques: coluna mais fina, como o tanque do BuildCraft. */
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(BlockState state, net.minecraft.world.level.BlockGetter level, BlockPos pos,
+                                                                  net.minecraft.world.phys.shapes.CollisionContext context) {
+        return isTank(state) ? TANK_SHAPE : super.getShape(state, level, pos, context);
+    }
+
+    public static boolean isTank(BlockState state) {
+        String path = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath();
+        return path.equals("tank") || path.endsWith("_tank");
     }
 
     /** Baú pessoal: quem não é o dono não consegue quebrar. */

@@ -80,6 +80,9 @@ public final class MachineLayout {
     private final int inventoryY;
     private final boolean showInventoryTitle;
     private final boolean hasInventory;
+    private final int inventoryPitch;
+    private final int hotbarOffset;
+    private final int titleColor;
     private final List<SlotDef> slots;
     private final List<GaugeDef> gauges;
     private final List<TankDef> tanks;
@@ -97,6 +100,9 @@ public final class MachineLayout {
         this.inventoryY = builder.inventoryY;
         this.showInventoryTitle = builder.showInventoryTitle;
         this.hasInventory = builder.hasInventory;
+        this.inventoryPitch = builder.inventoryPitch;
+        this.hotbarOffset = builder.hotbarOffset;
+        this.titleColor = builder.titleColor;
         this.slots = List.copyOf(builder.slots);
         this.gauges = List.copyOf(builder.gauges);
         this.tanks = List.copyOf(builder.tanks);
@@ -133,6 +139,11 @@ public final class MachineLayout {
     public int inventoryY() { return this.inventoryY; }
     /** Algumas GUIs do IC2 (caldeira) não mostram o inventário do jogador. */
     public boolean hasInventory() { return this.hasInventory; }
+    /** Distância entre slots do inventário do jogador (18 no padrão; 21 no transformador molecular). */
+    public int inventoryPitch() { return this.inventoryPitch; }
+    /** Distância da primeira linha do inventário até a barra de atalhos (58 no padrão). */
+    public int hotbarOffset() { return this.hotbarOffset; }
+    public int titleColor() { return this.titleColor; }
     public boolean showInventoryTitle() { return this.showInventoryTitle; }
     public List<SlotDef> slots() { return this.slots; }
     public List<GaugeDef> gauges() { return this.gauges; }
@@ -171,6 +182,9 @@ public final class MachineLayout {
         private int inventoryY;
         private boolean showInventoryTitle;
         private boolean hasInventory = true;
+        private int inventoryPitch = 18;
+        private int hotbarOffset = 58;
+        private int titleColor = TEXT_COLOR;
         private final List<SlotDef> slots = new ArrayList<>();
         private final List<GaugeDef> gauges = new ArrayList<>();
         private final List<TankDef> tanks = new ArrayList<>();
@@ -193,6 +207,18 @@ public final class MachineLayout {
         public Builder inventory(int x, int y) {
             this.inventoryX = x;
             this.inventoryY = y;
+            return this;
+        }
+
+        /** Inventário com espaçamento próprio (texturas do Advanced Solar Panels). */
+        public Builder inventory(int x, int y, int pitch, int hotbarOffset) {
+            this.inventoryPitch = pitch;
+            this.hotbarOffset = hotbarOffset;
+            return inventory(x, y);
+        }
+
+        public Builder titleColor(int color) {
+            this.titleColor = color;
             return this;
         }
 
@@ -247,6 +273,14 @@ public final class MachineLayout {
                 this.upgradeSlots.add(this.slots.size() + i);
             }
             return grid(x, y, 1, count, false);
+        }
+
+        /** <slotgrid name="upgrade" rows="1"/>: slots de upgrade lado a lado. */
+        public Builder upgradesRow(int x, int y, int count) {
+            for (int i = 0; i < count; i++) {
+                this.upgradeSlots.add(this.slots.size() + i);
+            }
+            return grid(x, y, count, 1, false);
         }
 
         // ── slots em coordenadas de Slot (Container* do IC2) ─────────────
@@ -335,6 +369,11 @@ public final class MachineLayout {
         public Builder text(Function<MachineMenu, Component> text, int x, int y, int width, int height, int color) {
             this.texts.add(new TextDef(text, x, y, width, height, color));
             return this;
+        }
+
+        /** Texto alinhado à direita, terminando em x. */
+        public Builder textRight(Function<MachineMenu, Component> text, int x, int y, int color) {
+            return text(text, x, y, -1, 0, color);
         }
 
         public MachineLayout build() {

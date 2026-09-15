@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ic2reborn:block/centrifuge_extractor_bottom",
+    "up": "ic2reborn:block/centrifuge_extractor_top",
+    "north": "ic2reborn:block/centrifuge_extractor_front_active",
+    "south": "ic2reborn:block/centrifuge_extractor_back",
+    "east": "ic2reborn:block/centrifuge_extractor_side_active_a",
+    "west": "ic2reborn:block/centrifuge_extractor_side_active_a",
+    "particle": "ic2reborn:block/centrifuge_extractor_back"
+  }
+}

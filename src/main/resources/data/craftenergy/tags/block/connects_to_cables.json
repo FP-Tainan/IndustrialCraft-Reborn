@@ -29,7 +29,14 @@
     "ic2reborn:iron_furnace",
     "ic2reborn:kinetic_generator",
     "ic2reborn:lv_transformer",
-    "ic2reborn:macerator",
+    "ic2reborn:rotary_macerator",
+    "ic2reborn:singularity_compressor",
+    "ic2reborn:centrifuge_extractor",
+    "ic2reborn:compacting_recycler",
+    "ic2reborn:liquescent_extruder",
+    "ic2reborn:impellerized_roller",
+    "ic2reborn:water_jet_cutter",
+    "ic2reborn:thermal_washer",
     "ic2reborn:matter_generator",
     "ic2reborn:metal_former",
     "ic2reborn:mfe",
@@ -54,6 +61,13 @@
     "ic2reborn:weighted_fluid_distributor",
     "ic2reborn:weighted_item_distributor",
     "ic2reborn:wind_generator",
-    "ic2reborn:wind_kinetic_generator"
+    "ic2reborn:wind_kinetic_generator",
+    "ic2reborn:advanced_solar_panel",
+    "ic2reborn:hybrid_solar_panel",
+    "ic2reborn:ultimate_solar_panel",
+    "ic2reborn:quantum_solar_panel",
+    "ic2reborn:quantum_generator",
+    "ic2reborn:molecular_transformer",
+    "ic2reborn:vacuum_canner"
   ]
 }

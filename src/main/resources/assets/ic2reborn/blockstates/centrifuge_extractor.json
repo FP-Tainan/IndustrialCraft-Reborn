@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "active=false,facing=north": { "model": "ic2reborn:block/centrifuge_extractor" },
+    "active=false,facing=east": { "model": "ic2reborn:block/centrifuge_extractor", "y": 90 },
+    "active=false,facing=south": { "model": "ic2reborn:block/centrifuge_extractor", "y": 180 },
+    "active=false,facing=west": { "model": "ic2reborn:block/centrifuge_extractor", "y": 270 },
+    "active=true,facing=north": [ { "model": "ic2reborn:block/centrifuge_extractor_active_a" }, { "model": "ic2reborn:block/centrifuge_extractor_active_b" } ],
+    "active=true,facing=east": [ { "model": "ic2reborn:block/centrifuge_extractor_active_a", "y": 90 }, { "model": "ic2reborn:block/centrifuge_extractor_active_b", "y": 90 } ],
+    "active=true,facing=south": [ { "model": "ic2reborn:block/centrifuge_extractor_active_a", "y": 180 }, { "model": "ic2reborn:block/centrifuge_extractor_active_b", "y": 180 } ],
+    "active=true,facing=west": [ { "model": "ic2reborn:block/centrifuge_extractor_active_a", "y": 270 }, { "model": "ic2reborn:block/centrifuge_extractor_active_b", "y": 270 } ]
+  }
+}

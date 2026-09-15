@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "active=false,facing=north": { "model": "ic2reborn:block/liquescent_extruder" },
+    "active=false,facing=east": { "model": "ic2reborn:block/liquescent_extruder", "y": 90 },
+    "active=false,facing=south": { "model": "ic2reborn:block/liquescent_extruder", "y": 180 },
+    "active=false,facing=west": { "model": "ic2reborn:block/liquescent_extruder", "y": 270 },
+    "active=true,facing=north": { "model": "ic2reborn:block/liquescent_extruder_active" },
+    "active=true,facing=east": { "model": "ic2reborn:block/liquescent_extruder_active", "y": 90 },
+    "active=true,facing=south": { "model": "ic2reborn:block/liquescent_extruder_active", "y": 180 },
+    "active=true,facing=west": { "model": "ic2reborn:block/liquescent_extruder_active", "y": 270 }
+  }
+}

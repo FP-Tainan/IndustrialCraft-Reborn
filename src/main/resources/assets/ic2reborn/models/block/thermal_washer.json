@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ic2reborn:block/thermal_washer_top_n_bottom",
+    "up": "ic2reborn:block/thermal_washer_top_n_bottom",
+    "north": "ic2reborn:block/thermal_washer_front",
+    "south": "ic2reborn:block/thermal_washer_back",
+    "east": "ic2reborn:block/thermal_washer_side",
+    "west": "ic2reborn:block/thermal_washer_side",
+    "particle": "ic2reborn:block/thermal_washer_side"
+  }
+}

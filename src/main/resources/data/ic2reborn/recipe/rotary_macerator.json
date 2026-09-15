@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#C#",
+    "#M#",
+    "#X#"
+  ],
+  "key": {
+    "#": "ic2reborn:sharp_plate",
+    "C": "ic2reborn:advanced_circuit",
+    "M": "ic2reborn:macerator",
+    "X": "ic2reborn:advanced_machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:rotary_macerator"
+  }
+}

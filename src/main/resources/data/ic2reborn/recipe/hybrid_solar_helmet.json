@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "CQC",
+    "GTG"
+  ],
+  "key": {
+    "S": "ic2reborn:hybrid_solar_panel",
+    "C": "ic2reborn:advanced_circuit",
+    "Q": "ic2reborn:quantum_helmet",
+    "G": "craftenergy:glass_fibre_cable",
+    "T": "ic2reborn:hv_transformer"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:hybrid_solar_helmet"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " L ",
+    "CSC",
+    "ECE"
+  ],
+  "key": {
+    "L": "minecraft:lapis_block",
+    "C": "ic2reborn:coal_chunk",
+    "S": "ic2reborn:advanced_solar_panel",
+    "E": "ic2reborn:enriched_sunnarium_alloy"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:ultimate_solar_panel"
+  }
+}

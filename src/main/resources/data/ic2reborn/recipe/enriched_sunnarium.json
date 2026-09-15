@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "UUU",
+    "USU",
+    "UUU"
+  ],
+  "key": {
+    "U": "ic2reborn:irradiant_uranium",
+    "S": "ic2reborn:sunnarium"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:enriched_sunnarium"
+  }
+}

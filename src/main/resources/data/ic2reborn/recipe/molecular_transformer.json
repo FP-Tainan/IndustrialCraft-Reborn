@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MTM",
+    "CcC",
+    "MTM"
+  ],
+  "key": {
+    "M": "ic2reborn:advanced_machine_block",
+    "T": "ic2reborn:ev_transformer",
+    "C": "ic2reborn:advanced_circuit",
+    "c": "ic2reborn:mt_core"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:molecular_transformer"
+  }
+}

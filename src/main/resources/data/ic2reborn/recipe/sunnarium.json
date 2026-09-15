@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": "ic2reborn:sunnarium_part"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:sunnarium"
+  }
+}

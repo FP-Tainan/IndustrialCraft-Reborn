@@ -121,6 +121,9 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     public static final int BUTTON_UU = 80;
     /** Automação: minerador avançado 110 reiniciar, 111 lista negra/branca, 112 toque suave; Energy-O-Mat 120–127 preço. */
     public static final int BUTTON_AUTOMATION = 110;
+    /** Gerador quântico: 130–135 produção (−100k, −10k, −1k, +1k, +10k, +100k CW), 140–144 tensão (220 a 69.000 MV). */
+    public static final int BUTTON_QUANTUM_PRODUCTION = 130;
+    public static final int BUTTON_QUANTUM_VOLTAGE = 140;
 
     /** Modos do transformador do IC2. */
     public enum TransformerMode { REDSTONE, STEP_DOWN, STEP_UP }
@@ -147,6 +150,21 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private static final long GEO_LAVA_PER_TICK = FluidConstants.BUCKET / 500;
     /** Tanques do IC2: 8 baldes (semifluido: 10). */
     private static final long TANK_CAPACITY = 8 * FluidConstants.BUCKET;
+    /** Advanced Machines: calor máximo, consumo ocioso com redstone (IC2: 1 e 6 EU/t) e água por operação. */
+    public static final int ADVANCED_MAX_HEAT = 10_000;
+    private static final long ADVANCED_IDLE_POWER = 2_000;
+    private static final long ADVANCED_WASHER_IDLE_POWER = 12_000;
+    private static final long ADVANCED_WATER_PER_OPERATION = FluidConstants.BUCKET / 2;
+    /** Advanced Solar Panels: estado do céu acima do painel ou do capacete. */
+    public static final int SOLAR_NONE = 0;
+    public static final int SOLAR_NIGHT = 1;
+    public static final int SOLAR_DAY = 2;
+    private static final int ADVANCED_SOLAR_CHARGE_SLOTS = 4;
+    /** Gerador quântico: produção padrão (IC2: 512 EU/t), limite, passos dos botões e tensões. */
+    private static final long QUANTUM_DEFAULT_PRODUCTION = 256_000;
+    private static final long QUANTUM_MAX_PRODUCTION = 1_000_000_000;
+    private static final long[] QUANTUM_STEPS = {-100_000, -10_000, -1_000, 1_000, 10_000, 100_000};
+    private static final int[] QUANTUM_VOLTAGES = {220, 1_000, 2_400, 13_800, 69_000};
     /** A textura ativa continua alguns ticks depois de parar, para não piscar. */
     private static final int ACTIVE_HOLD_TICKS = 10;
     /** Aquecer (indução, centrífuga) gasta 1 EU/t no IC2 → 1.000 CW a 1.000 MV. */
@@ -192,8 +210,15 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case GEO_GENERATOR, SEMIFLUID_GENERATOR -> new Slots(-1, -1, NO_OUTPUTS, -1, 2, 0, 1);
                 case BATBOX, CESU, MFE, MFSU, CHARGEPAD, CHARGEPAD_CESU, CHARGEPAD_MFE, CHARGEPAD_MFSU -> new Slots(-1, -1, NO_OUTPUTS, 1, 0, -1, -1);
                 case ORE_WASHING_PLANT -> new Slots(0, -1, new int[]{1, 2, 3}, 10, -1, 8, 9);
+                // Advanced Machines: entrada 0, saídas, descarga; nas de água o recipiente entra e sai depois dos upgrades
+                case MOLECULAR_TRANSFORMER -> new Slots(0, -1, new int[]{1}, -1, -1, -1, -1);
+                case ROTARY_MACERATOR -> new Slots(0, -1, new int[]{1, 2}, 3, -1, -1, -1);
+                case SINGULARITY_COMPRESSOR, COMPACTING_RECYCLER, IMPELLERIZED_ROLLER -> new Slots(0, -1, new int[]{1}, 2, -1, -1, -1);
+                case CENTRIFUGE_EXTRACTOR, LIQUESCENT_EXTRUDER -> new Slots(0, -1, new int[]{1, 2, 3}, 4, -1, -1, -1);
+                case WATER_JET_CUTTER -> new Slots(0, -1, new int[]{1}, 2, -1, 5, 6);
+                case THERMAL_WASHER -> new Slots(0, -1, new int[]{1, 2, 3}, 4, -1, 7, 8);
                 case SOLID_CANNER -> new Slots(0, 1, new int[]{2}, 3, -1, -1, -1);
-                case CANNER -> new Slots(0, 7, new int[]{1}, 2, -1, -1, -1);
+                case CANNER, VACUUM_CANNER -> new Slots(0, 7, new int[]{1}, 2, -1, -1, -1);
                 // descarga 0, scanner 1, tubos 2, broca 3, upgrade 4, buffer 5–19 (usados pelo MinerLogic)
                 case MINER -> new Slots(-1, -1, NO_OUTPUTS, 0, -1, -1, -1);
                 // fermentador: célula de biomassa 0→1, célula de biogás 2→3, fertilizante 4
@@ -313,6 +338,22 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     private long lastFlow;
     private int activeHold;
     private int heat;
+    /** Lavadora térmica: o tanque estava seco no tick anterior. */
+    private boolean advancedTankDry;
+    /** Tanque básico: a fermentação do antigo barril do IC2. */
+    private final @Nullable BrewingLogic brewing;
+    /** Painéis solares avançados: estado do céu (-1 = ainda não olhou) e CW gerados agora. */
+    private int solarState = -1;
+    private long solarGeneration;
+    /** Gerador quântico: produção (CW), tensão e se está ligado (redstone desliga). */
+    private long quantumProduction = QUANTUM_DEFAULT_PRODUCTION;
+    private int quantumVoltage = 2_400;
+    private boolean quantumOn;
+    /** Transformador molecular: energia gasta e total da receita em andamento (CW·tick), entrada e saída guardadas. */
+    private long molecularUsed;
+    private long molecularTotal;
+    private ItemStack molecularInput = ItemStack.EMPTY;
+    private ItemStack molecularOutput = ItemStack.EMPTY;
     private int maxHeat;
     private int workHeat = CENTRIFUGE_MAX_HEAT;
     private boolean bladeTooWeak;
@@ -352,7 +393,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.slots = Slots.of(this.guiType, this.profile.role());
         this.recipeKey = this.guiType.name().toLowerCase(Locale.ROOT);
         this.maxProgress = this.profile.operationTicks();
-        this.maxHeat = this.guiType == MachineGuiType.INDUCTION_FURNACE ? INDUCTION_MAX_HEAT
+        this.maxHeat = this.guiType.isAdvancedMachine() ? ADVANCED_MAX_HEAT
+                : this.guiType == MachineGuiType.INDUCTION_FURNACE ? INDUCTION_MAX_HEAT
                 : this.guiType == MachineGuiType.BLAST_FURNACE ? BLAST_FURNACE_MAX_HEAT : CENTRIFUGE_MAX_HEAT;
 
         MachineLayout layout = this.guiType.layout();
@@ -367,7 +409,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 mainTank = new MachineTank(TANK_CAPACITY);
                 input = exposed = insertOnly(mainTank, fluid -> fluid == Fluids.LAVA);
             }
-            case ORE_WASHING_PLANT -> {
+            case ORE_WASHING_PLANT, WATER_JET_CUTTER, THERMAL_WASHER -> {
                 mainTank = new MachineTank(TANK_CAPACITY);
                 input = exposed = insertOnly(mainTank, fluid -> fluid == Fluids.WATER);
             }
@@ -477,7 +519,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 input = insertOnly(mainTank, fluid -> fluid == Fluids.WATER);
                 exposed = new CombinedStorage<>(List.of(input, insertOnly(secondTank, fluid -> fluid == IC2Fluids.WEED_EX.fluid())));
             }
-            case CANNER -> {
+            case CANNER, VACUUM_CANNER -> {
                 mainTank = new MachineTank(TANK_CAPACITY);
                 secondTank = new MachineTank(TANK_CAPACITY);
                 input = insertOnly(mainTank, fluid -> true);
@@ -500,6 +542,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.uu = UuLogic.create(this, this.guiType);
         this.utility = UtilityLogic.create(this, this.guiType);
         this.automation = AutomationLogic.create(this, this.guiType);
+        this.brewing = "tank".equals(BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath()) ? new BrewingLogic(this) : null;
 
         this.energyNode = switch (this.profile.role()) {
             case GENERATOR -> new GeneratorNode();
@@ -723,10 +766,16 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
     /** Clique no bloco antes da GUI: a luminária liga/desliga; o baú pessoal só abre para o dono. */
     public boolean handleUse(Player player) {
+        if (this.brewing != null && this.brewing.handleUse(player)) return true;
         if (this.automation != null && this.automation.handleUse(player)) return true;
         if (this.utility == null) return false;
         if (player.getMainHandItem().getItem() instanceof net.ic2reborn.item.WrenchItem && this.guiType != MachineGuiType.PERSONAL_CHEST) return false;
         return this.utility.handleUse(player);
+    }
+
+    /** Fermentação do tanque básico (null nos outros blocos). */
+    public @Nullable BrewingLogic brewing() {
+        return this.brewing;
     }
 
     public void onPlacedBy(net.minecraft.world.entity.LivingEntity placer) {
@@ -803,9 +852,37 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         }
     }
 
+    // ── fluido visível nos tanques ────────────────────────────────────────
+    private @Nullable FluidVariant syncedTankFluid;
+    private long syncedTankAmount = -1;
+
+    /** Fluido desenhado dentro dos tanques (cliente). */
+    public FluidVariant displayedTankFluid() {
+        return this.guiType == MachineGuiType.TANK && this.tank != null ? this.tank.variant : FluidVariant.blank();
+    }
+
+    /** Quanto do tanque está cheio, de 0 a 1 (cliente). */
+    public float displayedTankLevel() {
+        if (this.guiType != MachineGuiType.TANK || this.tank == null || this.tank.capacity <= 0) return 0.0F;
+        return (float) Math.min(1.0, (double) this.tank.amount / this.tank.capacity);
+    }
+
+    /** Manda ao cliente o fluido do tanque quando muda de tipo ou em passos de 1/64 da capacidade. */
+    private void syncTank(Level level) {
+        if (this.guiType != MachineGuiType.TANK || this.tank == null) return;
+        long step = Math.max(1, this.tank.capacity / 64);
+        long amount = this.tank.amount == 0 ? 0 : this.tank.amount / step + 1;
+        if (!this.tank.variant.equals(this.syncedTankFluid) || amount != this.syncedTankAmount) {
+            this.syncedTankFluid = this.tank.variant;
+            this.syncedTankAmount = amount;
+            level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
+    }
+
     @Override
     public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
-        if (this.guiType == MachineGuiType.WIND_KINETIC_GENERATOR || this.guiType == MachineGuiType.WATER_KINETIC_GENERATOR) {
+        if (this.guiType == MachineGuiType.WIND_KINETIC_GENERATOR || this.guiType == MachineGuiType.WATER_KINETIC_GENERATOR
+                || this.guiType == MachineGuiType.TANK) {
             return saveCustomOnly(registries);
         }
         return super.getUpdateTag(registries);
@@ -874,6 +951,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     /** Botões da GUI: modos do transformador, da enlatadora e do conformador, e troca de tanques. */
     public boolean handleMenuButton(int id) {
         if (this.transformer != null) return setTransformerMode(id);
+        if (this.guiType == MachineGuiType.QUANTUM_GENERATOR) return handleQuantumButton(id);
         if (this.logistics != null) return this.logistics.handleButton(id);
         if (this.steam != null) return this.steam.handleButton(id);
         if (this.uu != null) return this.uu.handleButton(id);
@@ -885,7 +963,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             setChanged();
             return true;
         }
-        if (this.guiType != MachineGuiType.CANNER) return false;
+        if (this.guiType != MachineGuiType.CANNER && this.guiType != MachineGuiType.VACUUM_CANNER) return false;
 
         if (id >= BUTTON_CANNER_MODE && id < BUTTON_CANNER_MODE + CannerMode.values().length) {
             this.cannerMode = CannerMode.values()[id - BUTTON_CANNER_MODE];
@@ -1028,6 +1106,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case NUCLEAR_REACTOR -> this.reactor != null && this.reactor.tick(level);
                 case RT_GENERATOR -> this.utility != null && this.utility.tick(level);
                 case SEMIFLUID_GENERATOR -> tickSemifluid();
+                case ADVANCED_SOLAR_PANEL, HYBRID_SOLAR_PANEL, ULTIMATE_SOLAR_PANEL, QUANTUM_SOLAR_PANEL -> tickAdvancedSolar(level);
+                case QUANTUM_GENERATOR -> tickQuantumGenerator(level);
                 default -> tickGenerator(level);
             };
             case PROCESSOR -> switch (this.guiType) {
@@ -1042,13 +1122,16 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 case TERRAFORMER, ADVANCED_MINER, BATCH_CRAFTER, ENERGY_O_MAT -> this.automation != null && this.automation.tick(level);
                 case INDUCTION_FURNACE -> tickInduction(level);
                 case CENTRIFUGE -> tickCentrifugeHeat(level) | tickProcessor(level);
+                case ROTARY_MACERATOR, SINGULARITY_COMPRESSOR, CENTRIFUGE_EXTRACTOR, COMPACTING_RECYCLER,
+                     LIQUESCENT_EXTRUDER, IMPELLERIZED_ROLLER, WATER_JET_CUTTER, THERMAL_WASHER, VACUUM_CANNER -> tickAdvanced(level);
+                case MOLECULAR_TRANSFORMER -> tickMolecularTransformer(level);
                 default -> tickProcessor(level);
             };
             case KINETIC -> tickKineticSource(level);
             case HEAT -> tickHeatMachine(level);
             case TRANSFORMER -> tickTransformer(level);
             case LOGISTICS -> (this.logistics != null && this.logistics.tick(level)) | (this.reactor != null && this.reactor.tick(level))
-                    | (this.automation != null && this.automation.tick(level));
+                    | (this.automation != null && this.automation.tick(level)) | (this.brewing != null && this.brewing.tick());
             case STORAGE -> this.utility != null && this.utility.tick(level);
             case NONE -> false;
         };
@@ -1056,10 +1139,12 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         // o reator pode ter derretido neste tick
         if (this.isRemoved() || level.getBlockEntity(this.worldPosition) != this) return;
         syncRotor(level);
+        syncTank(level);
 
         boolean working = switch (this.profile.role()) {
-            case GENERATOR -> this.energy > energyBefore;
-            case PROCESSOR -> this.energy < energyBefore;
+            case GENERATOR -> this.guiType == MachineGuiType.QUANTUM_GENERATOR ? this.quantumOn : this.energy > energyBefore;
+            // Advanced Machines: a textura ativa acompanha o calor (IC2: setActive(heat > 0))
+            case PROCESSOR -> this.guiType.isAdvancedMachine() ? this.heat > 0 : this.energy < energyBefore;
             case KINETIC -> this.kineticWorking;
             case HEAT -> this.heatWorking;
             case TRANSFORMER -> this.transformer != null && this.transformer.mode() == BufferedTransformer.Mode.STEP_UP;
@@ -2009,9 +2094,13 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
                 }
             }
         }
-        this.profile = this.baseProfile.role() == MachineEnergyProfile.Role.PROCESSOR
-                ? this.baseProfile.upgraded(Math.min(overclockers, 16), Math.min(transformers, 4), storage)
-                : this.baseProfile;
+        if (this.guiType.isAdvancedMachine()) {
+            this.profile = this.baseProfile.heatingUpgraded(Math.min(transformers, 4), storage);
+        } else {
+            this.profile = this.baseProfile.role() == MachineEnergyProfile.Role.PROCESSOR
+                    ? this.baseProfile.upgraded(Math.min(overclockers, 16), Math.min(transformers, 4), storage)
+                    : this.baseProfile;
+        }
         if (this.maxProgress != this.profile.operationTicks() && this.baseProfile.operationTicks() > 0
                 && this.guiType != MachineGuiType.INDUCTION_FURNACE) {
             this.maxProgress = this.profile.operationTicks();
@@ -2339,9 +2428,13 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
     }
 
     private @Nullable Operation recipeOperation(String machine, ItemStack input, ItemStack secondary) {
-        if (input.isEmpty()) return null;
         Fluid tankFluid = this.tank == null || this.tank.isResourceBlank() ? null : this.tank.variant.getFluid();
         long tankMb = this.tank == null ? 0 : this.tank.amount * 1000 / FluidConstants.BUCKET;
+        return recipeOperation(machine, input, secondary, tankFluid, tankMb);
+    }
+
+    private @Nullable Operation recipeOperation(String machine, ItemStack input, ItemStack secondary, @Nullable Fluid tankFluid, long tankMb) {
+        if (input.isEmpty()) return null;
         return MachineRecipes.INSTANCE.find(machine, input, secondary, tankFluid, tankMb)
                 .map(recipe -> new Operation(recipe.inputCount(), recipe.secondary() == null ? 0 : recipe.secondaryCount(),
                         recipe.createResults(), random -> recipe.createResults(),
@@ -2420,6 +2513,264 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         boolean blacklisted = BuiltInRegistries.ITEM.wrapAsHolder(input.getItem()).is(RECYCLER_BLACKLIST);
         return Operation.items(1, 0, List.of(new ItemStack(scrap)),
                 random -> !blacklisted && random.nextInt(RECYCLE_CHANCE) == 0 ? List.of(new ItemStack(scrap)) : List.of());
+    }
+
+    // ── Advanced Solar Panels ─────────────────────────────────────────────
+    /**
+     * Painéis do Advanced Solar Panels: a cada 128 ticks olham o céu logo acima; dia limpo rende a produção
+     * de dia, noite ou chuva a noturna, sem céu nada. Carregam até 4 itens com a energia guardada.
+     */
+    private boolean tickAdvancedSolar(Level level) {
+        if (this.solarState < 0 || level.getGameTime() % 128 == 0) {
+            this.solarState = solarState(level, this.worldPosition);
+        }
+        this.solarGeneration = switch (this.solarState) {
+            case SOLAR_DAY -> this.profile.power();
+            case SOLAR_NIGHT -> solarNightPower();
+            default -> 0;
+        };
+        boolean changed = produce(this.solarGeneration);
+        for (int slot = 0; slot < ADVANCED_SOLAR_CHARGE_SLOTS && slot < this.inventory.getContainerSize() && this.energy > 0; slot++) {
+            ItemStack stack = this.inventory.getItem(slot);
+            long moved = EnergyItems.charge(stack, this.energy, this.profile.voltage(), false);
+            if (moved > 0) {
+                this.energy -= moved;
+                this.inventory.setItem(slot, stack);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    /** Céu acima de {@code pos}: {@link #SOLAR_DAY}, {@link #SOLAR_NIGHT} (noite ou chuva) ou {@link #SOLAR_NONE}. */
+    public static int solarState(Level level, BlockPos pos) {
+        BlockPos above = pos.above();
+        if (!level.dimensionType().hasSkyLight() || level.dimensionType().hasCeiling() || !level.canSeeSky(above)) return SOLAR_NONE;
+        boolean wet = (level.isRaining() || level.isThundering()) && level.getBiome(above).value().hasPrecipitation();
+        return level.isBrightOutside() && !wet ? SOLAR_DAY : SOLAR_NIGHT;
+    }
+
+    /** IC2: 1/8/64/2.048 EU/t à noite. */
+    private long solarNightPower() {
+        return switch (this.guiType) {
+            case ADVANCED_SOLAR_PANEL -> 500;
+            case HYBRID_SOLAR_PANEL -> 4_000;
+            case ULTIMATE_SOLAR_PANEL -> 32_000;
+            case QUANTUM_SOLAR_PANEL -> 1_024_000;
+            default -> 0;
+        };
+    }
+
+    /** Gerador quântico (criativo): energia sem fim na produção e na tensão escolhidas; redstone desliga. */
+    private boolean tickQuantumGenerator(Level level) {
+        this.quantumOn = !redstonePowered(level);
+        if (this.profile.voltage() != this.quantumVoltage || this.profile.power() != this.quantumProduction) {
+            this.profile = new MachineEnergyProfile(MachineEnergyProfile.Role.GENERATOR, this.quantumVoltage,
+                    this.quantumProduction, Math.max(1, this.quantumProduction), 0, 0, 0.0);
+        }
+        long target = this.quantumOn ? this.quantumProduction : 0;
+        if (this.energy == target) return false;
+        this.energy = target;
+        return true;
+    }
+
+    private boolean handleQuantumButton(int id) {
+        if (id >= BUTTON_QUANTUM_PRODUCTION && id < BUTTON_QUANTUM_PRODUCTION + QUANTUM_STEPS.length) {
+            this.quantumProduction = Math.max(0, Math.min(QUANTUM_MAX_PRODUCTION,
+                    this.quantumProduction + QUANTUM_STEPS[id - BUTTON_QUANTUM_PRODUCTION]));
+        } else if (id >= BUTTON_QUANTUM_VOLTAGE && id < BUTTON_QUANTUM_VOLTAGE + QUANTUM_VOLTAGES.length) {
+            this.quantumVoltage = QUANTUM_VOLTAGES[id - BUTTON_QUANTUM_VOLTAGE];
+        } else {
+            return false;
+        }
+        setChanged();
+        return true;
+    }
+
+    /**
+     * Transformador molecular: a receita começa consumindo a entrada e termina quando toda a energia chega;
+     * o progresso é a energia recebida, sem tempo mínimo.
+     */
+    private boolean tickMolecularTransformer(Level level) {
+        boolean changed = false;
+        if (this.molecularTotal <= 0) {
+            ItemStack input = this.inventory.getItem(this.slots.input());
+            Optional<MachineRecipes.Compiled> recipe = input.isEmpty() ? Optional.empty()
+                    : MachineRecipes.INSTANCE.find("molecular_transformer", input, ItemStack.EMPTY, null, 0);
+            if (recipe.isPresent() && recipe.get().energy() > 0) {
+                ItemStack result = recipe.get().createResult();
+                if (!result.isEmpty() && insertResults(List.of(result), true)) {
+                    this.molecularInput = input.copyWithCount(recipe.get().inputCount());
+                    this.molecularOutput = result;
+                    this.molecularTotal = EnergyUnits.fromCWh(recipe.get().energy());
+                    this.molecularUsed = 0;
+                    shrinkSlot(this.slots.input(), recipe.get().inputCount());
+                    changed = true;
+                }
+            }
+        }
+        if (this.molecularTotal > 0) {
+            long used = Math.min(this.energy, this.molecularTotal - this.molecularUsed);
+            this.energy -= used;
+            this.molecularUsed += used;
+            changed |= used > 0;
+            if (this.molecularUsed >= this.molecularTotal && insertResults(List.of(this.molecularOutput), false)) {
+                this.molecularUsed = 0;
+                this.molecularTotal = 0;
+                this.molecularInput = ItemStack.EMPTY;
+                this.molecularOutput = ItemStack.EMPTY;
+                changed = true;
+            }
+        }
+        this.progress = this.molecularTotal <= 0 ? 0 : (int) (this.molecularUsed * 1_000 / this.molecularTotal);
+        this.maxProgress = 1_000;
+        return changed;
+    }
+
+    private long molecularDemand() {
+        return this.molecularTotal <= 0 ? 0 : Math.max(0, this.molecularTotal - this.molecularUsed - this.energy);
+    }
+
+    /** Campos da GUI dos painéis, do gerador quântico e do transformador molecular (ou null). */
+    private @Nullable Integer advancedSolarData(int field) {
+        if (this.guiType.isAdvancedSolarPanel()) {
+            return switch (field) {
+                case DATA_MODE -> Math.max(0, this.solarState);
+                case DATA_HEAT -> clampToInt(this.solarGeneration);
+                case DATA_MAX_HEAT -> clampToInt(this.profile.power());
+                default -> null;
+            };
+        }
+        if (this.guiType == MachineGuiType.QUANTUM_GENERATOR) {
+            return switch (field) {
+                case DATA_MODE -> this.quantumOn ? 1 : 0;
+                case DATA_HEAT -> clampToInt(this.quantumProduction);
+                default -> null;
+            };
+        }
+        if (this.guiType == MachineGuiType.MOLECULAR_TRANSFORMER) {
+            return switch (field) {
+                case DATA_MODE -> this.molecularInput.isEmpty() ? 0 : BuiltInRegistries.ITEM.getId(this.molecularInput.getItem()) + 1;
+                case DATA_MAX_HEAT -> this.molecularOutput.isEmpty() ? 0 : BuiltInRegistries.ITEM.getId(this.molecularOutput.getItem()) + 1;
+                case DATA_HEAT -> clampToInt(this.molecularTotal / EnergyUnits.TICKS_PER_HOUR);
+                default -> null;
+            };
+        }
+        return null;
+    }
+
+    // ── Advanced Machines ─────────────────────────────────────────────────
+    /**
+     * Advanced Machines (TileEntityHeatingMachine): cada tick trabalhando soma o calor atual ao progresso
+     * e a operação sai a cada {@code maxProgress} pontos (várias no mesmo tick, se sobrar). O calor sobe 1
+     * por tick trabalhando, ou parado com redstone pagando o consumo ocioso, e cai 2 no resto. Quente de
+     * todo, uma operação leva 12 ticks; um tick sem poder trabalhar zera o progresso.
+     */
+    private boolean tickAdvanced(Level level) {
+        int heatBefore = this.heat;
+        int progressBefore = this.progress;
+
+        // lavadora térmica: água num tanque seco com a máquina a 50% ou mais explode
+        if (this.guiType == MachineGuiType.THERMAL_WASHER && this.tank != null) {
+            if (this.advancedTankDry && this.tank.amount > 0 && this.heat >= ADVANCED_MAX_HEAT / 2) {
+                CraftEnergyApi.explodeFromOvervoltage(level, this.worldPosition, this.profile.voltage());
+                this.heat = 0;
+                return true;
+            }
+            this.advancedTankDry = this.tank.amount == 0;
+        }
+
+        boolean canRun = consumeIdleWater(level);
+        Operation operation = canRun ? advancedOperation(level) : null;
+        boolean heating;
+        if (!canRun) {
+            heating = false;
+        } else if (operation != null && this.energy >= this.profile.power()) {
+            this.energy -= this.profile.power();
+            heating = true;
+            this.progress += this.heat;
+            int maxProgress = Math.max(1, this.profile.operationTicks());
+            while (operation != null && this.progress >= maxProgress) {
+                completeAdvanced(level, operation);
+                this.progress -= maxProgress;
+                operation = advancedOperation(level);
+            }
+        } else {
+            this.progress = 0;
+            long idle = this.guiType == MachineGuiType.THERMAL_WASHER ? ADVANCED_WASHER_IDLE_POWER : ADVANCED_IDLE_POWER;
+            heating = redstonePowered(level) && this.energy >= idle;
+            if (heating) this.energy -= idle;
+        }
+        this.heat = heating ? Math.min(ADVANCED_MAX_HEAT, this.heat + 1) : Math.max(0, this.heat - 2);
+        return heating || this.heat != heatBefore || this.progress != progressBefore;
+    }
+
+    /** Operação possível agora nas Advanced Machines, já conferindo saída e água. */
+    private @Nullable Operation advancedOperation(Level level) {
+        ItemStack input = this.inventory.getItem(this.slots.input());
+        ItemStack secondary = this.slots.secondary() >= 0 ? this.inventory.getItem(this.slots.secondary()) : ItemStack.EMPTY;
+        // a enlatadora a vácuo esvazia e enche recipientes sem nada na entrada
+        if (input.isEmpty() && this.guiType != MachineGuiType.VACUUM_CANNER) return null;
+        Operation operation = switch (this.guiType) {
+            case VACUUM_CANNER -> cannerOperation(input, secondary);
+            case ROTARY_MACERATOR -> recipeOperation("macerator", input, ItemStack.EMPTY);
+            case SINGULARITY_COMPRESSOR -> recipeOperation("compressor", input, ItemStack.EMPTY);
+            case CENTRIFUGE_EXTRACTOR -> recipeOperation("extractor", input, ItemStack.EMPTY);
+            case COMPACTING_RECYCLER -> compactingOperation(input);
+            case LIQUESCENT_EXTRUDER -> recipeOperation("metal_former_extruding", input, ItemStack.EMPTY);
+            case IMPELLERIZED_ROLLER -> recipeOperation("metal_former_rolling", input, ItemStack.EMPTY);
+            case WATER_JET_CUTTER -> withWater(recipeOperation("metal_former_cutting", input, ItemStack.EMPTY));
+            // a lavadora térmica gasta sempre 500 CL, mesmo onde a receita da lavadora comum pede mais
+            case THERMAL_WASHER -> withWater(hasFluid(ADVANCED_WATER_PER_OPERATION) && this.tank.variant.getFluid() == Fluids.WATER
+                    ? recipeOperation("ore_washing_plant", input, ItemStack.EMPTY, Fluids.WATER, Long.MAX_VALUE) : null);
+            default -> null;
+        };
+        if (operation == null || !insertResults(operation.preview(), true) || !hasFluid(operation.fluid())
+                || !canFillOutput(operation)) return null;
+        return operation;
+    }
+
+    private @Nullable Operation withWater(@Nullable Operation operation) {
+        if (operation == null) return null;
+        return new Operation(operation.inputCount(), operation.secondaryCount(), operation.preview(), operation.result(),
+                ADVANCED_WATER_PER_OPERATION, null, 0, 0, 0);
+    }
+
+    /** Reciclador compactador: 9 sucatas viram uma caixa de sucata; o resto recicla como no reciclador (1 em 8). */
+    private @Nullable Operation compactingOperation(ItemStack input) {
+        if (input.getItem() == IC2AutoItems.SCRAP.get()) {
+            if (input.getCount() < 9) return null;
+            ItemStack box = new ItemStack(IC2AutoItems.SCRAP_BOX.get());
+            return Operation.items(9, 0, List.of(box), random -> List.of(box.copy()));
+        }
+        return recyclingOperation(input);
+    }
+
+    private void completeAdvanced(Level level, Operation operation) {
+        List<ItemStack> results = operation.result().apply(level.getRandom());
+        shrinkSlot(this.slots.input(), operation.inputCount());
+        shrinkSlot(this.slots.secondary(), operation.secondaryCount());
+        if (this.tank != null && operation.fluid() > 0) {
+            this.tank.consume(operation.fluid());
+        }
+        if (this.outputTank != null && operation.resultFluid() != null) {
+            this.outputTank.fill(operation.resultFluid(), operation.resultFluidAmount());
+        }
+        insertResults(results, false);
+    }
+
+    /** Água gasta parada, conforme o calor: cortador até 2 CL/tick, lavadora até 5; sem água a máquina esfria. */
+    private boolean consumeIdleWater(Level level) {
+        int mb = switch (this.guiType) {
+            case WATER_JET_CUTTER -> (int) (this.heat / (double) ADVANCED_MAX_HEAT * 2.0 + level.getRandom().nextDouble());
+            case THERMAL_WASHER -> this.heat * 5 / ADVANCED_MAX_HEAT;
+            default -> 0;
+        };
+        if (mb <= 0) return true;
+        long droplets = mb * FluidConstants.BUCKET / 1000;
+        if (this.tank == null || this.tank.amount < droplets) return false;
+        this.tank.consume(droplets);
+        return true;
     }
 
     private boolean hasFluid(long amount) {
@@ -2598,6 +2949,7 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
 
         @Override
         public long powerDemand() {
+            if (guiType == MachineGuiType.MOLECULAR_TRANSFORMER) return molecularDemand();
             long intake = guiType == MachineGuiType.MINER ? MinerLogic.MAX_INTAKE : profile.maxIntake();
             if (automation != null) intake = Math.min(intake, automation.demandLimit());
             return Math.max(0, Math.min(intake, profile.capacity() - energy));
@@ -2635,6 +2987,8 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
             Integer value = this.steam.dataValue(field);
             if (value != null) return value;
         }
+        Integer solarValue = advancedSolarData(field);
+        if (solarValue != null) return solarValue;
         if (field >= DATA_FLUID && field < DATA_FLUID + 2 * DATA_PER_TANK) {
             MachineTank fluidTank = (field - DATA_FLUID) / DATA_PER_TANK == 0 ? this.tank : this.outputTank;
             if (fluidTank == null) return 0;
@@ -2779,6 +3133,17 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         output.putInt("TotalFuel", this.totalFuel);
         output.putLong("FuelPower", this.fuelPower);
         output.putInt("Heat", this.heat);
+        if (this.brewing != null) this.brewing.write(output);
+        if (this.guiType == MachineGuiType.QUANTUM_GENERATOR) {
+            output.putLong("QuantumProduction", this.quantumProduction);
+            output.putInt("QuantumVoltage", this.quantumVoltage);
+        }
+        if (this.guiType == MachineGuiType.MOLECULAR_TRANSFORMER && this.molecularTotal > 0) {
+            output.putLong("MolecularUsed", this.molecularUsed);
+            output.putLong("MolecularTotal", this.molecularTotal);
+            output.store("MolecularInput", ItemStack.OPTIONAL_CODEC, this.molecularInput);
+            output.store("MolecularOutput", ItemStack.OPTIONAL_CODEC, this.molecularOutput);
+        }
         if (this.miner != null) {
             this.miner.write(output);
         }
@@ -2843,6 +3208,19 @@ public class MachineBlockEntity extends BlockEntity implements ExtendedMenuProvi
         this.totalFuel = input.getIntOr("TotalFuel", 0);
         this.fuelPower = input.getLongOr("FuelPower", 0);
         this.heat = Math.max(0, input.getIntOr("Heat", 0));
+        if (this.brewing != null) this.brewing.read(input);
+        if (this.guiType == MachineGuiType.QUANTUM_GENERATOR) {
+            this.quantumProduction =Math.max(0, Math.min(QUANTUM_MAX_PRODUCTION, input.getLongOr("QuantumProduction", QUANTUM_DEFAULT_PRODUCTION)));
+            int voltage = input.getIntOr("QuantumVoltage", 2_400);
+            this.quantumVoltage = java.util.Arrays.stream(QUANTUM_VOLTAGES).anyMatch(v -> v == voltage) ? voltage : 2_400;
+        }
+        if (this.guiType == MachineGuiType.MOLECULAR_TRANSFORMER) {
+            this.molecularUsed = Math.max(0, input.getLongOr("MolecularUsed", 0));
+            this.molecularTotal = Math.max(0, input.getLongOr("MolecularTotal", 0));
+            this.molecularInput = input.read("MolecularInput", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+            this.molecularOutput = input.read("MolecularOutput", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+            if (this.molecularOutput.isEmpty()) this.molecularTotal = 0;
+        }
         if (this.miner != null) {
             this.miner.read(input);
         }

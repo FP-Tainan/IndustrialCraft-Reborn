@@ -1,0 +1,7 @@
+{
+  "machine": "molecular_transformer",
+  "input": "#c:ingots/silver",
+  "result": "minecraft:gold_ingot",
+  "result_count": 1,
+  "energy": 250000
+}

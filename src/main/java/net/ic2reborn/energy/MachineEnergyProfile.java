@@ -49,6 +49,22 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
             case METAL_FORMER -> processor(220, 4_000, 200);
             case BLOCK_CUTTER -> processor(220, 4_000, 450);
             case CENTRIFUGE -> processor(1_000, 48_000, 500);
+            // Advanced Machines: fim de jogo, só em extra-alta tensão. IC2: 15/24/48 EU/t → 2.000 CW por EU/t;
+            // a operação pede 120.000 pontos de progresso (o calor de cada tick), o reciclador 10.000
+            case ROTARY_MACERATOR, SINGULARITY_COMPRESSOR, CENTRIFUGE_EXTRACTOR -> heating(30_000, ADVANCED_PROGRESS);
+            case COMPACTING_RECYCLER -> heating(30_000, ADVANCED_PROGRESS / 12);
+            case LIQUESCENT_EXTRUDER, IMPELLERIZED_ROLLER, WATER_JET_CUTTER, VACUUM_CANNER -> heating(48_000, ADVANCED_PROGRESS);
+            case THERMAL_WASHER -> heating(96_000, ADVANCED_PROGRESS);
+            // Advanced Solar Panels: produção de dia (a noturna fica no block entity), em tensões altas.
+            // IC2: 8/64/512/4.096 EU/t e 32k/100k/1M/10M EU → EU/t × 500 = CW, EU × 0,5 = CWh
+            case ADVANCED_SOLAR_PANEL -> simple(Role.GENERATOR, 1_000, 4_000, EnergyUnits.fromCWh(16_000));
+            case HYBRID_SOLAR_PANEL -> simple(Role.GENERATOR, 2_400, 32_000, EnergyUnits.fromCWh(50_000));
+            case ULTIMATE_SOLAR_PANEL -> simple(Role.GENERATOR, 13_800, 256_000, EnergyUnits.fromCWh(500_000));
+            case QUANTUM_SOLAR_PANEL -> simple(Role.GENERATOR, 69_000, 2_048_000, EnergyUnits.fromCWh(5_000_000));
+            // gerador quântico (criativo): produção e tensão escolhidas na GUI; o block entity monta o perfil real
+            case QUANTUM_GENERATOR -> simple(Role.GENERATOR, 2_400, 256_000, 256_000);
+            // transformador molecular: qualquer tensão, sem buffer; puxa da rede só o que falta da receita
+            case MOLECULAR_TRANSFORMER -> new MachineEnergyProfile(Role.PROCESSOR, 69_000, 100_000_000, 100_000_000, 0, 0, 0.0);
             // IC2: 1.000 EU guardados; o consumo depende da broca (3.000 CW com a perfuradora)
             case MINER -> new MachineEnergyProfile(Role.PROCESSOR, 220, 3_000, EnergyUnits.fromCWh(500), 0, 0, 0.0);
             // calor (HU) sem eletricidade: fermentador e geradores de calor sólido, fluido e RT
@@ -122,6 +138,23 @@ public record MachineEnergyProfile(Role role, int voltage, long power, long capa
 
     private static MachineEnergyProfile processor(int voltage, long power, int operationTicks) {
         return new MachineEnergyProfile(Role.PROCESSOR, voltage, power, power * operationTicks, operationTicks, 0, 0.0);
+    }
+
+    /** Pontos de progresso de uma operação das Advanced Machines (12 ticks com o calor no máximo). */
+    public static final int ADVANCED_PROGRESS = 120_000;
+
+    /** Advanced Machines: 13.800 MV, buffer para 640 ticks trabalhando; operationTicks guarda os pontos de progresso. */
+    private static MachineEnergyProfile heating(long power, int progressPoints) {
+        return new MachineEnergyProfile(Role.PROCESSOR, 13_800, power, power * 640, progressPoints, 0, 0.0);
+    }
+
+    /** Advanced Machines com upgrades: overclocker não faz nada; transformador e armazenamento valem. */
+    public MachineEnergyProfile heatingUpgraded(int transformers, int storageUpgrades) {
+        if (transformers <= 0 && storageUpgrades <= 0) return this;
+        int newVoltage = this.voltage;
+        for (int i = 0; i < transformers; i++) newVoltage = nextVoltage(newVoltage);
+        return new MachineEnergyProfile(this.role, newVoltage, this.power,
+                this.capacity + EnergyUnits.fromCWh(5_000L * storageUpgrades), this.operationTicks, this.highVoltage, this.efficiency);
     }
 
     private static MachineEnergyProfile transformer(int lowVoltage, int highVoltage, long power, double efficiency) {

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:ultimate_solar_panel"
+  ],
+  "result": {
+    "count": 8,
+    "id": "ic2reborn:hybrid_solar_panel"
+  }
+}

@@ -237,13 +237,24 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     private static final String[] TRANSFORMER_MODES = {"redstone", "step_down", "step_up"};
     private static final String[] TRANSFORMER_MODE_FALLBACKS = {"Redstone = step-up", "Fixed step-down", "Fixed step-up"};
 
+    /** Enlatadora e enlatadora a vácuo: mesma GUI, com os botões de modo e de trocar tanques. */
+    private boolean isCanner() {
+        return this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.CANNER
+                || this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.VACUUM_CANNER;
+    }
+
     private boolean isTransformer() {
-        return this.menu.getGuiType().name().endsWith("_TRANSFORMER");
+        // o transformador molecular não é transformador de tensão
+        return this.menu.getGuiType().name().endsWith("_TRANSFORMER") && this.menu.getGuiType() != net.ic2reborn.menu.MachineGuiType.MOLECULAR_TRANSFORMER;
     }
 
     @Override
     protected void init() {
         super.init();
+        if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.QUANTUM_GENERATOR) {
+            addQuantumGeneratorButtons();
+            return;
+        }
         if (!isTransformer()) return;
 
         for (int mode = 0; mode < TRANSFORMER_MODES.length; mode++) {
@@ -253,6 +264,28 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
                                     TRANSFORMER_MODE_FALLBACKS[mode]),
                             button -> this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, buttonId))
                     .bounds(this.leftPos + 7, this.topPos + 65 + mode * 20, 144, 20)
+                    .build());
+        }
+    }
+
+    /** Gerador quântico: produção nos botões de cima (posições do addon), tensão nos de baixo. */
+    private static final String[] QUANTUM_PRODUCTION_LABELS = {"-100k", "-10k", "-1k", "+1k", "+10k", "+100k"};
+    private static final int[][] QUANTUM_PRODUCTION_BOUNDS = {{6, 32}, {39, 26}, {66, 20}, {89, 20}, {110, 26}, {137, 32}};
+    private static final String[] QUANTUM_VOLTAGE_LABELS = {"220", "1k", "2.4k", "13.8k", "69k"};
+
+    private void addQuantumGeneratorButtons() {
+        for (int i = 0; i < QUANTUM_PRODUCTION_LABELS.length; i++) {
+            int buttonId = net.ic2reborn.block.entity.MachineBlockEntity.BUTTON_QUANTUM_PRODUCTION + i;
+            this.addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.literal(QUANTUM_PRODUCTION_LABELS[i]),
+                            button -> this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, buttonId))
+                    .bounds(this.leftPos + QUANTUM_PRODUCTION_BOUNDS[i][0], this.topPos + 40, QUANTUM_PRODUCTION_BOUNDS[i][1], 20)
+                    .build());
+        }
+        for (int i = 0; i < QUANTUM_VOLTAGE_LABELS.length; i++) {
+            int buttonId = net.ic2reborn.block.entity.MachineBlockEntity.BUTTON_QUANTUM_VOLTAGE + i;
+            this.addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.literal(QUANTUM_VOLTAGE_LABELS[i]),
+                            button -> this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, buttonId))
+                    .bounds(this.leftPos + 6 + i * 33, this.topPos + 84, 31, 20)
                     .build());
         }
     }
@@ -272,7 +305,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
             this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, logisticsButton);
             return true;
         }
-        if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.CANNER && event.button() == 0) {
+        if (isCanner() && event.button() == 0) {
             int button = -1;
             if (this.isHovering(63, 81, 50, 14, event.x(), event.y())) {
                 button = net.ic2reborn.block.entity.MachineBlockEntity.BUTTON_CANNER_MODE + (this.menu.getMachineMode() + 1) % 4;
@@ -532,7 +565,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
                         "gui.ic2reborn.block_cutter.blade", "Cutting blade")), mouseX, mouseY);
             }
         }
-        if (this.menu.getGuiType() == net.ic2reborn.menu.MachineGuiType.CANNER) {
+        if (isCanner()) {
             int mode = Math.floorMod(this.menu.getMachineMode(), CANNER_MODES.length);
             if (this.isHovering(63, 81, 50, 14, mouseX, mouseY)) {
                 graphics.setComponentTooltipForNextFrame(this.font, java.util.List.of(Component.translatableWithFallback(
@@ -553,7 +586,7 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         }
 
         // GuiIC2: título centralizado em y = 6
-        graphics.text(this.font, this.title, (this.imageWidth - this.font.width(this.title)) / 2, 6, textColor, false);
+        graphics.text(this.font, this.title, (this.imageWidth - this.font.width(this.title)) / 2, 6, 0xFF000000 | this.layout.titleColor(), false);
 
         if (this.layout.showInventoryTitle()) {
             graphics.text(this.font, this.playerInventoryTitle,
@@ -564,6 +597,8 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
             Component component = text.text().apply(this.menu);
             int textX = text.x();
             int textY = text.y();
+            // largura negativa: alinhado à direita em x
+            if (text.width() < 0) textX -= this.font.width(component);
             if (text.width() > 0) textX += (text.width() - this.font.width(component)) / 2;
             if (text.height() > 0) textY += (text.height() - 8) / 2;
             graphics.text(this.font, component, textX, textY, 0xFF000000 | text.color(), false);

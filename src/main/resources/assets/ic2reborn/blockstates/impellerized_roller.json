@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "active=false,facing=north": { "model": "ic2reborn:block/impellerized_roller" },
+    "active=false,facing=east": { "model": "ic2reborn:block/impellerized_roller", "y": 90 },
+    "active=false,facing=south": { "model": "ic2reborn:block/impellerized_roller", "y": 180 },
+    "active=false,facing=west": { "model": "ic2reborn:block/impellerized_roller", "y": 270 },
+    "active=true,facing=north": { "model": "ic2reborn:block/impellerized_roller_active" },
+    "active=true,facing=east": { "model": "ic2reborn:block/impellerized_roller_active", "y": 90 },
+    "active=true,facing=south": { "model": "ic2reborn:block/impellerized_roller_active", "y": 180 },
+    "active=true,facing=west": { "model": "ic2reborn:block/impellerized_roller_active", "y": 270 }
+  }
+}

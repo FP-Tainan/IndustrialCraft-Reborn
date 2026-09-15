@@ -1,0 +1,6 @@
+{
+  "machine": "metal_former_extruding",
+  "input": "ic2reborn:iridium",
+  "result": "ic2reborn:iridium_ingot",
+  "result_count": 1
+}

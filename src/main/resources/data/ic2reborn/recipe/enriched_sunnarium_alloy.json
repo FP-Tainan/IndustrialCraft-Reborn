@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SAS",
+    " S "
+  ],
+  "key": {
+    "S": "ic2reborn:enriched_sunnarium",
+    "A": "ic2reborn:sunnarium_alloy"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:enriched_sunnarium_alloy"
+  }
+}

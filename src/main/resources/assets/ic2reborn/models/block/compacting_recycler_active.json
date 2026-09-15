@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ic2reborn:block/compacting_recycler_bottom",
+    "up": "ic2reborn:block/compacting_recycler_top_active",
+    "north": "ic2reborn:block/compacting_recycler_front_active",
+    "south": "ic2reborn:block/compacting_recycler_back",
+    "east": "ic2reborn:block/compacting_recycler_right",
+    "west": "ic2reborn:block/compacting_recycler_left",
+    "particle": "ic2reborn:block/compacting_recycler_back"
+  }
+}

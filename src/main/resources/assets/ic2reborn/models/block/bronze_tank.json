@@ -1,7 +1,44 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "textures": {
-    "all": "ic2reborn:block/bronze_tank",
-    "particle": "ic2reborn:block/bronze_tank"
-  }
+    "particle": "ic2reborn:block/bronze_tank_frame_side",
+    "end": "ic2reborn:block/bronze_tank_frame_end",
+    "side": "ic2reborn:block/bronze_tank_frame_side"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        16,
+        14
+      ],
+      "faces": {
+        "up": {
+          "texture": "#end",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#end",
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        }
+      }
+    }
+  ]
 }

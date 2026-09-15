@@ -39,7 +39,11 @@ public class ElectricArmorItem extends ElectricItem {
         ADVANCED_BATPACK(EquipmentSlot.CHEST, 300_000, 500_000, 1_000, 0, 0.0, true),
         ENERGY_PACK(EquipmentSlot.CHEST, 1_000_000, 500_000, 2_400, 0, 0.0, true),
         ELECTRIC_JETPACK(EquipmentSlot.CHEST, 15_000, 30_000, 220, 0, 0.0, false),
-        NIGHTVISION_GOGGLES(EquipmentSlot.HEAD, 100_000, 100_000, 220, 0, 0.0, false);
+        NIGHTVISION_GOGGLES(EquipmentSlot.HEAD, 100_000, 100_000, 220, 0, 0.0, false),
+        // capacetes solares do Advanced Solar Panels (IC2: 1M/10M EU, 3.000/10.000 EU/t, 800/2.000 EU por dano)
+        ADVANCED_SOLAR(EquipmentSlot.HEAD, 500_000, 1_500_000, 2_400, 400, 0.9, false),
+        HYBRID_SOLAR(EquipmentSlot.HEAD, 5_000_000, 5_000_000, 13_800, 1_000, 1.0, false),
+        ULTIMATE_SOLAR(EquipmentSlot.HEAD, 5_000_000, 5_000_000, 13_800, 1_000, 1.0, false);
 
         final EquipmentSlot defaultSlot;
         final long capacityCWh;
@@ -72,9 +76,15 @@ public class ElectricArmorItem extends ElectricItem {
      * @param asset    textura no corpo quando não há material
      */
     public ElectricArmorItem(Properties properties, Kind kind, EquipmentSlot slot, @Nullable ArmorMaterial material, String asset) {
+        this(properties, kind, slot, material, material != null ? material.assetId() : IC2ArmorMaterials.asset(asset));
+    }
+
+    /** Proteção de um material com a textura de outra (capacetes solares). */
+    protected ElectricArmorItem(Properties properties, Kind kind, EquipmentSlot slot, @Nullable ArmorMaterial material,
+                                net.minecraft.resources.ResourceKey<net.minecraft.world.item.equipment.EquipmentAsset> asset) {
         super(properties.component(DataComponents.EQUIPPABLE, Equippable.builder(slot)
                         .setEquipSound(SoundEvents.ARMOR_EQUIP_IRON)
-                        .setAsset(material != null ? material.assetId() : IC2ArmorMaterials.asset(asset))
+                        .setAsset(asset)
                         .setDamageOnHurt(false)
                         .build()),
                 EnergyUnits.fromCWh(kind.capacityCWh), kind.transferLimit, kind.voltage);
@@ -172,7 +182,7 @@ public class ElectricArmorItem extends ElectricItem {
             tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.jetpack_mode_key", "Switch mode: %s",
                     Component.keybind("key.ic2reborn.jetpack_mode")).withStyle(ChatFormatting.DARK_GRAY));
         }
-        if (this.slot == EquipmentSlot.HEAD && this.kind != Kind.QUANTUM || this.kind == Kind.QUANTUM && this.slot == EquipmentSlot.HEAD) {
+        if (this.slot == EquipmentSlot.HEAD && (this.kind == Kind.NANO || this.kind == Kind.QUANTUM || this.kind == Kind.NIGHTVISION_GOGGLES)) {
             tooltip.accept(Component.translatableWithFallback("tooltip.ic2reborn.nightvision_key",
                     "Night vision: %s", Component.keybind("key.ic2reborn.nightvision")).withStyle(ChatFormatting.DARK_GRAY));
         }

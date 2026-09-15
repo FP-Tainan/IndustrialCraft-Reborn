@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#C#",
+    "#M#",
+    "#X#"
+  ],
+  "key": {
+    "#": "ic2reborn:fluid_cell",
+    "C": "ic2reborn:advanced_circuit",
+    "M": "ic2reborn:canner",
+    "X": "ic2reborn:advanced_machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:vacuum_canner"
+  }
+}

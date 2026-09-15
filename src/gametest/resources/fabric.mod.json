@@ -34,6 +34,8 @@
       "net.ic2reborn.test.UtilityGameTest",
       "net.ic2reborn.test.AutomationGameTest",
       "net.ic2reborn.test.MultimeterGameTest",
+      "net.ic2reborn.test.AdvancedMachinesGameTest",
+      "net.ic2reborn.test.AdvancedSolarGameTest",
       "net.ic2reborn.test.BarrelAndWorkbenchGameTest"
     ]
   },

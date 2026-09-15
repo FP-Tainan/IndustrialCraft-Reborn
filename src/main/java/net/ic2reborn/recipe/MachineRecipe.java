@@ -22,13 +22,14 @@ import java.util.Optional;
  *   {@code fluid}, vale o que estiver no tanque;</li>
  *   <li>{@code fluid_result}: {@code {"fluid", "amount"}} produzido no tanque de saída (enlatadora);</li>
  *   <li>{@code min_heat}: calor mínimo (centrífuga térmica);</li>
- *   <li>{@code hardness}: dureza mínima da lâmina (cortador de blocos).</li>
+ *   <li>{@code hardness}: dureza mínima da lâmina (cortador de blocos);</li>
+ *   <li>{@code energy}: CWh gastos na operação (transformador molecular).</li>
  * </ul>
  */
 public record MachineRecipe(String machine, String input, int inputCount, Optional<String> secondaryInput,
                             int secondaryCount, Optional<Identifier> result, int resultCount, List<Output> results,
                             Optional<Identifier> fluid, int fluidAmount, Optional<FluidOutput> fluidResult,
-                            int minHeat, int hardness) {
+                            int minHeat, int hardness, long energy) {
     public record Output(Identifier item, int count) {
         public static final Codec<Output> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("item").forGetter(Output::item),
@@ -56,7 +57,8 @@ public record MachineRecipe(String machine, String input, int inputCount, Option
             Codec.INT.optionalFieldOf("fluid_amount", 0).forGetter(MachineRecipe::fluidAmount),
             FluidOutput.CODEC.optionalFieldOf("fluid_result").forGetter(MachineRecipe::fluidResult),
             Codec.INT.optionalFieldOf("min_heat", 0).forGetter(MachineRecipe::minHeat),
-            Codec.INT.optionalFieldOf("hardness", 0).forGetter(MachineRecipe::hardness)
+            Codec.INT.optionalFieldOf("hardness", 0).forGetter(MachineRecipe::hardness),
+            Codec.LONG.optionalFieldOf("energy", 0L).forGetter(MachineRecipe::energy)
     ).apply(instance, MachineRecipe::new));
 
     /** Todas as saídas: {@code result} (se houver) seguido de {@code results}. */

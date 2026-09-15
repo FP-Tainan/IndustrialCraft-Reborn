@@ -1,6 +1,6 @@
 package net.ic2reborn.item;
 
-import net.ic2reborn.block.entity.BarrelBlockEntity;
+import net.ic2reborn.block.entity.BrewingLogic;
 import net.ic2reborn.registry.IC2AutoItems;
 import net.ic2reborn.registry.IC2Components;
 import net.ic2reborn.registry.IC2Items;
@@ -44,7 +44,7 @@ public class BoozeMugItem extends Item {
     public static ItemStack create(int value) {
         ItemStack stack = new ItemStack(IC2Items.BOOZE_MUG.get());
         stack.set(IC2Components.BOOZE.get(), value);
-        String variant = type(value) == BarrelBlockEntity.RUM ? "rum" : TIME[Math.min(time(value), TIME.length - 1)];
+        String variant = type(value) == BrewingLogic.RUM ? "rum" : TIME[Math.min(time(value), TIME.length - 1)];
         stack.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(List.of(), List.of(), List.of(variant), List.of()));
         return stack;
     }
@@ -54,27 +54,27 @@ public class BoozeMugItem extends Item {
     }
 
     private static int type(int value) {
-        return BarrelBlockEntity.unpack(value, 0, 2);
+        return BrewingLogic.unpack(value, 0, 2);
     }
 
     private static int solid(int value) {
-        return BarrelBlockEntity.unpack(value, 7, 3);
+        return BrewingLogic.unpack(value, 7, 3);
     }
 
     private static int hops(int value) {
-        return BarrelBlockEntity.unpack(value, 10, 3);
+        return BrewingLogic.unpack(value, 10, 3);
     }
 
     private static int time(int value) {
-        return BarrelBlockEntity.unpack(value, 13, 3);
+        return BrewingLogic.unpack(value, 13, 3);
     }
 
     @Override
     public Component getName(ItemStack stack) {
         int value = value(stack);
         int type = type(value);
-        if (type == BarrelBlockEntity.RUM) return Component.translatableWithFallback("item.ic2reborn.booze_mug.rum", "Rum");
-        if (type != BarrelBlockEntity.BEER) return Component.translatableWithFallback("item.ic2reborn.booze_mug.zero", "Zero");
+        if (type == BrewingLogic.RUM) return Component.translatableWithFallback("item.ic2reborn.booze_mug.rum", "Rum");
+        if (type != BrewingLogic.BEER) return Component.translatableWithFallback("item.ic2reborn.booze_mug.zero", "Zero");
         int time = Math.min(time(value), TIME.length - 1);
         Component timeName = Component.translatableWithFallback("item.ic2reborn.booze_mug." + TIME[time], TIME_FALLBACK[time]);
         if (time == TIME.length - 1) return timeName;
@@ -102,7 +102,7 @@ public class BoozeMugItem extends Item {
     /** Efeitos do IC2: cansaço e força que sobem a cada caneca; demais dá lentidão, resistência, enjoo e dano. */
     private static void drink(int value, LivingEntity living) {
         int type = type(value);
-        if (type == BarrelBlockEntity.BEER) {
+        if (type == BrewingLogic.BEER) {
             if (time(value) == 5) {
                 blackStuff(living);
                 return;
@@ -131,8 +131,8 @@ public class BoozeMugItem extends Item {
                     }
                 }
             }
-        } else if (type == BarrelBlockEntity.RUM) {
-            if (BarrelBlockEntity.unpack(value, 7, 7) < 100) {
+        } else if (type == BrewingLogic.RUM) {
+            if (BrewingLogic.unpack(value, 7, 7) < 100) {
                 blackStuff(living);
                 return;
             }

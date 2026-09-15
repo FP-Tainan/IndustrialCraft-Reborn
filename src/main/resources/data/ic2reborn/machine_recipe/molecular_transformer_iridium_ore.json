@@ -1,0 +1,7 @@
+{
+  "machine": "molecular_transformer",
+  "input": "minecraft:iron_ingot",
+  "result": "ic2reborn:iridium_ore",
+  "result_count": 1,
+  "energy": 4500000
+}

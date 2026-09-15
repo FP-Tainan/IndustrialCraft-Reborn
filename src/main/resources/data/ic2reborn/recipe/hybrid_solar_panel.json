@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PLP",
+    "IAI",
+    "CSC"
+  ],
+  "key": {
+    "P": "ic2reborn:carbon_plate",
+    "L": "minecraft:lapis_block",
+    "I": "ic2reborn:iridium",
+    "A": "ic2reborn:advanced_solar_panel",
+    "C": "ic2reborn:advanced_circuit",
+    "S": "ic2reborn:enriched_sunnarium"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:hybrid_solar_panel"
+  }
+}

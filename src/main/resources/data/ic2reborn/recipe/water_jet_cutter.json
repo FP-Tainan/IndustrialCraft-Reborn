@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#C#",
+    "#M#",
+    "#X#"
+  ],
+  "key": {
+    "#": "minecraft:diamond",
+    "C": "ic2reborn:advanced_circuit",
+    "M": "ic2reborn:metal_former",
+    "X": "ic2reborn:advanced_machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:water_jet_cutter"
+  }
+}

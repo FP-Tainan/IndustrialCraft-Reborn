@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RSR",
+    "LIL",
+    "RDR"
+  ],
+  "key": {
+    "R": "minecraft:redstone",
+    "S": "ic2reborn:sunnarium_part",
+    "L": "minecraft:lapis_lazuli",
+    "I": "ic2reborn:reinforced_iridium_iron_plate",
+    "D": "minecraft:diamond"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:irradiant_reinforced_plate"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "machine": "molecular_transformer",
+  "input": "minecraft:sand",
+  "result": "minecraft:gravel",
+  "result_count": 1,
+  "energy": 25000
+}

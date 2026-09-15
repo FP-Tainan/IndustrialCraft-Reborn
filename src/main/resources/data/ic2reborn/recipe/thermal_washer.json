@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#C#",
+    "#M#",
+    "#X#"
+  ],
+  "key": {
+    "#": "ic2reborn:dust_sulfur",
+    "C": "ic2reborn:advanced_circuit",
+    "M": "ic2reborn:ore_washing_plant",
+    "X": "ic2reborn:advanced_machine_block"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:thermal_washer"
+  }
+}

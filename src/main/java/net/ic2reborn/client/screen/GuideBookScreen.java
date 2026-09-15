@@ -22,6 +22,8 @@ public class GuideBookScreen extends Screen {
             {"conversion", "ic2reborn:kinetic_generator"},
             {"generators", "ic2reborn:generator"},
             {"machines", "ic2reborn:macerator"},
+            {"advanced_machines", "ic2reborn:rotary_macerator"},
+            {"advanced_solar", "ic2reborn:quantum_solar_panel"},
             {"metallurgy", "ic2reborn:blast_furnace"},
             {"upgrades", "ic2reborn:upgrade_overclocker"},
             {"logistics", "ic2reborn:pump"},
@@ -34,9 +36,9 @@ public class GuideBookScreen extends Screen {
             {"utilities", "ic2reborn:tesla_coil"},
             {"multimeter", "craftenergy:multimeter"},
     };
-    private static final int WIDTH = 330;
-    private static final int HEIGHT = 200;
-    private static final int LIST_WIDTH = 110;
+    private static final int WIDTH = 360;
+    private static final int HEIGHT = 232;
+    private static final int LIST_WIDTH = 132;
     private static final int PAPER = 0xFFEFE6CF;
     private static final int INK = 0xFF3A2E1F;
 

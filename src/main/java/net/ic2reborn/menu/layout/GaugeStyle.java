@@ -29,6 +29,11 @@ public enum GaugeStyle {
     PROGRESS_CENTRIFUGE(252, 33, 3, 28, Orientation.UP, -1, -1, 5, 30, 246, 32, null),
     HEAT_CENTRIFUGE(225, 54, 20, 4, Orientation.RIGHT, -1, -1, 22, 6, 224, 47, null),
     PROGRESS_ORE_WASHER(177, 118, 18, 18, Orientation.RIGHT, -1, -1, 20, 19, 102, 38, "guiorewashingplant.png"),
+    /** Advanced Solar Panels: barra azul de energia dos painéis e progresso do transformador molecular. */
+    ENERGY_ADVANCED_SOLAR(195, 0, 24, 14, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "advancedsolarpanel.png"),
+    PROGRESS_MOLECULAR_TRANSFORMER(221, 7, 10, 15, Orientation.DOWN, 0, 0, 0, 0, 0, 0, "moleculartransformer.png"),
+    /** Advanced Machines: seta da extrusora e do laminador (ProgressBars do addon). */
+    PROGRESS_EXTRUDER(176, 14, 29, 19, Orientation.RIGHT, 1, 1, 28, 19, 78, 34, "guiextruder.png"),
     PROGRESS_BLOCK_CUTTER(176, 15, 46, 17, Orientation.RIGHT, 0, 0, 46, 17, 55, 33, "guiblockcutter.png"),
     PROGRESS_CANNER(233, 0, 23, 14, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guicanner.png"),
     HEAT_FERMENTER(177, 10, 40, 3, Orientation.RIGHT, 0, 0, 0, 0, 0, 0, "guifermenter.png"),

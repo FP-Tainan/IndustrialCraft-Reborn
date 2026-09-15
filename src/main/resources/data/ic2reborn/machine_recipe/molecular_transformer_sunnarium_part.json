@@ -1,0 +1,7 @@
+{
+  "machine": "molecular_transformer",
+  "input": "minecraft:glowstone_dust",
+  "result": "ic2reborn:sunnarium_part",
+  "result_count": 1,
+  "energy": 500000
+}

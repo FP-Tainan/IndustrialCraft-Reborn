@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SQS",
+    "SSS"
+  ],
+  "key": {
+    "S": "ic2reborn:ultimate_solar_panel",
+    "Q": "ic2reborn:quantum_core"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:quantum_solar_panel"
+  }
+}

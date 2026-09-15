@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ic2reborn:block/rotary_macerator_bottom",
+    "up": "ic2reborn:block/rotary_macerator_top_active",
+    "north": "ic2reborn:block/rotary_macerator_front_active",
+    "south": "ic2reborn:block/rotary_macerator_back",
+    "east": "ic2reborn:block/rotary_macerator_side",
+    "west": "ic2reborn:block/rotary_macerator_side",
+    "particle": "ic2reborn:block/rotary_macerator_back"
+  }
+}

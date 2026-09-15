@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "GUG",
+    " G "
+  ],
+  "key": {
+    "G": "minecraft:glowstone_dust",
+    "U": "ic2reborn:ingot_uranium"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:irradiant_uranium"
+  }
+}

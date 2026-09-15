@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "ASA",
+    "CIC"
+  ],
+  "key": {
+    "P": "ic2reborn:irradiant_glass_pane",
+    "A": "ic2reborn:advanced_alloy",
+    "S": "ic2reborn:solar_generator",
+    "C": "ic2reborn:advanced_circuit",
+    "I": "ic2reborn:irradiant_reinforced_plate"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:advanced_solar_panel"
+  }
+}

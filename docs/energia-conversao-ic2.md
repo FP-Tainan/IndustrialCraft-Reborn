@@ -107,6 +107,46 @@ trade-o-mat, baú pessoal. Energy-o-mat e batch crafter: a definir.
 
 Upgrades de transformador passam a subir a tensão nominal da máquina (220 → 1.000 → 2.400 MV).
 
+## Máquinas avançadas (Advanced Machines)
+
+Fim de jogo: todas em **13.800 MV** (EAT). O IC2 pedia 15/24/48 EU/t; aqui fica 2.000 CW por EU/t.
+A velocidade vem do calor (0 a 10.000): cada tick trabalhando soma o calor ao progresso e a operação
+sai a cada 120.000 pontos — 12 ticks com o calor no máximo (o reciclador compactador faz uma por tick).
+O calor sobe 1/tick trabalhando (ou parado com redstone, pagando o consumo ocioso) e cai 2/tick parado.
+Overclocker não faz efeito; transformador (até 69.000 MV) e armazenamento valem. Buffer: 640 ticks de consumo.
+
+| Máquina | Tensão | Consumo | Corrente | Ocioso (redstone) | Buffer | Base das receitas |
+|---|---|---|---|---|---|---|
+| Triturador rotativo | 13.800 MV | 30.000 CW | 2,17 RA | 2.000 CW | 5.333 CWh | macerador |
+| Compressor de singularidade | 13.800 MV | 30.000 CW | 2,17 RA | 2.000 CW | 5.333 CWh | compressor |
+| Extrator centrífugo | 13.800 MV | 30.000 CW | 2,17 RA | 2.000 CW | 5.333 CWh | extrator |
+| Reciclador compactador | 13.800 MV | 30.000 CW | 2,17 RA | 2.000 CW | 5.333 CWh | reciclador (+ 9 sucatas → caixa) |
+| Extrusora liquescente | 13.800 MV | 48.000 CW | 3,48 RA | 2.000 CW | 8.533 CWh | conformador (extrudar) |
+| Laminador de impulsores | 13.800 MV | 48.000 CW | 3,48 RA | 2.000 CW | 8.533 CWh | conformador (laminar) |
+| Cortador a jato d'água | 13.800 MV | 48.000 CW | 3,48 RA | 2.000 CW | 8.533 CWh | conformador (cortar) + 500 CL de água |
+| Enlatadora a vácuo | 13.800 MV | 48.000 CW | 3,48 RA | 2.000 CW | 8.533 CWh | enlatadora (4 modos, 2 tanques) |
+| Lavadora térmica | 13.800 MV | 96.000 CW | 6,96 RA | 12.000 CW | 17.067 CWh | lavadora de minério + 500 CL de água |
+
+## Painéis solares avançados (Advanced Solar Panels)
+
+Tensões altas; IC2 EU/t × 500 = CW e EU × 0,5 = CWh (como o painel solar e as armaduras).
+Precisam de céu aberto acima (olham a cada 128 ticks); noite ou chuva de dia rendem a produção noturna; sem céu, nada.
+
+| Bloco | Tensão | Dia | Noite | Capacidade |
+|---|---|---|---|---|
+| Painel solar avançado | 1.000 MV | 4.000 CW | 500 CW | 16.000 CWh |
+| Painel solar híbrido | 2.400 MV | 32.000 CW | 4.000 CW | 50.000 CWh |
+| Painel solar híbrido supremo | 13.800 MV | 256.000 CW | 32.000 CW | 500.000 CWh |
+| Painel solar quântico | 69.000 MV | 2.048.000 CW | 1.024.000 CW | 5.000.000 CWh |
+| Gerador quântico (criativo) | 220 a 69.000 MV (botões) | 256.000 CW padrão, ajustável | — | infinita |
+
+Transformador molecular: aceita qualquer tensão (nominal 69.000 MV), sem buffer; puxa da rede só o que falta da
+receita (campo `energy`, em CWh, em `machine_recipe`). Ex.: terra → argila 25.000 CWh; lingote de ferro → minério
+de irídio 4.500.000 CWh; crânio de esqueleto wither → estrela do Nether 125.000.000 CWh.
+
+Capacetes solares: avançado 4.000/500 CW (2.400 MV, 500.000 CWh), híbrido 32.000/4.000 CW e supremo
+256.000/32.000 CW (13.800 MV, 5.000.000 CWh); o híbrido e o supremo gastam 500 CWh para repor o ar.
+
 ## Armazenamento
 
 | Bloco | Tensão | Carga/descarga máx | Capacidade |

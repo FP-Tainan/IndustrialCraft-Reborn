@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PRP",
+    "P P",
+    "PRP"
+  ],
+  "key": {
+    "P": "ic2reborn:irradiant_glass_pane",
+    "R": "ic2reborn:thick_neutron_reflector"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:mt_core"
+  }
+}

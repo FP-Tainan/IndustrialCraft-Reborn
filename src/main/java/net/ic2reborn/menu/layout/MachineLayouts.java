@@ -17,6 +17,9 @@ import static net.ic2reborn.menu.layout.MachineLayout.GaugeSource.NONE;
 public final class MachineLayouts {
     private static final int HEAT_TEXT_COLOR = 0x57C4DA;
     private static final int FLOW_TEXT_COLOR = 0x20EB3E;
+    /** Advanced Solar Panels: texto cinza-claro dos painéis e branco do gerador quântico e do transformador molecular. */
+    private static final int SOLAR_TEXT_COLOR = 0xCDCDCD;
+    private static final int WHITE = 0xFFFFFF;
 
     private MachineLayouts() {}
 
@@ -159,7 +162,8 @@ public final class MachineLayouts {
                     .build();
 
             // ── hand-written GUIs ────────────────────────────────────────────
-            case CANNER -> MachineLayout.textured("guicanner.png", 184)
+            // a enlatadora a vácuo usa a mesma GUI e mostra o calor no canto esquerdo
+            case CANNER, VACUUM_CANNER -> MachineLayout.textured("guicanner.png", 184)
                     .slotAt(80, 44).outputAt(119, 17).slotAt(8, 80)
                     .gridAt(152, 26, 1, 4, false)
                     .slotAt(41, 17)
@@ -175,6 +179,9 @@ public final class MachineLayouts {
                     .imageIf(menu -> menu.getMachineMode() == 1, "guicanner.png", 63, 81, 176, 32, 50, 14, 256, 256)
                     .imageIf(menu -> menu.getMachineMode() == 2, "guicanner.png", 63, 81, 176, 46, 50, 14, 256, 256)
                     .imageIf(menu -> menu.getMachineMode() == 3, "guicanner.png", 63, 81, 176, 60, 50, 14, 256, 256)
+                    .text(menu -> menu.getGuiType() == MachineGuiType.VACUUM_CANNER ? tr("heat", "Heat:") : Component.empty(), 8, 30)
+                    .text(menu -> menu.getGuiType() == MachineGuiType.VACUUM_CANNER
+                            ? Component.literal(menu.getHeat() * 100 / 10_000 + "%") : Component.empty(), 8, 40)
                     .build();
 
             case FERMENTER -> MachineLayout.textured("guifermenter.png", 184)
@@ -543,6 +550,132 @@ public final class MachineLayouts {
             case MV_TRANSFORMER -> transformer(1_000, 2_400, 120_000);
             case HV_TRANSFORMER -> transformer(2_400, 13_800, 1_000_000);
             case EV_TRANSFORMER -> transformer(13_800, 69_000, 5_000_000);
+
+            // ── Advanced Solar Panels (texturas do addon; slots medidos nelas) ─
+            case ADVANCED_SOLAR_PANEL, HYBRID_SOLAR_PANEL, ULTIMATE_SOLAR_PANEL, QUANTUM_SOLAR_PANEL -> MachineLayout.textured("advancedsolarpanel.png", 194, 168)
+                    .plain(17, 59).plain(35, 59).plain(53, 59).plain(71, 59)
+                    .gauge(19, 24, ENERGY_ADVANCED_SOLAR, MachineLayout.GaugeSource.ENERGY)
+                    .imageIf(menu -> menu.getMachineMode() == 2, "advancedsolarpanel.png", 24, 41, 195, 15, 14, 14, 256, 256)
+                    .imageIf(menu -> menu.getMachineMode() == 1, "advancedsolarpanel.png", 24, 41, 210, 15, 14, 14, 256, 256)
+                    .text(menu -> tr("solar.storage", "Storage: %s/%s CWh", compact(menu.getEnergyCWh()), compact(menu.getCapacityCWh())), 50, 22, 0, 0, SOLAR_TEXT_COLOR)
+                    .text(menu -> tr("solar.max_output", "Max Output: %s CW", compact(menu.getMaxHeat())), 50, 32, 0, 0, SOLAR_TEXT_COLOR)
+                    .text(menu -> tr("solar.generating", "Generating: %s CW", compact(menu.getHeat())), 50, 42, 0, 0, SOLAR_TEXT_COLOR)
+                    .inventory(16, 85)
+                    .noInventoryTitle()
+                    .titleColor(SOLAR_TEXT_COLOR)
+                    .build();
+
+            case QUANTUM_GENERATOR -> MachineLayout.textured("quantumgenerator.png", 176, 193)
+                    .imageIf(menu -> menu.getMachineMode() == 1, "quantumgenerator.png", 145, 21, 176, 3, 14, 14, 256, 256)
+                    .textRight(menu -> tr("quantum.output", "Output:"), 88, 25, WHITE)
+                    .text(menu -> Component.literal(compact(menu.getHeat()) + " CW"), 95, 25, 0, 0, WHITE)
+                    .textRight(menu -> tr("quantum.voltage", "Voltage:"), 88, 69, WHITE)
+                    .text(menu -> Component.literal(menu.getVoltage() + " MV"), 95, 69, 0, 0, WHITE)
+                    .inventory(7, 109)
+                    .noInventoryTitle()
+                    .titleColor(WHITE)
+                    .build();
+
+            case MOLECULAR_TRANSFORMER -> MachineLayout.textured("moleculartransformer.png", 220, 193)
+                    .plain(20, 27).plainOutput(20, 68)
+                    .progress(23, 48, PROGRESS_MOLECULAR_TRANSFORMER)
+                    .textRight(menu -> tr("molecular.input", "Input:"), 107, 26, WHITE)
+                    .text(menu -> itemName(menu.getMachineMode()), 112, 26, 0, 0, WHITE)
+                    .textRight(menu -> tr("molecular.output", "Output:"), 107, 38, WHITE)
+                    .text(menu -> itemName(menu.getMaxHeat()), 112, 38, 0, 0, WHITE)
+                    .textRight(menu -> tr("molecular.energy", "Energy:"), 107, 50, WHITE)
+                    .text(menu -> Component.literal(menu.getHeat() <= 0 ? "" : compact(menu.getHeat()) + " CWh"), 112, 50, 0, 0, WHITE)
+                    .textRight(menu -> tr("molecular.power", "CW in:"), 107, 62, WHITE)
+                    .text(menu -> Component.literal(menu.getHeat() <= 0 ? "" : compact(menu.getPower()) + " CW"), 112, 62, 0, 0, WHITE)
+                    .textRight(menu -> tr("molecular.progress", "Progress:"), 107, 74, WHITE)
+                    .text(menu -> Component.literal(menu.getHeat() <= 0 || menu.getMaxProgress() <= 0 ? ""
+                            : menu.getProgress() * 100 / menu.getMaxProgress() + "%"), 112, 74, 0, 0, WHITE)
+                    // inventário da textura: slots a cada 21 px, barra de atalhos 67 px abaixo
+                    .inventory(17, 97, 21, 67)
+                    .noInventoryTitle()
+                    .titleColor(WHITE)
+                    .build();
+
+            // ── Advanced Machines (assets/advanced_machines/guidef) ──────────
+            case ROTARY_MACERATOR -> MachineLayout.dynamic(176, 166)
+                    .slot(50, 17)
+                    .image("overlay/induction_furnace_output.png", 110, 30, 0, 0, 38, 26, 38, 26)
+                    .plainOutput(113, 35).plainOutput(129, 35)
+                    .slot(50, 52)
+                    .upgrades(151, 25, 2)
+                    .energy(55, 37)
+                    .progress(77, 37, PROGRESS_CRUSH)
+                    .text(tr("advanced.speed", "Speed:"), 10, 26)
+                    .text(menu -> Component.literal(String.valueOf(menu.getHeat())), 10, 36)
+                    .text(tr("advanced.rpm", "RPM"), 10, 46)
+                    .build();
+
+            case SINGULARITY_COMPRESSOR -> pressureMachine(PROGRESS_TRIANGLE, 85, 37, 9);
+            case COMPACTING_RECYCLER -> pressureMachine(PROGRESS_RECYCLER, 85, 37, 9);
+
+            case CENTRIFUGE_EXTRACTOR -> MachineLayout.dynamic(176, 166)
+                    .slot(50, 17)
+                    .image("overlay/centrifuge_extractor_output.png", 110, 30, 0, 0, 54, 26, 54, 26)
+                    .plainOutput(113, 35).plainOutput(129, 35).plainOutput(145, 35)
+                    .slot(50, 52)
+                    .upgradesRow(120, 60, 2)
+                    .energy(55, 37)
+                    .progress(77, 37, PROGRESS_DROP)
+                    .text(tr("advanced.speed", "Speed:"), 10, 26)
+                    .text(menu -> Component.literal(String.valueOf(menu.getHeat())), 10, 36)
+                    .text(tr("advanced.cm_per_s", "cm/s"), 10, 46)
+                    .build();
+
+            case LIQUESCENT_EXTRUDER -> MachineLayout.dynamic(176, 166)
+                    .slot(50, 17)
+                    .image("overlay/centrifuge_extractor_output.png", 110, 30, 0, 0, 54, 26, 54, 26)
+                    .plainOutput(113, 35).plainOutput(129, 35).plainOutput(145, 35)
+                    .slot(50, 52)
+                    .upgradesRow(120, 60, 2)
+                    .energy(55, 37)
+                    .progress(74, 34, PROGRESS_EXTRUDER)
+                    .text(tr("heat", "Heat:"), 10, 31)
+                    .text(menu -> Component.literal((menu.getHeat() * 100 + 5_000) / 10_000 + "%"), 10, 41)
+                    .build();
+
+            case IMPELLERIZED_ROLLER -> MachineLayout.dynamic(176, 166)
+                    .slot(60, 17).largeOutput(116, 32).slot(60, 52)
+                    .upgrades(151, 25, 2)
+                    .energy(65, 37)
+                    .progress(81, 34, PROGRESS_EXTRUDER)
+                    .text(tr("advanced.pressure", "Pressure:"), 7, 26)
+                    .text(menu -> Component.literal(String.valueOf(menu.getHeat())), 7, 36)
+                    .text(tr("advanced.gibbl", "Gibbl"), 7, 46)
+                    .build();
+
+            // o addon enchia só por cano ou clique; aqui há também o slot de recipiente
+            case WATER_JET_CUTTER -> MachineLayout.dynamic(176, 166)
+                    .slot(85, 17).largeOutput(136, 28).slot(85, 52)
+                    .upgradesRow(126, 60, 2)
+                    .slot(7, 62).output(25, 62)
+                    .tank(60, 15)
+                    .energy(90, 37)
+                    .progress(108, 34, PROGRESS_ARROW)
+                    .text(tr("advanced.pressure", "Pressure:"), 7, 22)
+                    .text(menu -> Component.literal(String.valueOf(menu.getHeat())), 7, 32)
+                    .text(tr("advanced.gibbl", "Gibbl"), 7, 42)
+                    .noInventoryTitle()
+                    .build();
+
+            case THERMAL_WASHER -> MachineLayout.dynamic(176, 166)
+                    .image("guiorewashingplant.png", 80, 33, 80, 33, 43, 28, 256, 256)
+                    .slot(103, 16)
+                    .grid(85, 61, 3, 1, true)
+                    .slot(150, 61)
+                    .upgradesRow(132, 16, 2)
+                    .slot(36, 16).output(36, 61)
+                    .tank(60, 20)
+                    .energy(155, 45)
+                    .progress(103, 39, PROGRESS_ORE_WASHER)
+                    .text(tr("heat", "Heat:"), 7, 40)
+                    .text(menu -> Component.literal(menu.getHeat() * 100 / 10_000 + "%"), 7, 50)
+                    .noInventoryTitle()
+                    .build();
         };
     }
 
@@ -553,6 +686,32 @@ public final class MachineLayouts {
                 .upgrades(151, 7)
                 .energy(59, 37)
                 .progress(progressX, progressY, progress)
+                .build();
+    }
+
+    /** Números grandes curtos para caber nas texturas: 12.500, 250k, 5.0M. */
+    private static String compact(long value) {
+        if (value >= 1_000_000) return String.format(java.util.Locale.ROOT, "%.1fM", value / 1_000_000.0);
+        if (value >= 100_000) return value / 1_000 + "k";
+        return String.valueOf(value);
+    }
+
+    /** Nome do item pelo id do registro + 1 (0 = nada). */
+    private static Component itemName(int id) {
+        if (id <= 0) return Component.empty();
+        return new net.minecraft.world.item.ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.byId(id - 1)).getHoverName();
+    }
+
+    /** Compressor de singularidade e reciclador compactador: pressão = calor × 9 "Gibbl". */
+    private static MachineLayout pressureMachine(GaugeStyle progress, int progressX, int progressY, int pressurePerHeat) {
+        return MachineLayout.dynamic(176, 166)
+                .slot(60, 17).largeOutput(113, 32).slot(60, 52)
+                .upgrades(151, 25, 2)
+                .energy(65, 37)
+                .progress(progressX, progressY, progress)
+                .text(tr("advanced.pressure", "Pressure:"), 7, 26)
+                .text(menu -> Component.literal(String.valueOf(menu.getHeat() * pressurePerHeat)), 7, 36)
+                .text(tr("advanced.gibbl", "Gibbl"), 7, 46)
                 .build();
     }
 

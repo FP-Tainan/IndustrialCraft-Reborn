@@ -1,0 +1,6 @@
+{
+  "machine": "compressor",
+  "input": "ic2reborn:iridium_ore",
+  "result": "ic2reborn:iridium_ingot",
+  "result_count": 1
+}

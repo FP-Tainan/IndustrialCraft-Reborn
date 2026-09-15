@@ -25,9 +25,6 @@ public class IC2BlockEntities {
     public static final RegistryObject<BlockEntityType<net.ic2reborn.block.entity.TeleporterBlockEntity>> TELEPORTER =
             BLOCK_ENTITY_TYPES.register("teleporter", () ->
                     new BlockEntityType<>(net.ic2reborn.block.entity.TeleporterBlockEntity::new, Set.of(IC2AutoBlocks.TELEPORTER.get())));
-    public static final RegistryObject<BlockEntityType<net.ic2reborn.block.entity.BarrelBlockEntity>> BARREL =
-            BLOCK_ENTITY_TYPES.register("barrel", () ->
-                    new BlockEntityType<>(net.ic2reborn.block.entity.BarrelBlockEntity::new, Set.of(IC2AutoBlocks.BARREL.get())));
     private static Block[] autoBlocks() {
         return IC2AutoBlocks.BLOCKS.getEntries().stream()
                 .map(RegistryObject::get)

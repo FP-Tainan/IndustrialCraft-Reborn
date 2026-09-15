@@ -1,0 +1,7 @@
+{
+  "machine": "molecular_transformer",
+  "input": "minecraft:red_wool",
+  "result": "minecraft:redstone_block",
+  "result_count": 1,
+  "energy": 250000
+}

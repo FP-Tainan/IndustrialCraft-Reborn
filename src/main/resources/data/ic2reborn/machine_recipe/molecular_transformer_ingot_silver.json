@@ -1,0 +1,7 @@
+{
+  "machine": "molecular_transformer",
+  "input": "#c:ingots/tin",
+  "result": "ic2reborn:ingot_silver",
+  "result_count": 1,
+  "energy": 250000
+}

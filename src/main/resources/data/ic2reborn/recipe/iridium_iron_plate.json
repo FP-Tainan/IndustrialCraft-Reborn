@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "IPI",
+    "III"
+  ],
+  "key": {
+    "I": "craftenergy:plate_iron",
+    "P": "ic2reborn:iridium_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:iridium_iron_plate"
+  }
+}

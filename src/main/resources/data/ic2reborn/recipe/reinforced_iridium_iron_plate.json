@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ACA",
+    "CIC",
+    "ACA"
+  ],
+  "key": {
+    "A": "ic2reborn:advanced_alloy",
+    "C": "ic2reborn:carbon_plate",
+    "I": "ic2reborn:iridium_iron_plate"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:reinforced_iridium_iron_plate"
+  }
+}

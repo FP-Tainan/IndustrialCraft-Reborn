@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "CNC",
+    "GTG"
+  ],
+  "key": {
+    "S": "ic2reborn:advanced_solar_panel",
+    "C": "ic2reborn:advanced_circuit",
+    "N": "ic2reborn:nano_helmet",
+    "G": "craftenergy:cable_gold_double_insulated",
+    "T": "ic2reborn:lv_transformer"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:advanced_solar_helmet"
+  }
+}

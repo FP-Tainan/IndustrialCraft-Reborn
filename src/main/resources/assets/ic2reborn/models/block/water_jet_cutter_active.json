@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ic2reborn:block/water_jet_cutter_bottom_active",
+    "up": "ic2reborn:block/water_jet_cutter_top",
+    "north": "ic2reborn:block/water_jet_cutter_front_active",
+    "south": "ic2reborn:block/water_jet_cutter_back",
+    "east": "ic2reborn:block/water_jet_cutter_side",
+    "west": "ic2reborn:block/water_jet_cutter_side",
+    "particle": "ic2reborn:block/water_jet_cutter_back"
+  }
+}

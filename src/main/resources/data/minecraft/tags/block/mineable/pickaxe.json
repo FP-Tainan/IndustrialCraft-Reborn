@@ -10,11 +10,25 @@
     "ic2reborn:extractor",
     "ic2reborn:iron_furnace",
     "ic2reborn:lead_ore",
-    "ic2reborn:macerator",
+    "ic2reborn:rotary_macerator",
+    "ic2reborn:singularity_compressor",
+    "ic2reborn:centrifuge_extractor",
+    "ic2reborn:compacting_recycler",
+    "ic2reborn:liquescent_extruder",
+    "ic2reborn:impellerized_roller",
+    "ic2reborn:water_jet_cutter",
+    "ic2reborn:thermal_washer",
     "ic2reborn:machine_block",
     "ic2reborn:uranium_ore",
     "ic2reborn:reinforced_stone",
     "ic2reborn:reinforced_glass",
-    "ic2reborn:iron_fence"
+    "ic2reborn:iron_fence",
+    "ic2reborn:advanced_solar_panel",
+    "ic2reborn:hybrid_solar_panel",
+    "ic2reborn:ultimate_solar_panel",
+    "ic2reborn:quantum_solar_panel",
+    "ic2reborn:quantum_generator",
+    "ic2reborn:molecular_transformer",
+    "ic2reborn:vacuum_canner"
   ]
 }

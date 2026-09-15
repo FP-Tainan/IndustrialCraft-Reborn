@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "ic2reborn:block/impellerized_roller_top_n_bottom",
+    "up": "ic2reborn:block/impellerized_roller_top_n_bottom",
+    "north": "ic2reborn:block/impellerized_roller_front",
+    "south": "ic2reborn:block/impellerized_roller_back",
+    "east": "ic2reborn:block/impellerized_roller_side",
+    "west": "ic2reborn:block/impellerized_roller_side",
+    "particle": "ic2reborn:block/impellerized_roller_back"
+  }
+}

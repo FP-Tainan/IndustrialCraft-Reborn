@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "ic2reborn:hybrid_solar_helmet",
+    "ic2reborn:ultimate_solar_panel"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:ultimate_solar_helmet"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "UDU",
+    "GGG"
+  ],
+  "key": {
+    "G": "ic2reborn:reinforced_glass",
+    "U": "ic2reborn:irradiant_uranium",
+    "D": "minecraft:glowstone_dust"
+  },
+  "result": {
+    "count": 1,
+    "id": "ic2reborn:irradiant_glass_pane"
+  }
+}
